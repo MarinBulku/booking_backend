@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <changeSet id="create_initial_tables" author="marinbulku">
+
+        <!-- Creating roles table> </-->
+        <createTable tableName="role_tbl">
+            <column name="role_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="role" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <!-- Creating users table> </-->
+        <createTable tableName="user_tbl">
+            <column name="user_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="full_name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="fk_role_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="phone_number" type="varchar(50)"/>
+            <column name="address" type="varchar(50)"/>
+            <column name="bookings_number" type="int"/>
+            <column name="booking_points" type="int"/>
+
+        </createTable>
+
+        <!-- Adding foreign key relationships
+        between users and role tables> </-->
+        <addForeignKeyConstraint baseTableName="user_tbl"
+                                 baseColumnNames="fk_role_id"
+                                 constraintName="constraint_role_user"
+                                 referencedTableName="role_tbl"
+                                 referencedColumnNames="role_id"
+                                 onDelete="CASCADE"
+                                 onUpdate="CASCADE"/>
+
+        <!-- Creating hotels table> </-->
+        <createTable tableName="hotel_tbl">
+            <column name="hotel_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="hotel_name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="image_path" type="varchar(50)"/>
+            <column name="free_parking" type="boolean"/>
+            <column name="free_wifi" type="boolean"/>
+            <column name="free_pool" type="boolean"/>
+            <column name="free_breakfast" type="boolean"/>
+        </createTable>
+
+        <!-- Creating rooms table> </-->
+        <createTable tableName="room_tbl">
+            <column name="room_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="fk_hotel_id" type="int"/>
+            <column name="room_name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="capacity_adults" type="int"/>
+            <column name="capacity_kids" type="int"/>
+            <column name="price" type="int"/>
+            <column name="description" type="text"/>
+            <column name="image_path" type="varchar(50)"/>
+        </createTable>
+
+        <!-- Adding foreign key relationships
+        between hotel and room tables> </-->
+        <addForeignKeyConstraint baseTableName="room_tbl"
+                                 baseColumnNames="fk_hotel_id"
+                                 constraintName="constraint_hotel_room"
+                                 referencedTableName="hotel_tbl"
+                                 referencedColumnNames="hotel_id"
+                                 onDelete="CASCADE"
+                                 onUpdate="CASCADE"/>
+
+        <!--Creating bookings table -->
+        <createTable tableName="booking_tbl">
+            <column name="fk_room_id" type="int">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="fk_user_id" type="int">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="start_date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="end_date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="price_paid" type="decimal(12,2)"/>
+            <column name="cancelled" type="boolean"/>
+        </createTable>
+
+        <!-- Adding foreign key relationships
+        between user and booking tables> </-->
+        <addForeignKeyConstraint baseTableName="booking_tbl"
+                                 baseColumnNames="fk_user_id"
+                                 constraintName="constraint_user_booking"
+                                 referencedTableName="user_tbl"
+                                 referencedColumnNames="user_id"
+                                 onDelete="CASCADE"
+                                 onUpdate="CASCADE"/>
+
+        <!-- Adding foreign key relationships
+        between room and booking tables> </-->
+        <addForeignKeyConstraint baseTableName="booking_tbl"
+                                 baseColumnNames="fk_room_id"
+                                 constraintName="constraint_room_booking"
+                                 referencedTableName="room_tbl"
+                                 referencedColumnNames="room_id"
+                                 onDelete="CASCADE"
+                                 onUpdate="CASCADE"/>
+
+        <!--Creating points table-->
+        <createTable tableName="point_tbl">
+            <column name="fk_room_id" type="int">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="points_required" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="discount" type="float">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <!--Creating the relationship between rooms and points-->
+        <addForeignKeyConstraint baseTableName="point_tbl"
+                                 baseColumnNames="fk_room_id"
+                                 constraintName="constraint_room_points"
+                                 referencedTableName="room_tbl"
+                                 referencedColumnNames="room_id"
+                                 onUpdate="CASCADE"
+                                 onDelete="CASCADE"/>
+
+        <!--Creating discount dates table-->
+        <createTable tableName="discount_date_tbl">
+            <column name="fk_room_id" type="int">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="discount_date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="discount" type="float">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <!--Creating the relationship between rooms and discount dates-->
+        <addForeignKeyConstraint baseTableName="discount_date_tbl"
+                                 baseColumnNames="fk_room_id"
+                                 constraintName="constraint_room_discount_date"
+                                 referencedTableName="room_tbl"
+                                 referencedColumnNames="room_id"
+                                 onUpdate="CASCADE"
+                                 onDelete="CASCADE"/>
+    </changeSet>
+</databaseChangeLog>
