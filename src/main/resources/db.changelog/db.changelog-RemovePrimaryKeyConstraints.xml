@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <changeSet id="readd_constraints" author="marinbulku">
+        <!-- Re-adding dropped foreign key constraints -->
+
+        <!-- Adding foreign key relationships
+        between user and booking tables> </-->
+        <addForeignKeyConstraint baseTableName="booking_tbl"
+                                 baseColumnNames="fk_user_id"
+                                 constraintName="constraint_user_booking"
+                                 referencedTableName="user_tbl"
+                                 referencedColumnNames="user_id"
+                                 onDelete="CASCADE"
+                                 onUpdate="CASCADE"/>
+
+        <!-- Adding foreign key relationships
+        between room and booking tables> </-->
+        <addForeignKeyConstraint baseTableName="booking_tbl"
+                                 baseColumnNames="fk_room_id"
+                                 constraintName="constraint_room_booking"
+                                 referencedTableName="room_tbl"
+                                 referencedColumnNames="room_id"
+                                 onDelete="CASCADE"
+                                 onUpdate="CASCADE"/>
+
+        <!--Creating the relationship between rooms and points-->
+        <addForeignKeyConstraint baseTableName="point_tbl"
+                                 baseColumnNames="fk_room_id"
+                                 constraintName="constraint_room_points"
+                                 referencedTableName="room_tbl"
+                                 referencedColumnNames="room_id"
+                                 onUpdate="CASCADE"
+                                 onDelete="CASCADE"/>
+
+        <!--Creating the relationship between rooms and discount dates-->
+        <addForeignKeyConstraint baseTableName="discount_date_tbl"
+                                 baseColumnNames="fk_room_id"
+                                 constraintName="constraint_room_discount_date"
+                                 referencedTableName="room_tbl"
+                                 referencedColumnNames="room_id"
+                                 onUpdate="CASCADE"
+                                 onDelete="CASCADE"/>
+
+    </changeSet>
+    <changeSet id="remove_primary_key_constraint" author="marinbulku">
+        <dropPrimaryKey tableName="booking_tbl" constraintName="booking_tbl_pkey"/>
+        <dropPrimaryKey tableName="point_tbl" constraintName="point_tbl_pkey"/>
+        <dropPrimaryKey tableName="discount_date_tbl" constraintName="discount_date_tbl_pkey"/>
+
+    </changeSet>
+</databaseChangeLog>
