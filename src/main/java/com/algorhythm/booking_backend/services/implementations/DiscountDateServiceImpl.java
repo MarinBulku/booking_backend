@@ -22,7 +22,7 @@ public class DiscountDateServiceImpl implements DiscountDateService {
     @Override
     public List<DiscountDate> datesBetween(Integer roomId, LocalDate startDate, LocalDate endDate) {
 
-        List<DiscountDate> allDiscountDates = discountDateRepository.findByDateBetweenAndRoomId(startDate, endDate, roomId);
+        List<DiscountDate> allDiscountDates = discountDateRepository.findByDiscountDateBeforeAndDiscountDateAfterAndRoom_RoomId(startDate, endDate, roomId);
 
         if (allDiscountDates.isEmpty()) return new ArrayList<>();
 

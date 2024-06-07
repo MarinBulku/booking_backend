@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface DiscountDateRepository extends JpaRepository<DiscountDate, Integer> {
 
-    List<DiscountDate> findByDateBetweenAndRoomId(LocalDate startDate, LocalDate endDate, Integer roomId);
+    List<DiscountDate> findByDiscountDateBeforeAndDiscountDateAfterAndRoom_RoomId(LocalDate startDate, LocalDate endDate, Integer roomId);
 }

@@ -7,6 +7,7 @@ import com.algorhythm.booking_backend.repositories.RoleRepository;
 import com.algorhythm.booking_backend.repositories.UserRepository;
 import com.algorhythm.booking_backend.services.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,8 +18,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    public final UserRepository userRepository;
-    public final RoleRepository roleRepository;
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
     @Override
     public List<User> findAll() {
 
@@ -54,7 +56,7 @@ public class UserServiceImpl implements UserService {
         User newUser = User.builder()
                 .fullName(name)
                 .email(email)
-                .password(password)
+                .password(passwordEncoder.encode(password))
                 .phoneNumber(number)
                 .role(optional.get())
                 .address(Address)

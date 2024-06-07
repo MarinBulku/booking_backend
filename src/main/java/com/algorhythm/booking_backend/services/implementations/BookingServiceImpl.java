@@ -37,7 +37,7 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public List<Booking> findAllBookingsFromUser(Integer userId) {
 
-        List<Booking> allBookingsFromUser = bookingRepository.findByUserId(userId);
+        List<Booking> allBookingsFromUser = bookingRepository.findByUser_UserId(userId);
 
         if (allBookingsFromUser.isEmpty()) return new ArrayList<>();
 
