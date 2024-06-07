@@ -1,10 +1,10 @@
 package com.algorhythm.booking_backend.controllers;
 
-import com.algorhythm.booking_backend.dataproviders.dtos.booking.HotelSearchRequest;
-import com.algorhythm.booking_backend.dataproviders.dtos.hotel.AvailableHotelDto;
-import com.algorhythm.booking_backend.dataproviders.dtos.hotel.HotelCreationRequest;
-import com.algorhythm.booking_backend.dataproviders.dtos.hotel.HotelDTO;
-import com.algorhythm.booking_backend.dataproviders.services.interfaces.HotelService;
+import com.algorhythm.booking_backend.datasources.datatansferobjects.booking.HotelSearchRequest;
+import com.algorhythm.booking_backend.datasources.datatansferobjects.hotel.AvailableHotelDto;
+import com.algorhythm.booking_backend.datasources.datatansferobjects.hotel.HotelCreationRequest;
+import com.algorhythm.booking_backend.datasources.datatansferobjects.hotel.HotelDTO;
+import com.algorhythm.booking_backend.datasources.services.interfaces.HotelService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;

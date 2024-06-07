@@ -1,11 +1,11 @@
 package com.algorhythm.booking_backend.controllers;
 
-import com.algorhythm.booking_backend.dataproviders.dtos.authentication.AuthenticationRequest;
-import com.algorhythm.booking_backend.dataproviders.dtos.authentication.AuthenticationResponse;
-import com.algorhythm.booking_backend.dataproviders.dtos.user.NewUserDto;
-import com.algorhythm.booking_backend.dataproviders.dtos.user.UserDto;
-import com.algorhythm.booking_backend.dataproviders.dtos.authentication.DeauthenticationRequest;
-import com.algorhythm.booking_backend.dataproviders.services.interfaces.UserService;
+import com.algorhythm.booking_backend.datasources.datatansferobjects.authentication.AuthenticationRequest;
+import com.algorhythm.booking_backend.datasources.datatansferobjects.authentication.AuthenticationResponse;
+import com.algorhythm.booking_backend.datasources.datatansferobjects.user.NewUserDto;
+import com.algorhythm.booking_backend.datasources.datatansferobjects.user.UserDto;
+import com.algorhythm.booking_backend.datasources.datatansferobjects.authentication.DeauthenticationRequest;
+import com.algorhythm.booking_backend.datasources.services.interfaces.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
