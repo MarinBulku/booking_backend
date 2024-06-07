@@ -2,6 +2,12 @@ package com.algorhythm.booking_backend.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 @Entity
 @Table(name = "user_tbl")
@@ -11,7 +17,7 @@ import lombok.*;
 @AllArgsConstructor
 @Getter
 @Setter
-public class User {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,4 +48,18 @@ public class User {
     @ManyToOne
     @JoinColumn(name = "fk_role_id")
     private Role role;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+
+        ArrayList<SimpleGrantedAuthority> authorities = new ArrayList<SimpleGrantedAuthority>();
+        authorities.add(new SimpleGrantedAuthority(role.getRole()));
+
+        return authorities;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
 }
