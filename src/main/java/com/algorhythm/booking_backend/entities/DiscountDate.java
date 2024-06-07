@@ -3,7 +3,7 @@ package com.algorhythm.booking_backend.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "discount_date_tbl")
@@ -25,7 +25,7 @@ public class DiscountDate {
     private Room room;
 
     @Column(name = "discount_date")
-    private Date discountDate;
+    private LocalDate discountDate;
 
     @Column(name = "discount")
     private Double discount;
