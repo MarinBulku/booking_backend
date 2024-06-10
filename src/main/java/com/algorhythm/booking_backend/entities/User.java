@@ -40,10 +40,10 @@ public class User implements UserDetails {
     private String address;
 
     @Column(name = "bookings_number")
-    private String bookingsNumber;
+    private Integer bookingsNumber;
 
     @Column(name = "booking_points")
-    private String bookingPoints;
+    private Integer bookingPoints;
 
     @ManyToOne
     @JoinColumn(name = "fk_role_id")
@@ -53,7 +53,7 @@ public class User implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
         ArrayList<SimpleGrantedAuthority> authorities = new ArrayList<SimpleGrantedAuthority>();
-        authorities.add(new SimpleGrantedAuthority(role.getRole()));
+        authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getRole()));
 
         return authorities;
     }
