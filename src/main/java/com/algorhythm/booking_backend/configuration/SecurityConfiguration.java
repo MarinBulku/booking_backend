@@ -3,6 +3,7 @@ package com.algorhythm.booking_backend.configuration;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -29,6 +30,8 @@ public class SecurityConfiguration {
                             auth.requestMatchers("/swagger-ui/**").permitAll();
                             auth.requestMatchers("/swagger-ui.html").permitAll();
                             auth.requestMatchers("/api-docs/**").permitAll();
+                            auth.requestMatchers("/users/login").permitAll();
+                            auth.requestMatchers("/users/logout").permitAll();
                             auth.anyRequest().authenticated();
                         }
                 )
