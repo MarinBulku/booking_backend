@@ -1,18 +1,24 @@
 package com.algorhythm.booking_backend.services.interfaces;
 
-import com.algorhythm.booking_backend.entities.User;
+import com.algorhythm.booking_backend.dataproviders.authentication.AuthenticationRequest;
+import com.algorhythm.booking_backend.dataproviders.authentication.AuthenticationResponse;
+import com.algorhythm.booking_backend.dataproviders.User.NewUserDto;
+import com.algorhythm.booking_backend.dataproviders.User.UserDto;
 
 import java.util.List;
 
 public interface UserService {
 
-    List<User> findAll();
+    List<UserDto> findAll();
 
-    User findById(Integer id);
+    UserDto findById(Integer id);
 
     boolean existsById(Integer id);
 
-    User addCustomer(String name, String email, String password, String number, Integer roleId, String Address);
+    UserDto addUser(NewUserDto newUserDto);
 
-    void removeCustomer(Integer idOfUserToBeRemoved);
+    void removeUser(Integer idOfUserToBeRemoved);
+
+    AuthenticationResponse authenticate(AuthenticationRequest request);
+    void deauthenticate(String token);
 }

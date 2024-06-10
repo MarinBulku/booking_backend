@@ -1,5 +1,9 @@
 package com.algorhythm.booking_backend.services.implementations;
 
+import com.algorhythm.booking_backend.dataproviders.authentication.AuthenticationRequest;
+import com.algorhythm.booking_backend.dataproviders.authentication.AuthenticationResponse;
+import com.algorhythm.booking_backend.dataproviders.User.NewUserDto;
+import com.algorhythm.booking_backend.dataproviders.User.UserDto;
 import com.algorhythm.booking_backend.entities.Role;
 import com.algorhythm.booking_backend.entities.User;
 import com.algorhythm.booking_backend.exceptions.EntityNotFoundException;
@@ -21,22 +25,50 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
     @Override
-    public List<User> findAll() {
+    public List<UserDto> findAll() {
 
         List<User> allUsers = userRepository.findAll();
 
-        if (allUsers.isEmpty()) return new ArrayList<User>();
+        if (allUsers.isEmpty()) return new ArrayList<>();
 
-        return allUsers;
+        ArrayList<UserDto> allUsersDto = new ArrayList<>(allUsers.size());
+        for (User u: allUsers) {
+            allUsersDto.add(UserDto.builder()
+                            .userId(u.getUserId())
+                            .name(u.getFullName())
+                            .email(u.getEmail())
+                            .phoneNumber(u.getPhoneNumber())
+                            .address(u.getAddress())
+                            .bookingPoints(u.getBookingPoints())
+                            .bookingsNumber(u.getBookingsNumber())
+                            .role(u.getRole().getRole())
+                            .roleId(u.getRole().getRoleId())
+                    .build());
+        }
+        return allUsersDto;
     }
 
     @Override
-    public User findById(Integer id) {
+    public UserDto findById(Integer id) {
 
         Optional<User> foundUser  = userRepository.findById(id);
 
-        if (foundUser.isPresent()) return foundUser.get();
+        if (foundUser.isPresent()) {
+            User u = foundUser.get();
+            return UserDto.builder()
+                    .userId(u.getUserId())
+                    .name(u.getFullName())
+                    .email(u.getEmail())
+                    .phoneNumber(u.getPhoneNumber())
+                    .address(u.getAddress())
+                    .bookingPoints(u.getBookingPoints())
+                    .bookingsNumber(u.getBookingsNumber())
+                    .role(u.getRole().getRole())
+                    .roleId(u.getRole().getRoleId())
+                    .build();
+        }
 
         else throw new EntityNotFoundException("No user with this id: " + id);
 
@@ -48,25 +80,72 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User addCustomer(String name, String email, String password, String number, Integer roleId, String Address) {
+    public UserDto addUser(NewUserDto newUserDto) {
 
-            Optional<Role> optional = roleRepository.findById(roleId);
-            if (optional.isEmpty()) throw new EntityNotFoundException("No role with this id: " +roleId);
+            Optional<Role> optional = roleRepository.findById(newUserDto.getRoleId());
+            if (optional.isEmpty()) throw new EntityNotFoundException("No role with this id: " + newUserDto.getRoleId());
 
         User newUser = User.builder()
-                .fullName(name)
-                .email(email)
-                .password(passwordEncoder.encode(password))
-                .phoneNumber(number)
+                .fullName(newUserDto.getName())
+                .email(newUserDto.getEmail())
+                .password(passwordEncoder.encode(newUserDto.getPassword()))
+                .phoneNumber(newUserDto.getNumber())
                 .role(optional.get())
-                .address(Address)
+                .address(newUserDto.getAddress())
+                .bookingsNumber(0)
+                .bookingPoints(0)
                 .build();
-        return userRepository.save(newUser);
+
+        User u = userRepository.save(newUser);
+
+        return UserDto.builder()
+                .userId(u.getUserId())
+                .name(u.getFullName())
+                .email(u.getEmail())
+                .phoneNumber(u.getPhoneNumber())
+                .address(u.getAddress())
+                .bookingPoints(u.getBookingPoints())
+                .bookingsNumber(u.getBookingsNumber())
+                .role(u.getRole().getRole())
+                .roleId(u.getRole().getRoleId())
+                .build();
     }
 
     @Override
-    public void removeCustomer(Integer idOfUserToBeRemoved) {
+    public void removeUser(Integer idOfUserToBeRemoved) {
         if (!userRepository.existsById(idOfUserToBeRemoved)) throw new EntityNotFoundException("No user with this id: "+ idOfUserToBeRemoved);
-        roleRepository.deleteById(idOfUserToBeRemoved);
+        userRepository.deleteById(idOfUserToBeRemoved);
+    }
+
+    @Override
+    public AuthenticationResponse authenticate(AuthenticationRequest request) {
+        Optional<User> optional = userRepository.findByEmail(request.getEmail());
+
+        if (optional.isEmpty()) {
+            throw new EntityNotFoundException("User not found with email: " + request.getEmail());
+        }
+
+        User user = optional.get();
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            throw new EntityNotFoundException("Invalid Credentials");
+        }
+
+        String jwtToken = jwtService.generateToken(user);
+        return AuthenticationResponse.builder()
+                .token(jwtToken)
+                .userId(user.getUserId())
+                .name(user.getFullName())
+                .email(user.getEmail())
+                .phoneNumber(user.getPhoneNumber())
+                .address(user.getAddress())
+                .bookingsNumber(user.getBookingsNumber())
+                .bookingPoints(user.getBookingPoints())
+                .role(user.getRole().getRole())
+                .build();
+    }
+
+    @Override
+    public void deauthenticate(String token) {
+
     }
 }
