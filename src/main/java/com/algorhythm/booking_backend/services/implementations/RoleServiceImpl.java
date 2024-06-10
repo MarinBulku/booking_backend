@@ -37,6 +37,15 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    public Role createRole(String roleName) {
+        Role newRole = Role.builder()
+                .role(roleName)
+                .build();
+
+        return roleRepository.save(newRole);
+    }
+
+    @Override
     public boolean existsById(Integer roleId) {
 
         return roleRepository.existsById(roleId);

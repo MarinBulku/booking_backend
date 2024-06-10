@@ -10,6 +10,8 @@ public interface RoleService {
 
     Role findById(Integer roleId);
 
+    Role createRole(String roleName);
+
     boolean existsById(Integer roleId);
 
     Role updateRole(Integer idOfTheRoleToBeUpdated, String newRoleName);
