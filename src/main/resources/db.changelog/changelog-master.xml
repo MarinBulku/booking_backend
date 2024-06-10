@@ -12,5 +12,6 @@
         <include file="./db.changelog/db.changelog-addingTables.xml"/>
         <include file="./db.changelog/db.changelog-RemovePrimaryKeyConstraints.xml"/>
         <include file="./db.changelog/db.changelog-AddingNewPrimaryKeys.xml"/>
+        <include file="./db.changelog/db.changelog-AlteringPasswordField.xml"/>
 
 </databaseChangeLog>
