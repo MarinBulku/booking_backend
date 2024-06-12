@@ -147,6 +147,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean deauthenticate(DeauthenticationRequest request) {
+        if (request.getToken().isBlank()) return false;
         return jwtService.revokeToken(request.getToken());
     }
 }
