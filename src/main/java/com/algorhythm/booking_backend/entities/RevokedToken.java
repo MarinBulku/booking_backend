@@ -6,6 +6,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "revoked_tokens_tbl")
 @Builder
@@ -19,5 +21,8 @@ public class RevokedToken {
     @Id
     @Column(name = "token")
     private String revokedToken;
+
+    @Column(name = "date_revoked")
+    private LocalDateTime timeRevoked;
 
 }
