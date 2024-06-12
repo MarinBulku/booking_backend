@@ -4,6 +4,7 @@ import com.algorhythm.booking_backend.dataproviders.authentication.Authenticatio
 import com.algorhythm.booking_backend.dataproviders.authentication.AuthenticationResponse;
 import com.algorhythm.booking_backend.dataproviders.User.NewUserDto;
 import com.algorhythm.booking_backend.dataproviders.User.UserDto;
+import com.algorhythm.booking_backend.dataproviders.authentication.DeauthenticationRequest;
 
 import java.util.List;
 
@@ -20,5 +21,5 @@ public interface UserService {
     void removeUser(Integer idOfUserToBeRemoved);
 
     AuthenticationResponse authenticate(AuthenticationRequest request);
-    void deauthenticate(String token);
+    boolean deauthenticate(DeauthenticationRequest request);
 }

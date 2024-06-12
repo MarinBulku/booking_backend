@@ -1,22 +1,28 @@
 package com.algorhythm.booking_backend.services.implementations;
 
+import com.algorhythm.booking_backend.entities.RevokedToken;
+import com.algorhythm.booking_backend.repositories.RevokedTokensRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 
 @Service
+@RequiredArgsConstructor
 public class JwtService {
 
     private static final String SECRET_KEY = "56692738757545333c46492d227b747e5d495c2b4941764e59675b2f63";
+    private final RevokedTokensRepository revokedTokensRepository;
     public String extractUserEmail(String token){
         return extractClaim(token, Claims::getSubject);
     }
@@ -28,7 +34,12 @@ public class JwtService {
 
     public boolean isTokenValid(String token, UserDetails userDetails){
         final String userName = extractUserEmail(token);
-        return (userName.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        return (userName.equals(userDetails.getUsername()) && !isTokenExpired(token) && !isTokenRevoked(token));
+    }
+
+    private boolean isTokenRevoked(String token) {
+        Optional<RevokedToken> optional = revokedTokensRepository.findById(token);
+        return optional.isPresent();
     }
 
     private boolean isTokenExpired(String token) {
@@ -70,5 +81,15 @@ public class JwtService {
     private Key getSigningKey() {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
         return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    public boolean revokeToken(String token){
+        RevokedToken newRevokedToken = RevokedToken.builder()
+                .revokedToken(token)
+                .build();
+
+        revokedTokensRepository.save(newRevokedToken);
+
+        return revokedTokensRepository.existsById(token);
     }
 }

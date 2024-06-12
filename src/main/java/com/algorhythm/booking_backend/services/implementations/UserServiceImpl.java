@@ -4,6 +4,7 @@ import com.algorhythm.booking_backend.dataproviders.authentication.Authenticatio
 import com.algorhythm.booking_backend.dataproviders.authentication.AuthenticationResponse;
 import com.algorhythm.booking_backend.dataproviders.User.NewUserDto;
 import com.algorhythm.booking_backend.dataproviders.User.UserDto;
+import com.algorhythm.booking_backend.dataproviders.authentication.DeauthenticationRequest;
 import com.algorhythm.booking_backend.entities.Role;
 import com.algorhythm.booking_backend.entities.User;
 import com.algorhythm.booking_backend.exceptions.EntityNotFoundException;
@@ -145,7 +146,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deauthenticate(String token) {
-
+    public boolean deauthenticate(DeauthenticationRequest request) {
+        return jwtService.revokeToken(request.getToken());
     }
 }

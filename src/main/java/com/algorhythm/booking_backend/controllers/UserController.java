@@ -4,7 +4,7 @@ import com.algorhythm.booking_backend.dataproviders.authentication.Authenticatio
 import com.algorhythm.booking_backend.dataproviders.authentication.AuthenticationResponse;
 import com.algorhythm.booking_backend.dataproviders.User.NewUserDto;
 import com.algorhythm.booking_backend.dataproviders.User.UserDto;
-import com.algorhythm.booking_backend.services.interfaces.RoleService;
+import com.algorhythm.booking_backend.dataproviders.authentication.DeauthenticationRequest;
 import com.algorhythm.booking_backend.services.interfaces.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -26,7 +26,6 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
-    private final RoleService roleService;
 
     @PostMapping("/login")
     @Operation(summary = "Authenticate and receive a token")
@@ -35,11 +34,13 @@ public class UserController {
             return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/logout")
+    @PostMapping("/logout")
     @Operation(summary = "Deauthenticate")
-    public ResponseEntity<Void> deauthenticate(@RequestParam String token){
-        userService.deauthenticate(token);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<Void> deauthenticate(@RequestBody DeauthenticationRequest request){
+        if (userService.deauthenticate(request))
+            return new ResponseEntity<>(HttpStatus.OK);
+
+        else return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping
