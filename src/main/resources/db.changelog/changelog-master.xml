@@ -15,5 +15,6 @@
         <include file="./db.changelog/db.changelog-AlteringPasswordField.xml"/>
         <include file="./db.changelog/db.changelog-RevokedTokensTable.xml"/>
         <include file="./db.changelog/db.changelog-AlterTokenField.xml"/>
+        <include file="./db.changelog/db.changelog-AddDateRevokedToBlacklist.xml"/>
 
 </databaseChangeLog>
