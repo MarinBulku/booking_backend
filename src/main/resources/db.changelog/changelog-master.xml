@@ -13,5 +13,7 @@
         <include file="./db.changelog/db.changelog-RemovePrimaryKeyConstraints.xml"/>
         <include file="./db.changelog/db.changelog-AddingNewPrimaryKeys.xml"/>
         <include file="./db.changelog/db.changelog-AlteringPasswordField.xml"/>
+        <include file="./db.changelog/db.changelog-RevokedTokensTable.xml"/>
+        <include file="./db.changelog/db.changelog-AlterTokenField.xml"/>
 
 </databaseChangeLog>
