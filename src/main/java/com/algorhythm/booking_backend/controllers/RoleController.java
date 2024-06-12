@@ -1,12 +1,10 @@
 package com.algorhythm.booking_backend.controllers;
 
 import com.algorhythm.booking_backend.entities.Role;
-import com.algorhythm.booking_backend.exceptions.EntityNotFoundException;
 import com.algorhythm.booking_backend.services.interfaces.RoleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
