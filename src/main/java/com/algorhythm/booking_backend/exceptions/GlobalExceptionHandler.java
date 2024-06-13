@@ -12,7 +12,9 @@ import java.time.ZonedDateTime;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = {
-            EntityNotFoundException.class
+            EntityNotFoundException.class,
+            ImageTooLargeException.class,
+            IncorrectFileTypeException.class
     })
     public ResponseEntity<ApiException> handleNotFoundExceptions(Exception e) {
 
