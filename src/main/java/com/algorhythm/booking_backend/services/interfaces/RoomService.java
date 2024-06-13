@@ -1,5 +1,6 @@
 package com.algorhythm.booking_backend.services.interfaces;
 
+import com.algorhythm.booking_backend.dataproviders.Room.RoomCreationRequest;
 import com.algorhythm.booking_backend.entities.Room;
 
 import java.util.Date;
@@ -15,7 +16,7 @@ public interface RoomService {
 
     boolean existsById(Integer id);
 
-    Room addRoom(String name, Integer hotelId, Integer adultCapacity, Integer kidCapacity, Integer price, String description, String imagePath);
+    boolean addRoom(RoomCreationRequest request);
 
-    void removeRoom(Integer idOfRoomToBeRemoved);
+    boolean removeRoom(Integer idOfRoomToBeRemoved);
 }
