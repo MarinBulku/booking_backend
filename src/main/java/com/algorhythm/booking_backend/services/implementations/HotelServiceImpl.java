@@ -67,8 +67,8 @@ public class HotelServiceImpl implements HotelService {
 
     @Override
     public boolean addHotel(HotelCreationRequest request) {
-
         MultipartFile file = request.getHotelImage();
+        if (file == null || file.isEmpty()) throw new IncorrectFileTypeException("No image provided");
         if (file.getSize() > 102400)
             throw new ImageTooLargeException("Image size larger than 100KB: " + file.getSize());
         else if (!Objects.requireNonNull(file.getContentType()).startsWith("image/")) {
