@@ -4,6 +4,7 @@ import com.algorhythm.booking_backend.dataproviders.Room.RoomCreationRequest;
 import com.algorhythm.booking_backend.services.interfaces.RoomService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,7 @@ public class RoomController {
     @PostMapping("/create")
     @Operation(summary = "Add a new room")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> createRoom(@ModelAttribute RoomCreationRequest request){
+    public ResponseEntity<?> createRoom(@Valid @ModelAttribute RoomCreationRequest request){
         boolean addedRoom = roomService.addRoom(request);
         if (!addedRoom)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Could not save file");

@@ -5,6 +5,7 @@ import com.algorhythm.booking_backend.dataproviders.Hotel.HotelDTO;
 import com.algorhythm.booking_backend.services.interfaces.HotelService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,10 +32,17 @@ public class HotelController {
         return new ResponseEntity<>(hotelService.allHotelDtos(), HttpStatus.OK);
     }
 
+    @GetMapping("/allByOwner")
+    @Operation(summary = "Get all hotels by owner")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<HotelDTO>> getAllHotelsByOwner(@RequestParam Integer ownerId){
+        return ResponseEntity.ok(hotelService.allHotelDtosByOwner(ownerId));
+    }
+
     @PostMapping("/create")
     @Operation(summary = "Create a new hotel")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> createHotel(@ModelAttribute HotelCreationRequest request){
+    public ResponseEntity<?> createHotel(@Valid @ModelAttribute HotelCreationRequest request){
         boolean hotelAdded = hotelService.addHotel(request);
         if (!hotelAdded)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Could not save file");

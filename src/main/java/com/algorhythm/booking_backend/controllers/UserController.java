@@ -8,6 +8,7 @@ import com.algorhythm.booking_backend.dataproviders.authentication.Deauthenticat
 import com.algorhythm.booking_backend.services.interfaces.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,14 +30,14 @@ public class UserController {
 
     @PostMapping("/login")
     @Operation(summary = "Authenticate and receive a token")
-    public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request){
+    public ResponseEntity<AuthenticationResponse> authenticate(@Valid @RequestBody AuthenticationRequest request){
             AuthenticationResponse response = userService.authenticate(request);
             return ResponseEntity.ok(response);
     }
 
     @PostMapping("/logout")
     @Operation(summary = "Deauthenticate")
-    public ResponseEntity<Void> deauthenticate(@RequestBody DeauthenticationRequest request){
+    public ResponseEntity<Void> deauthenticate(@Valid @RequestBody DeauthenticationRequest request){
         if (userService.deauthenticate(request))
             return new ResponseEntity<>(HttpStatus.OK);
 
