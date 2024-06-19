@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class HotelDTO {
-    Integer hotelId;
-    String hotelName;
+    private Integer hotelId;
+    private String hotelName;
 }

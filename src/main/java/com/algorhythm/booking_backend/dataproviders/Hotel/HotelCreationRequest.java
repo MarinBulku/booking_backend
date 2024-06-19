@@ -1,5 +1,7 @@
 package com.algorhythm.booking_backend.dataproviders.Hotel;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,11 +13,14 @@ import org.springframework.web.multipart.MultipartFile;
 @AllArgsConstructor
 @NoArgsConstructor
 public class HotelCreationRequest {
-
-    String hotelName;
+    @NotBlank(message = "Hotel name shouldn't be null")
+    private String hotelName;
+    @NotNull(message = "Image file shouldn't be null")
     MultipartFile hotelImage;
-    boolean freeParking;
-    boolean freeWiFi;
-    boolean freePool;
-    boolean freeBreakfast;
+    @NotNull(message = "Owner ID shouldn't be null")
+    private Integer ownerId;
+    private String freeParking;
+    private String freeWiFi;
+    private String freePool;
+    private String freeBreakfast;
 }

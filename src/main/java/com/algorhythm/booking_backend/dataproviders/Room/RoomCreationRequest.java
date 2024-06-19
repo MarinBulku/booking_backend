@@ -1,5 +1,9 @@
 package com.algorhythm.booking_backend.dataproviders.Room;
 
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,11 +15,20 @@ import org.springframework.web.multipart.MultipartFile;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RoomCreationRequest {
-    String roomName;
-    Integer adultCapacity;
-    Integer kidCapacity;
-    Integer price;
-    String description;
-    Integer hotelId;
-    MultipartFile roomImage;
+    @NotBlank(message = "Room name shouldn't be null")
+    private String roomName;
+    @NotNull(message = "Adult capacity should not be null, min = 1")
+    @Min(1)
+    private Integer adultCapacity;
+    @NotNull(message = "Kids capacity should not be null")
+    @Min(0)
+    private Integer kidCapacity;
+    @NotNull(message = "Price should not be null")
+    @DecimalMin("0.0")
+    private Double price;
+    private String description;
+    @NotNull(message = "Hotel ID should not be null")
+    private Integer hotelId;
+    @NotNull(message = "Image file should not be null")
+    private MultipartFile roomImage;
 }
