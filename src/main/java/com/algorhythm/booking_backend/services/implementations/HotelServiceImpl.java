@@ -1,14 +1,21 @@
 package com.algorhythm.booking_backend.services.implementations;
 
+import com.algorhythm.booking_backend.dataproviders.Booking.BookingRequest;
+import com.algorhythm.booking_backend.dataproviders.Hotel.AvailableHotelDto;
 import com.algorhythm.booking_backend.dataproviders.Hotel.HotelCreationRequest;
 import com.algorhythm.booking_backend.dataproviders.Hotel.HotelDTO;
 import com.algorhythm.booking_backend.entities.Hotel;
+import com.algorhythm.booking_backend.entities.User;
 import com.algorhythm.booking_backend.exceptions.EntityNotFoundException;
 import com.algorhythm.booking_backend.exceptions.ImageTooLargeException;
 import com.algorhythm.booking_backend.exceptions.IncorrectFileTypeException;
 import com.algorhythm.booking_backend.repositories.HotelRepository;
+import com.algorhythm.booking_backend.repositories.UserRepository;
 import com.algorhythm.booking_backend.services.interfaces.HotelService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,6 +31,7 @@ import java.util.Optional;
 public class HotelServiceImpl implements HotelService {
 
     private final HotelRepository hotelRepository;
+    private final UserRepository userRepository;
 
     @Override
     public List<Hotel> findAll() {
@@ -37,18 +45,41 @@ public class HotelServiceImpl implements HotelService {
     @Override
     public List<HotelDTO> allHotelDtos() {
         List<Hotel> allHotels = findAll();
-        ArrayList<HotelDTO> allHotelDtos = new ArrayList<>();
+        return getHotelDTOS(allHotels);
+    }
+
+    @Override
+    public List<HotelDTO> allHotelDtosByOwner(Integer ownerId) {
+        Optional<User> owner = userRepository.findById(ownerId);
+
+        if (owner.isEmpty()) throw new EntityNotFoundException("No user with this ID: " + ownerId);
+
+        List<Hotel> allHotelsByOwner = hotelRepository.findHotelsByOwner(owner.get());
+        return getHotelDTOS(allHotelsByOwner);
+    }
+
+    @Override
+    public Page<AvailableHotelDto> findAllAvailableHotels(BookingRequest request, Integer pageNo) throws Exception {
+        if (!request.getCheckInDate().isBefore(request.getCheckOutDate()))
+            throw new Exception("Check in date should only be before check out date");
+        final int pageSize = 18;
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        return null;
+    }
+
+    private List<HotelDTO> getHotelDTOS(List<Hotel> allHotelsByOwner) {
+        ArrayList<HotelDTO> allHotelsByOwnerDtos = new ArrayList<>();
 
         for (Hotel h:
-             allHotels) {
+                allHotelsByOwner) {
             HotelDTO hotelDTO = HotelDTO.builder()
                     .hotelId(h.getHotelId())
                     .hotelName(h.getHotelName())
                     .build();
-            allHotelDtos.add(hotelDTO);
+            allHotelsByOwnerDtos.add(hotelDTO);
         }
 
-        return allHotelDtos;
+        return allHotelsByOwnerDtos;
     }
 
     @Override
@@ -67,8 +98,11 @@ public class HotelServiceImpl implements HotelService {
 
     @Override
     public boolean addHotel(HotelCreationRequest request) {
+
+        Optional<User> owner = userRepository.findById(request.getOwnerId());
+        if (owner.isEmpty()) throw new EntityNotFoundException("No user found with this ID: " + request.getOwnerId());
+
         MultipartFile file = request.getHotelImage();
-        if (file == null || file.isEmpty()) throw new IncorrectFileTypeException("No image provided");
         if (file.getSize() > 102400)
             throw new ImageTooLargeException("Image size larger than 100KB: " + file.getSize());
         else if (!Objects.requireNonNull(file.getContentType()).startsWith("image/")) {
@@ -84,12 +118,13 @@ public class HotelServiceImpl implements HotelService {
         }
 
         Hotel newHotel = Hotel.builder()
+                .owner(owner.get())
                 .hotelName(request.getHotelName())
                 .hotelImagePath(filePath)
-                .freeParking(request.isFreeParking())
-                .freeWiFi(request.isFreeWiFi())
-                .freePool(request.isFreePool())
-                .freeBreakfast(request.isFreeBreakfast())
+                .freeParking(Boolean.getBoolean(request.getFreeParking()))
+                .freeWiFi(Boolean.getBoolean(request.getFreeWiFi()))
+                .freePool(Boolean.getBoolean(request.getFreePool()))
+                .freeBreakfast(Boolean.getBoolean(request.getFreeBreakfast()))
                 .build();
 
         hotelRepository.save(newHotel);
