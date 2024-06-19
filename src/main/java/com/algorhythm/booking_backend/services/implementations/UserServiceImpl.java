@@ -123,8 +123,10 @@ public class UserServiceImpl implements UserService {
         Optional<User> optional = userRepository.findByEmail(request.getEmail());
 
         if (optional.isEmpty()) {
-            throw new EntityNotFoundException("User not found with email: " + request.getEmail());
+            optional = userRepository.findByPhoneNumber(request.getEmail());
         }
+
+        if (optional.isEmpty()) throw new EntityNotFoundException("User not found with username: " + request.getEmail());
 
         User user = optional.get();
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {

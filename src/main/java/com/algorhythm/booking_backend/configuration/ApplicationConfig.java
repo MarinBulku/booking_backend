@@ -1,5 +1,6 @@
 package com.algorhythm.booking_backend.configuration;
 
+import com.algorhythm.booking_backend.entities.User;
 import com.algorhythm.booking_backend.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -14,6 +15,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.Optional;
+
 @Configuration
 @RequiredArgsConstructor
 @EnableGlobalMethodSecurity(
@@ -26,8 +29,13 @@ public class ApplicationConfig {
 
     @Bean
     public UserDetailsService userDetailsService(){
-        return username -> userRepository.findByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found!"));
+        return username -> {
+            Optional<User> user = userRepository.findByEmail(username);
+            if (user.isEmpty()) {
+                user = userRepository.findByPhoneNumber(username);
+            }
+            return user.orElseThrow(() -> new UsernameNotFoundException("User not found!"));
+        };
     }
 
     @Bean
