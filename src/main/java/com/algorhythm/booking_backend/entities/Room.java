@@ -27,7 +27,7 @@ public class Room {
     private Integer kidsCapacity;
 
     @Column(name = "price")
-    private Integer price;
+    private Double price;
 
     @Column(name = "description")
     private String description;

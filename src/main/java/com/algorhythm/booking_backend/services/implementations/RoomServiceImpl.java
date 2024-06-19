@@ -57,7 +57,6 @@ public class RoomServiceImpl implements RoomService {
         if (optional.isEmpty()) throw new EntityNotFoundException("No hotel found with this id: " + request.getHotelId());
 
         MultipartFile file = request.getRoomImage();
-        if (file == null || file.isEmpty()) throw new IncorrectFileTypeException("No image provided");
         if (file.getSize() > 102400)
             throw new ImageTooLargeException("Image size larger than 100KB: " + file.getSize());
         else if (!Objects.requireNonNull(file.getContentType()).startsWith("image/")) {
