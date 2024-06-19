@@ -17,5 +17,7 @@
         <include file="./db.changelog/db.changelog-AlterTokenField.xml"/>
         <include file="./db.changelog/db.changelog-AddDateRevokedToBlacklist.xml"/>
         <include file="./db.changelog/db.changelog-alter_filepath_length.xml"/>
+        <include file="./db.changelog/db.changelog-makeRoomPriceDecimal.xml"/>
+        <include file="./db.changelog/db.changelog-addOwnerIdToHotelTable.xml"/>
 
 </databaseChangeLog>
