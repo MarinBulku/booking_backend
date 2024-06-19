@@ -1,5 +1,6 @@
 package com.algorhythm.booking_backend.dataproviders.authentication;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,5 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DeauthenticationRequest {
-    String token;
+    @NotBlank(message = "Token shouldn't be null")
+    private String token;
 }
