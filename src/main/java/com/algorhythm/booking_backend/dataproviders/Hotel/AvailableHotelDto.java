@@ -1,8 +1,6 @@
 package com.algorhythm.booking_backend.dataproviders.Hotel;
 
-import jakarta.persistence.Column;
 import lombok.*;
-import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @Builder

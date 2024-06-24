@@ -1,6 +1,5 @@
 package com.algorhythm.booking_backend.repositories;
 
-import com.algorhythm.booking_backend.dataproviders.Hotel.AvailableHotelDto;
 import com.algorhythm.booking_backend.entities.Hotel;
 import com.algorhythm.booking_backend.entities.User;
 import org.springframework.data.domain.Page;
