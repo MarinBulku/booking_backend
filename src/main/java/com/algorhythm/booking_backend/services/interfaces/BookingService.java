@@ -1,6 +1,8 @@
 package com.algorhythm.booking_backend.services.interfaces;
 
+import com.algorhythm.booking_backend.dataproviders.Booking.BookingHistoryDto;
 import com.algorhythm.booking_backend.entities.Booking;
+import org.springframework.data.domain.Page;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -9,7 +11,7 @@ public interface BookingService {
 
     List<Booking> findAll();
 
-    List<Booking> findAllBookingsFromUser(Integer userId);
+    Page<BookingHistoryDto> findAllBookingsFromUser(Integer userId, Integer pageSize, Integer pageNo, String orderBy);
 
     Booking findById(Integer bookingId);
 

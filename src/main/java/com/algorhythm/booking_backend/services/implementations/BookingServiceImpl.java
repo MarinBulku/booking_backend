@@ -1,7 +1,9 @@
 package com.algorhythm.booking_backend.services.implementations;
 
+import com.algorhythm.booking_backend.dataproviders.Booking.BookingHistoryDto;
 import com.algorhythm.booking_backend.entities.Booking;
 import com.algorhythm.booking_backend.entities.Room;
+import com.algorhythm.booking_backend.entities.Status;
 import com.algorhythm.booking_backend.entities.User;
 import com.algorhythm.booking_backend.exceptions.EntityNotFoundException;
 import com.algorhythm.booking_backend.repositories.BookingRepository;
@@ -9,6 +11,10 @@ import com.algorhythm.booking_backend.repositories.RoomRepository;
 import com.algorhythm.booking_backend.repositories.UserRepository;
 import com.algorhythm.booking_backend.services.interfaces.BookingService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -35,13 +41,18 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<Booking> findAllBookingsFromUser(Integer userId) {
+    public Page<BookingHistoryDto> findAllBookingsFromUser(Integer userId, Integer pageSize, Integer pageNo, String orderBy) {
 
-        List<Booking> allBookingsFromUser = bookingRepository.findByUser_UserId(userId);
+        if (pageSize <= 0 || pageNo <0)
+            throw new IllegalArgumentException("Invalid page arguments");
 
-        if (allBookingsFromUser.isEmpty()) return new ArrayList<>();
-
-        return allBookingsFromUser;
+        Sort sort = switch (orderBy){
+            case "+" -> Sort.by("startDate").ascending();
+            case "-" -> Sort.by("startDate").descending();
+            default -> Sort.unsorted();
+        };
+        Pageable page = PageRequest.of(pageNo,pageSize, sort);
+        return bookingRepository.findByUser_UserId(userId, page);
     }
 
     @Override
@@ -61,7 +72,7 @@ public class BookingServiceImpl implements BookingService {
         if (optional.isEmpty()) throw new EntityNotFoundException("Booking not found!");
 
         Booking bookingToBeCanceled = optional.get();
-        bookingToBeCanceled.setCancelled(true);
+        bookingToBeCanceled.setStatus(Status.CANCELLED);
         bookingRepository.save(bookingToBeCanceled);
     }
 
@@ -80,7 +91,7 @@ public class BookingServiceImpl implements BookingService {
                 .startDate(startDate)
                 .endDate(endDate)
                 .pricePaid(price)
-                .isCancelled(false)
+                .status(Status.ACTIVE)
                 .build();
 
         return bookingRepository.save(newBooking);
