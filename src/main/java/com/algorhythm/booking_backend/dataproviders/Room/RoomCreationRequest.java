@@ -17,18 +17,18 @@ import org.springframework.web.multipart.MultipartFile;
 public class RoomCreationRequest {
     @NotBlank(message = "Room name shouldn't be null")
     private String roomName;
-    @NotNull(message = "Adult capacity should not be null, min = 1")
+    @NotBlank(message = "Adult capacity should not be null, min = 1")
     @Min(1)
     private Integer adultCapacity;
-    @NotNull(message = "Kids capacity should not be null")
+    @NotBlank(message = "Kids capacity should not be null")
     @Min(0)
     private Integer kidCapacity;
-    @NotNull(message = "Price should not be null")
+    @NotBlank(message = "Price should not be null")
     @DecimalMin("0.0")
     private Double price;
     private String description;
-    @NotNull(message = "Hotel ID should not be null")
+    @NotBlank(message = "Hotel ID should not be null")
     private Integer hotelId;
-    @NotNull(message = "Image file should not be null")
+    @NotBlank(message = "Image file should not be null")
     private MultipartFile roomImage;
 }

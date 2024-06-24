@@ -13,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class AvailableHotelDto {
     private Integer hotelId;
     private String hotelName;
-    private MultipartFile hotelImage;
+    private String hotelImage;
     private boolean freeParking;
     private boolean freeWiFi;
     private boolean freePool;
