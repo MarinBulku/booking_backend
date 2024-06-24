@@ -15,9 +15,9 @@ import org.springframework.web.multipart.MultipartFile;
 public class HotelCreationRequest {
     @NotBlank(message = "Hotel name shouldn't be null")
     private String hotelName;
-    @NotNull(message = "Image file shouldn't be null")
+    @NotBlank(message = "Image file shouldn't be null")
     MultipartFile hotelImage;
-    @NotNull(message = "Owner ID shouldn't be null")
+    @NotBlank(message = "Owner ID shouldn't be null")
     private Integer ownerId;
     private String freeParking;
     private String freeWiFi;

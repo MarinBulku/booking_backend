@@ -1,5 +1,7 @@
 package com.algorhythm.booking_backend.controllers;
 
+import com.algorhythm.booking_backend.dataproviders.Booking.BookingRequest;
+import com.algorhythm.booking_backend.dataproviders.Hotel.AvailableHotelDto;
 import com.algorhythm.booking_backend.dataproviders.Hotel.HotelCreationRequest;
 import com.algorhythm.booking_backend.dataproviders.Hotel.HotelDTO;
 import com.algorhythm.booking_backend.services.interfaces.HotelService;
@@ -7,6 +9,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -37,6 +40,14 @@ public class HotelController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<HotelDTO>> getAllHotelsByOwner(@RequestParam Integer ownerId){
         return ResponseEntity.ok(hotelService.allHotelDtosByOwner(ownerId));
+    }
+
+    @PostMapping("/availableHotels")
+    @Operation(summary = "Get all available hotels for a certain booking request")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<Page<AvailableHotelDto>> getAllAvailableHotels(@Valid @RequestBody BookingRequest request, @RequestParam Integer pageNo) throws Exception {
+        Page<AvailableHotelDto> pageRequested = hotelService.findAllAvailableHotels(request, pageNo);
+        return ResponseEntity.ok(pageRequested);
     }
 
     @PostMapping("/create")

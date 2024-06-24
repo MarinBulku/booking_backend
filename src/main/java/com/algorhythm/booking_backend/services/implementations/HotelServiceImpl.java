@@ -13,18 +13,14 @@ import com.algorhythm.booking_backend.repositories.HotelRepository;
 import com.algorhythm.booking_backend.repositories.UserRepository;
 import com.algorhythm.booking_backend.services.interfaces.HotelService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.apache.commons.io.FileUtils;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.io.*;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -58,13 +54,42 @@ public class HotelServiceImpl implements HotelService {
         return getHotelDTOS(allHotelsByOwner);
     }
 
-    @Override
-    public Page<AvailableHotelDto> findAllAvailableHotels(BookingRequest request, Integer pageNo) throws Exception {
+   @Override
+   public Page<AvailableHotelDto> findAllAvailableHotels(BookingRequest request, Integer pageNo){
         if (!request.getCheckInDate().isBefore(request.getCheckOutDate()))
-            throw new Exception("Check in date should only be before check out date");
+            throw new IllegalArgumentException("Check in date should only be before check out date");
         final int pageSize = 18;
-        Pageable pageable = PageRequest.of(pageNo, pageSize);
-        return null;
+
+       Pageable pageable = PageRequest.of(pageNo, pageSize);
+
+       Page<Hotel> availableHotels = hotelRepository.findAvailableHotels(
+                request.getCheckInDate(),
+                request.getCheckOutDate(),
+                request.getAdultsNumber(),
+                request.getKidsNumber(),
+                pageable
+        );
+
+       List<AvailableHotelDto> availableHotelDtoList = availableHotels.stream().map(h -> {
+           try {
+               String hotelImage = Base64.getEncoder().encodeToString(
+                       FileUtils.readFileToByteArray(new File(h.getHotelImagePath()))
+               );
+               return AvailableHotelDto.builder()
+                       .hotelId(h.getHotelId())
+                       .hotelName(h.getHotelName())
+                       .freeBreakfast(h.isFreeBreakfast())
+                       .freeWiFi(h.isFreeWiFi())
+                       .freeParking(h.isFreeParking())
+                       .freePool(h.isFreePool())
+                       .hotelImage(hotelImage)
+                       .build();
+           } catch (IOException e) {
+               throw new RuntimeException("Failed to read hotel image file", e);
+           }
+       }).collect(Collectors.toList());
+
+       return new PageImpl<>(availableHotelDtoList, pageable, availableHotelDtoList.size());
     }
 
     private List<HotelDTO> getHotelDTOS(List<Hotel> allHotelsByOwner) {
