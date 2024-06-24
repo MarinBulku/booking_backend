@@ -54,7 +54,7 @@ public class UserController {
 
     @GetMapping("/user")
     @Operation(summary = "Get user by id")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<UserDto> getUserById(@RequestParam Integer userId){
         UserDto user = userService.findById(userId);
         return ResponseEntity.ok(user);
