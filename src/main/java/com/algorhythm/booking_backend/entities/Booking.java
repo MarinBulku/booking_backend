@@ -37,6 +37,7 @@ public class Booking {
     @Column(name = "price_paid")
     private Double pricePaid;
 
-    @Column(name = "cancelled")
-    private boolean isCancelled;
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    private Status status;
 }
