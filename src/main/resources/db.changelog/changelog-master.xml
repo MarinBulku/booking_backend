@@ -19,5 +19,6 @@
         <include file="./db.changelog/db.changelog-alter_filepath_length.xml"/>
         <include file="./db.changelog/db.changelog-makeRoomPriceDecimal.xml"/>
         <include file="./db.changelog/db.changelog-addOwnerIdToHotelTable.xml"/>
+        <include file="./db.changelog/db.changelog-AddBookingStatus.xml"/>
 
 </databaseChangeLog>
