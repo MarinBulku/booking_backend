@@ -1,6 +1,6 @@
 package com.algorhythm.booking_backend.services.implementations;
 
-import com.algorhythm.booking_backend.dataproviders.Booking.BookingRequest;
+import com.algorhythm.booking_backend.dataproviders.Booking.HotelSearchRequest;
 import com.algorhythm.booking_backend.dataproviders.Hotel.AvailableHotelDto;
 import com.algorhythm.booking_backend.dataproviders.Hotel.HotelCreationRequest;
 import com.algorhythm.booking_backend.dataproviders.Hotel.HotelDTO;
@@ -55,7 +55,7 @@ public class HotelServiceImpl implements HotelService {
     }
 
    @Override
-   public Page<AvailableHotelDto> findAllAvailableHotels(BookingRequest request, Integer pageNo){
+   public Page<AvailableHotelDto> findAllAvailableHotels(HotelSearchRequest request, Integer pageNo){
         if (!request.getCheckInDate().isBefore(request.getCheckOutDate()))
             throw new IllegalArgumentException("Check in date should only be before check out date");
         final int pageSize = 18;

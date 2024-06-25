@@ -1,6 +1,6 @@
 package com.algorhythm.booking_backend.controllers;
 
-import com.algorhythm.booking_backend.dataproviders.Booking.BookingRequest;
+import com.algorhythm.booking_backend.dataproviders.Booking.HotelSearchRequest;
 import com.algorhythm.booking_backend.dataproviders.Hotel.AvailableHotelDto;
 import com.algorhythm.booking_backend.dataproviders.Hotel.HotelCreationRequest;
 import com.algorhythm.booking_backend.dataproviders.Hotel.HotelDTO;
@@ -45,7 +45,7 @@ public class HotelController {
     @PostMapping("/availableHotels")
     @Operation(summary = "Get all available hotels for a certain booking request")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<Page<AvailableHotelDto>> getAllAvailableHotels(@Valid @RequestBody BookingRequest request, @RequestParam Integer pageNo) throws Exception {
+    public ResponseEntity<Page<AvailableHotelDto>> getAllAvailableHotels(@Valid @RequestBody HotelSearchRequest request, @RequestParam Integer pageNo) throws Exception {
         Page<AvailableHotelDto> pageRequested = hotelService.findAllAvailableHotels(request, pageNo);
         return ResponseEntity.ok(pageRequested);
     }

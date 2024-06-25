@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class BookingRequest {
+public class HotelSearchRequest {
     @NotBlank(message = "Check in date should not be null")
     private LocalDate checkInDate;
     @NotBlank(message = "Check out date should not be null")

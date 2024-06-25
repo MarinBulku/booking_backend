@@ -1,6 +1,6 @@
 package com.algorhythm.booking_backend.services.interfaces;
 
-import com.algorhythm.booking_backend.dataproviders.Booking.BookingRequest;
+import com.algorhythm.booking_backend.dataproviders.Booking.HotelSearchRequest;
 import com.algorhythm.booking_backend.dataproviders.Hotel.AvailableHotelDto;
 import com.algorhythm.booking_backend.dataproviders.Hotel.HotelCreationRequest;
 import com.algorhythm.booking_backend.dataproviders.Hotel.HotelDTO;
@@ -17,7 +17,7 @@ public interface HotelService {
 
     List<HotelDTO> allHotelDtosByOwner(Integer ownerId);
 
-    Page<AvailableHotelDto> findAllAvailableHotels(BookingRequest request, Integer pageNo) throws Exception;
+    Page<AvailableHotelDto> findAllAvailableHotels(HotelSearchRequest request, Integer pageNo) throws Exception;
 
     Hotel findById(Integer id);
 
