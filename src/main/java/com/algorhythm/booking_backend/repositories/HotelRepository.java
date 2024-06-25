@@ -14,11 +14,17 @@ public interface HotelRepository extends JpaRepository<Hotel, Integer> {
     List<Hotel> findHotelsByOwner(User owner);
 
     @Query("select h from Hotel h " +
-            "inner join Room r " +
-            "on (r.hotel = h and r.adultsCapacity = :adultsNumber and r.kidsCapacity = :kidsNumber)" +
-            "where not exists (select distinct r from Room r " +
-            "inner join Booking b on r = b.room " +
-            "where ((b.startDate <= :checkInDate and :checkInDate <= b.endDate) or ((b.startDate <= :checkOutDate and :checkOutDate <= b.endDate))))")
+            "inner join Room r on r.hotel = h " +
+            "where r.adultsCapacity = :adultsNumber and r.kidsCapacity = :kidsNumber " +
+            "and not exists (" +
+            "   select b from Booking b " +
+            "   where b.room = r " +
+            "   and (" +
+            "       (b.startDate <= :checkInDate and :checkInDate <= b.endDate) or " +
+            "       (b.startDate <= :checkOutDate and :checkOutDate <= b.endDate) or " +
+            "       (:checkInDate <= b.startDate and b.startDate <= :checkOutDate)" +
+            "   )" +
+            ")")
     Page<Hotel> findAvailableHotels(
             LocalDate checkInDate,
             LocalDate checkOutDate,
