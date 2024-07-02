@@ -16,7 +16,7 @@ public class Points {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "point_id")
-    private Integer roomId;
+    private Integer pointId;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "fk_room_id")
