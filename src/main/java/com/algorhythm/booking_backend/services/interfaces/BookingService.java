@@ -15,7 +15,7 @@ public interface BookingService {
 
     Booking findById(Integer bookingId);
 
-    void cancelBooking(Integer bookingId);
+    boolean cancelBooking(Integer bookingId, Integer userId);
 
     Booking bookRoom(Integer roomId, LocalDate startDate, LocalDate endDate, Integer userId, Double price);
 }
