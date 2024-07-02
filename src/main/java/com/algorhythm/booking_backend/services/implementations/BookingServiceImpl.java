@@ -28,7 +28,6 @@ public class BookingServiceImpl implements BookingService {
 
     private final BookingRepository bookingRepository;
     private final UserRepository userRepository;
-    private final RoomRepository roomRepository;
 
     @Override
     public List<Booking> findAll() {
@@ -66,34 +65,29 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public void cancelBooking(Integer bookingId) {
+    public boolean cancelBooking(Integer bookingId, Integer userId) {
         Optional<Booking> optional = bookingRepository.findById(bookingId);
 
         if (optional.isEmpty()) throw new EntityNotFoundException("Booking not found!");
 
+        Optional<User> optionalUser = userRepository.findById(userId);
+
+        if (optionalUser.isEmpty()) throw new EntityNotFoundException("User not found!");
+
         Booking bookingToBeCanceled = optional.get();
+
+        if (bookingToBeCanceled.getUser() != optionalUser.get())
+            return false;
+
         bookingToBeCanceled.setStatus(Status.CANCELLED);
         bookingRepository.save(bookingToBeCanceled);
+
+        return true;
     }
 
     @Override
     public Booking bookRoom(Integer roomId, LocalDate startDate, LocalDate endDate, Integer userId, Double price) {
 
-        if (!userRepository.existsById(userId)) throw new EntityNotFoundException("User with this id not found: " + userId);
-        else if (!roomRepository.existsById(roomId)) throw new EntityNotFoundException("Room with this id not found: " + roomId);
-
-        User user = userRepository.findById(userId).get();
-        Room room = roomRepository.findById(roomId).get();
-
-        Booking newBooking = Booking.builder()
-                .user(user)
-                .room(room)
-                .startDate(startDate)
-                .endDate(endDate)
-                .pricePaid(price)
-                .status(Status.ACTIVE)
-                .build();
-
-        return bookingRepository.save(newBooking);
+        return null;
     }
 }
