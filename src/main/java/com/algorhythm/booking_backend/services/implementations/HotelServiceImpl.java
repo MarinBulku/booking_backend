@@ -54,15 +54,16 @@ public class HotelServiceImpl implements HotelService {
         return getHotelDTOS(allHotelsByOwner);
     }
 
-   @Override
-   public Page<AvailableHotelDto> findAllAvailableHotels(HotelSearchRequest request, Integer pageNo){
-        if (!request.getCheckInDate().isBefore(request.getCheckOutDate()))
-            throw new IllegalArgumentException("Check in date should only be before check out date");
+    @Override
+    public Page<AvailableHotelDto> findAllAvailableHotels(HotelSearchRequest request, Integer pageNo) {
+        if (!request.getCheckInDate().isBefore(request.getCheckOutDate())) {
+            throw new IllegalArgumentException("Check-in date should be before check-out date");
+        }
+
         final int pageSize = 18;
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
 
-       Pageable pageable = PageRequest.of(pageNo, pageSize);
-
-       Page<Hotel> availableHotels = hotelRepository.findAvailableHotels(
+        Page<Object[]> availableHotelsWithFreeRooms = hotelRepository.findAvailableHotels(
                 request.getCheckInDate(),
                 request.getCheckOutDate(),
                 request.getAdultsNumber(),
@@ -70,26 +71,31 @@ public class HotelServiceImpl implements HotelService {
                 pageable
         );
 
-       List<AvailableHotelDto> availableHotelDtoList = availableHotels.stream().map(h -> {
-           try {
-               String hotelImage = Base64.getEncoder().encodeToString(
-                       FileUtils.readFileToByteArray(new File(h.getHotelImagePath()))
-               );
-               return AvailableHotelDto.builder()
-                       .hotelId(h.getHotelId())
-                       .hotelName(h.getHotelName())
-                       .freeBreakfast(h.isFreeBreakfast())
-                       .freeWiFi(h.isFreeWiFi())
-                       .freeParking(h.isFreeParking())
-                       .freePool(h.isFreePool())
-                       .hotelImage(hotelImage)
-                       .build();
-           } catch (IOException e) {
-               throw new RuntimeException("Failed to read hotel image file", e);
-           }
-       }).collect(Collectors.toList());
+        // Map to DTOs
+        List<AvailableHotelDto> availableHotelDtoList = availableHotelsWithFreeRooms.getContent().stream().map(row -> {
+            Hotel h = (Hotel) row[0];
+            Long freeRooms = (Long) row[1];
 
-       return new PageImpl<>(availableHotelDtoList, pageable, availableHotelDtoList.size());
+            try {
+                String hotelImage = Base64.getEncoder().encodeToString(
+                        FileUtils.readFileToByteArray(new File(h.getHotelImagePath()))
+                );
+                return AvailableHotelDto.builder()
+                        .hotelId(h.getHotelId())
+                        .hotelName(h.getHotelName())
+                        .freeBreakfast(h.isFreeBreakfast())
+                        .freeWiFi(h.isFreeWiFi())
+                        .freeParking(h.isFreeParking())
+                        .freePool(h.isFreePool())
+                        .hotelImage(hotelImage)
+                        .roomCount(freeRooms.intValue())
+                        .build();
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to read hotel image file", e);
+            }
+        }).collect(Collectors.toList());
+
+        return new PageImpl<>(availableHotelDtoList, pageable, availableHotelsWithFreeRooms.getTotalElements());
     }
 
     private List<HotelDTO> getHotelDTOS(List<Hotel> allHotelsByOwner) {
@@ -146,10 +152,10 @@ public class HotelServiceImpl implements HotelService {
                 .owner(owner.get())
                 .hotelName(request.getHotelName())
                 .hotelImagePath(filePath)
-                .freeParking(Boolean.getBoolean(request.getFreeParking()))
-                .freeWiFi(Boolean.getBoolean(request.getFreeWiFi()))
-                .freePool(Boolean.getBoolean(request.getFreePool()))
-                .freeBreakfast(Boolean.getBoolean(request.getFreeBreakfast()))
+                .freeParking(request.getFreeParking().equalsIgnoreCase("true"))
+                .freeWiFi(request.getFreeWiFi().equalsIgnoreCase("true"))
+                .freePool(request.getFreePool().equalsIgnoreCase("true"))
+                .freeBreakfast(request.getFreeBreakfast().equalsIgnoreCase("true"))
                 .build();
 
         hotelRepository.save(newHotel);
