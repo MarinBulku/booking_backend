@@ -1,5 +1,6 @@
 package com.algorhythm.booking_backend.controllers;
 
+import com.algorhythm.booking_backend.dataproviders.Booking.BookingRequest;
 import com.algorhythm.booking_backend.dataproviders.Booking.RoomSearchRequest;
 import com.algorhythm.booking_backend.dataproviders.Room.AvailableRoomDto;
 import com.algorhythm.booking_backend.dataproviders.Room.RoomCreationRequest;
@@ -49,7 +50,18 @@ public class RoomController {
     @Operation(summary = "Get all available rooms for a certain room search request")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Page<AvailableRoomDto>> getAvailableRooms(@Valid @RequestBody RoomSearchRequest request, @RequestParam Integer pageNo){
-        Page<AvailableRoomDto> rooms = roomService.findAvailableRoomsToBook(request, pageNo);
+        Page<AvailableRoomDto> rooms = roomService.findAvailableRoomsToBook2(request, pageNo);
         return ResponseEntity.ok(rooms);
+    }
+
+    @PostMapping("/book")
+    @Operation(summary = "Book a new room")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<String> bookRoom(@Valid @RequestBody BookingRequest request){
+        boolean isBookingDone = roomService.bookRoom(request);
+
+        if (isBookingDone)
+            return ResponseEntity.ok("OK");
+        else return new ResponseEntity<>("Info not correct, credit card or price sent may be invalid", HttpStatus.BAD_REQUEST);
     }
 }
