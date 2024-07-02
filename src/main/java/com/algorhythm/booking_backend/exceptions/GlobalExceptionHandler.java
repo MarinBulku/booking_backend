@@ -1,5 +1,6 @@
 package com.algorhythm.booking_backend.exceptions;
 
+import jakarta.persistence.EntityExistsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -17,6 +18,7 @@ public class GlobalExceptionHandler {
             ImageTooLargeException.class,
             IncorrectFileTypeException.class,
             MethodArgumentNotValidException.class,
+            EntityExistsException.class,
             Exception.class
     })
     public ResponseEntity<ApiException> handleNotFoundExceptions(Exception e) {
