@@ -18,7 +18,7 @@ public class PointsServiceImpl implements PointService {
     @Override
     public List<Points> findRoomDiscountsByRoomId(Integer roomId) {
 
-        return pointRepository.findByRoomId(roomId);
+        return pointRepository.findByRoom_RoomId(roomId);
     }
 
     @Override
