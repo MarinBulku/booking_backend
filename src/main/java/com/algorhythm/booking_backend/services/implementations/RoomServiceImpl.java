@@ -1,5 +1,6 @@
 package com.algorhythm.booking_backend.services.implementations;
 
+import com.algorhythm.booking_backend.dataproviders.Booking.BookingRequest;
 import com.algorhythm.booking_backend.dataproviders.Booking.RoomSearchRequest;
 import com.algorhythm.booking_backend.dataproviders.Room.AvailableRoomDto;
 import com.algorhythm.booking_backend.dataproviders.Room.DatePrice;
@@ -10,6 +11,7 @@ import com.algorhythm.booking_backend.exceptions.ImageTooLargeException;
 import com.algorhythm.booking_backend.exceptions.IncorrectFileTypeException;
 import com.algorhythm.booking_backend.repositories.*;
 import com.algorhythm.booking_backend.services.interfaces.RoomService;
+import jakarta.persistence.EntityExistsException;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FileUtils;
 import org.springframework.data.domain.*;
@@ -18,7 +20,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -31,6 +36,7 @@ public class RoomServiceImpl implements RoomService {
     private final DiscountDateRepository discountDateRepository;
     private final PointRepository pointRepository;
     private final UserRepository userRepository;
+    private final BookingRepository bookingRepository;
     @Override
     public List<Room> findAll() {
         List<Room> allRooms = roomRepository.findAll();
@@ -38,8 +44,10 @@ public class RoomServiceImpl implements RoomService {
         return allRooms;
     }
 
+
     @Override
-    public Page<AvailableRoomDto> findAvailableRoomsToBook(RoomSearchRequest request, Integer pageNo) {
+    public Page<AvailableRoomDto> findAvailableRoomsToBook2(RoomSearchRequest request, Integer pageNo) {
+
         if (!request.getStartDate().isBefore(request.getEndDate()))
             throw new IllegalArgumentException("Start date must be before end date");
 
@@ -47,59 +55,90 @@ public class RoomServiceImpl implements RoomService {
         if (userOptional.isEmpty())
             throw new EntityNotFoundException("No user with this id: " + request.getUserId());
 
-        final int pageSize = 18;
+        final int pageSize = 18 ;
+        Sort sort = switch (request.getSort()) {
+            case "+" -> Sort.by(Sort.Order.asc("total_cost"));
+            case "-" -> Sort.by(Sort.Order.desc("total_cost"));
+            default -> Sort.unsorted();
+        };
 
-        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        /*
+        * we need 18 rooms per page, the results will have number of rooms * dates count records,
+        * so the page size of results in database should be 18 * no. of dates
+        * */
+        int offset = (int) request.getStartDate().datesUntil(request.getEndDate().plusDays(1)).count();
+        Pageable pageable = PageRequest.of(pageNo, pageSize * offset , sort);
         Optional<Hotel> optionalHotel = hotelRepository.findById(request.getHotelId());
 
         if (optionalHotel.isEmpty()) throw new EntityNotFoundException("No hotel with this id: " + request.getHotelId());
 
-        Page<Room> foundRooms = roomRepository.findAvailableRooms(
-                optionalHotel.get(),
+        List<Object[]> allAvailableRooms = roomRepository.findAvailableRooms2(
+                request.getHotelId(),
                 request.getStartDate(),
                 request.getEndDate(),
                 request.getAdultsCapacity(),
                 request.getKidsCapacity(),
+                userOptional.get().getBookingPoints(),
                 pageable
-                );
+        );
 
-        List<AvailableRoomDto> availableRoomDto = foundRooms.stream().map(room -> {
+        if (allAvailableRooms.size() == 0)
+            return new PageImpl<>(new ArrayList<>(), pageable, 0);
+
+        ArrayList<AvailableRoomDto> dtoArrayList = new ArrayList<>(allAvailableRooms.size());
+        Map<Integer, AvailableRoomDto> map = new HashMap<>();
+
+        for (Object[] row: allAvailableRooms) {
+            Integer roomId = (Integer) row[0];
+            String roomName = (String) row[1];
+            String description = (String) row[2];
+            String roomImageEncoded;
             try {
-                String roomImage = Base64.getEncoder().encodeToString(
-                        FileUtils.readFileToByteArray(new File(room.getRoomImagePath()))
+                roomImageEncoded = Base64.getEncoder().encodeToString(
+                        FileUtils.readFileToByteArray(new File((String)row[3]))
                 );
-                ArrayList<DatePrice> datePrices = getRoomsDatePriceList(room, request.getStartDate(), request.getEndDate());
-                Double totalPrice = datePrices.stream().mapToDouble(DatePrice::getPrice).sum();
-                Double pointDiscount = getPointDiscountByRoom(room, userOptional.get());
-                return AvailableRoomDto.builder()
-                        .roomId(room.getRoomId())
-                        .roomName(room.getRoomName())
-                        .description(room.getDescription())
-                        .roomImage(roomImage)
-                        .datePriceList(datePrices)
-                        .totalPrice(totalPrice * pointDiscount)
-                        .pointsDiscount(pointDiscount)
-                        .build();
             } catch (IOException e) {
-                throw new RuntimeException("Failed to read room image file");
+                roomImageEncoded = "";
             }
-        }).toList();
 
-        ArrayList<AvailableRoomDto> list = new ArrayList<>(availableRoomDto);
+            Instant bookingDateTime = (Instant) row[4];
+            LocalDate bookingDate = bookingDateTime.atZone(ZoneId.systemDefault()).toLocalDate();
+            Double dailyCost = (Double) row[5];
+            Double totalCost = (Double) row[6];
+            Double discountApplied = (Double) row[7];
 
-        if ("+".equals(request.getSort())) {
-            list.sort(Comparator.comparingDouble(AvailableRoomDto::getTotalPrice));
-        } else if ("-".equals(request.getSort())) {
-            list.sort(Comparator.comparingDouble(AvailableRoomDto::getTotalPrice).reversed());
+            AvailableRoomDto roomDto = map.get(roomId);
+            if (roomDto == null) {
+                roomDto = AvailableRoomDto.builder()
+                        .roomId(roomId)
+                        .roomName(roomName)
+                        .description(description)
+                        .roomImage(roomImageEncoded)
+                        .totalPrice(totalCost)
+                        .datePriceList(new ArrayList<>())
+                        .pointsDiscount(discountApplied)
+                        .build();
+                map.put(roomId, roomDto);
+            }
+
+            roomDto.getDatePriceList().add(DatePrice.builder()
+                    .date(bookingDate)
+                    .price(dailyCost)
+                    .build());
+            roomDto.setTotalPrice(totalCost);
         }
 
-        return new PageImpl<>(list, pageable, list.size());
+        /*
+        * In the end, we have max 18 rooms per page to return
+        * */
+
+        return new PageImpl<>(new ArrayList<>(map.values()), PageRequest.of(pageNo, pageSize), map.size());
     }
 
     private Double getPointDiscountByRoom(Room room, User user) {
 
         Integer userPoints = user.getBookingPoints();
-        List<Points> discountPoints = pointRepository.findByRoomId(room.getRoomId());
+        List<Points> discountPoints = pointRepository.findByRoom_RoomId(room.getRoomId());
         Double discount = 1.0;
         for (Points p:
              discountPoints) {
@@ -211,6 +250,68 @@ public class RoomServiceImpl implements RoomService {
             throw new EntityNotFoundException("File not found: " + pathOfImageToDelete);
         }
         roomRepository.deleteById(idOfRoomToBeRemoved);
+        return true;
+    }
+
+    @Override
+    public boolean bookRoom(BookingRequest request) {
+        if (!userRepository.existsById(request.getUserId())) throw new EntityNotFoundException("User with this id not found: " + request.getUserId());
+        else if (!roomRepository.existsById(request.getRoomId())) throw new EntityNotFoundException("Room with this id not found: " + request.getRoomId());
+
+        if (
+                request.getReservedFor().isBlank()
+                || request.getEmail().isBlank()
+                        || request.getAddress().isBlank()
+                        || request.getPhoneNumber().isBlank()
+        ) return false;
+
+        if (request.getCCName().isBlank()
+                || request.getCCNumber().isBlank()
+                || request.getCCNumber().length() != 16
+                || request.getCVV().isBlank()
+                || request.getCVV().length() != 3
+                || request.getCCExpiryDate().isBefore(LocalDate.now())
+        ) return false;
+
+        Room room = roomRepository.findById(request.getRoomId()).get();
+
+        Optional<Booking> isThereABooking = bookingRepository.isThereABooking(
+                room,
+                request.getStartDate(),
+                request.getEndDate()
+        );
+
+        if (isThereABooking.isPresent())
+            throw new EntityExistsException("Room already booked between those dates!");
+
+        Double bookingPrice = getRoomsDatePriceList(room, request.getStartDate(), request.getEndDate()).stream().mapToDouble(DatePrice::getPrice).sum();
+        User user = userRepository.findById(request.getUserId()).get();
+        Double discountPoints = getPointDiscountByRoom(room, user);
+        Double priceThatShouldBePaid = bookingPrice * discountPoints;
+
+        if (!priceThatShouldBePaid.equals(request.getPrice()))
+            return false;
+
+        Booking newBooking = Booking.builder()
+                .user(user)
+                .room(room)
+                .startDate(request.getStartDate())
+                .endDate(request.getEndDate())
+                .pricePaid(request.getPrice())
+                .status(Status.ACTIVE)
+                .reservedFor(request.getReservedFor())
+                .email(request.getEmail())
+                .address(request.getAddress())
+                .phoneNumber(request.getPhoneNumber())
+                .build();
+
+        bookingRepository.save(newBooking);
+
+        user.setBookingsNumber(user.getBookingsNumber()+1);
+        user.setBookingPoints(user.getBookingPoints()+2);
+
+        userRepository.save(user);
+
         return true;
     }
 }
