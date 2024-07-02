@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface PointRepository extends JpaRepository<Points, Integer> {
 
-    List<Points> findByRoomId(Integer roomId);
+    List<Points> findByRoom_RoomId(Integer roomId);
 }
