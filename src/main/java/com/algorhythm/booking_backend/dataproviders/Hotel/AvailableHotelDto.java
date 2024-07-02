@@ -16,4 +16,5 @@ public class AvailableHotelDto {
     private boolean freeWiFi;
     private boolean freePool;
     private boolean freeBreakfast;
+    private Integer roomCount;
 }
