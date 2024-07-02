@@ -6,12 +6,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/bookings")
@@ -34,5 +32,18 @@ public class BookingController {
             @RequestParam String sorted
     ){
         return ResponseEntity.ok(bookingService.findAllBookingsFromUser(userId, pageSize, pageNo, sorted));
+    }
+
+    @PutMapping("/cancel")
+    @PreAuthorize("hasRole('USER')")
+    @Operation(summary = "Cancel a booking")
+    public ResponseEntity<String> cancelBookReservation(@RequestParam Integer bookingId,
+                                                      @RequestParam Integer userId){
+        boolean cancelled = bookingService.cancelBooking(bookingId, userId);
+
+        if (cancelled)
+            return ResponseEntity.ok("Cancelled successfully");
+
+        return new ResponseEntity<>("User doesn't match with the booking user", HttpStatus.BAD_REQUEST);
     }
 }
