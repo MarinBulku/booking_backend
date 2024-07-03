@@ -56,46 +56,60 @@ public class RoomServiceImpl implements RoomService {
             throw new EntityNotFoundException("No user with this id: " + request.getUserId());
 
         final int pageSize = 18 ;
-        Sort sort = switch (request.getSort()) {
-            case "+" -> Sort.by(Sort.Order.asc("total_cost"));
-            case "-" -> Sort.by(Sort.Order.desc("total_cost"));
-            default -> Sort.unsorted();
-        };
-
         /*
         * we need 18 rooms per page, the results will have number of rooms * dates count records,
         * so the page size of results in database should be 18 * no. of dates
         * */
         int offset = (int) request.getStartDate().datesUntil(request.getEndDate().plusDays(1)).count();
-        Pageable pageable = PageRequest.of(pageNo, pageSize * offset , sort);
+        Pageable pageable = PageRequest.of(pageNo, pageSize * offset);
         Optional<Hotel> optionalHotel = hotelRepository.findById(request.getHotelId());
 
         if (optionalHotel.isEmpty()) throw new EntityNotFoundException("No hotel with this id: " + request.getHotelId());
 
-        List<Object[]> allAvailableRooms = roomRepository.findAvailableRooms2(
-                request.getHotelId(),
-                request.getStartDate(),
-                request.getEndDate(),
-                request.getAdultsCapacity(),
-                request.getKidsCapacity(),
-                userOptional.get().getBookingPoints(),
-                pageable
-        );
+        List<Object[]> allAvailableRooms = switch (request.getSort()){
+          case "+" -> roomRepository.findAvailableRoomsASC(
+                  request.getHotelId(),
+                  request.getStartDate(),
+                  request.getEndDate(),
+                  request.getAdultsCapacity(),
+                  request.getKidsCapacity(),
+                  userOptional.get().getBookingPoints(),
+                  pageable
+          );
+          case "-" -> roomRepository.findAvailableRoomsDESC(
+                  request.getHotelId(),
+                  request.getStartDate(),
+                  request.getEndDate(),
+                  request.getAdultsCapacity(),
+                  request.getKidsCapacity(),
+                  userOptional.get().getBookingPoints(),
+                  pageable
+          );
+
+            default -> roomRepository.findAvailableRooms2(
+                    request.getHotelId(),
+                    request.getStartDate(),
+                    request.getEndDate(),
+                    request.getAdultsCapacity(),
+                    request.getKidsCapacity(),
+                    userOptional.get().getBookingPoints(),
+                    pageable
+            );
+        };
 
         if (allAvailableRooms.size() == 0)
             return new PageImpl<>(new ArrayList<>(), pageable, 0);
 
-        ArrayList<AvailableRoomDto> dtoArrayList = new ArrayList<>(allAvailableRooms.size());
-        Map<Integer, AvailableRoomDto> map = new HashMap<>();
+        List<AvailableRoomDto> availableRoomsList = new ArrayList<>();
 
-        for (Object[] row: allAvailableRooms) {
+        for (Object[] row : allAvailableRooms) {
             Integer roomId = (Integer) row[0];
             String roomName = (String) row[1];
             String description = (String) row[2];
             String roomImageEncoded;
             try {
                 roomImageEncoded = Base64.getEncoder().encodeToString(
-                        FileUtils.readFileToByteArray(new File((String)row[3]))
+                        FileUtils.readFileToByteArray(new File((String) row[3]))
                 );
             } catch (IOException e) {
                 roomImageEncoded = "";
@@ -107,7 +121,14 @@ public class RoomServiceImpl implements RoomService {
             Double totalCost = (Double) row[6];
             Double discountApplied = (Double) row[7];
 
-            AvailableRoomDto roomDto = map.get(roomId);
+            AvailableRoomDto roomDto = null;
+            for (AvailableRoomDto dto : availableRoomsList) {
+                if (dto.getRoomId().equals(roomId)) {
+                    roomDto = dto;
+                    break;
+                }
+            }
+
             if (roomDto == null) {
                 roomDto = AvailableRoomDto.builder()
                         .roomId(roomId)
@@ -118,21 +139,19 @@ public class RoomServiceImpl implements RoomService {
                         .datePriceList(new ArrayList<>())
                         .pointsDiscount(discountApplied)
                         .build();
-                map.put(roomId, roomDto);
+                availableRoomsList.add(roomDto);
             }
 
             roomDto.getDatePriceList().add(DatePrice.builder()
                     .date(bookingDate)
                     .price(dailyCost)
                     .build());
-            roomDto.setTotalPrice(totalCost);
         }
-
         /*
         * In the end, we have max 18 rooms per page to return
         * */
-
-        return new PageImpl<>(new ArrayList<>(map.values()), PageRequest.of(pageNo, pageSize), map.size());
+        //System.out.println();
+        return new PageImpl<>(availableRoomsList, PageRequest.of(pageNo, pageSize), availableRoomsList.size());
     }
 
     private Double getPointDiscountByRoom(Room room, User user) {
