@@ -12,8 +12,29 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface HotelRepository extends JpaRepository<Hotel, Integer> {
+
+    /*
+    * findHotelsByOwner(User owner)
+    * owner - The owner of the business(hotel)
+    *
+    * Returns a list of hotels registered by the owner
+    * */
     List<Hotel> findHotelsByOwner(User owner);
 
+    /*
+    * findAvailableHotels( LocalDate checkInDate, LocalDate checkOutDate, Integer adultsNumber, Integer kidsNumber, Pageable pageable)
+    * checkInDate, checkOutDate - Date range to search for available hotels
+    * adultsNumber, kidsNumber - Other specifications of request, that the hotels must have
+    * pageable - For pagination of results
+    *
+    * The query searches for hotels that have rooms that meet the specs for kids and adults number
+    * Also the rooms must have not been booked between(including) dates specified
+    *
+    * If a hotel is found which meets the room requirements,
+    * it is returned along with the number of free rooms that it does have
+    *
+    * The results are paginated
+    * */
     @Query("select h, count(r) as freeRooms " +
             "from Hotel h " +
             "inner join Room r on r.hotel = h " +

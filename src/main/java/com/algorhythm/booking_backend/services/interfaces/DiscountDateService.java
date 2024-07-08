@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 public interface DiscountDateService {
-
+    //Discount Date Service method interfaces
     List<DiscountDate> datesBetween(Integer roomId, LocalDate startDate, LocalDate endDate);
 
     DiscountDate addDiscountDate(Integer roomId, LocalDate date, Double discount);

@@ -10,6 +10,8 @@ import java.util.List;
 
 public interface UserService {
 
+    //User Service method interfaces
+
     List<UserDto> findAll();
 
     UserDto findById(Integer id);

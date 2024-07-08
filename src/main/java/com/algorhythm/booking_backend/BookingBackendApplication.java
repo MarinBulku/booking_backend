@@ -10,6 +10,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableSpringDataWebSupport(pageSerializationMode = EnableSpringDataWebSupport.PageSerializationMode.VIA_DTO)
 public class BookingBackendApplication {
 
+    //Starting point of application
     public static void main(String[] args) {
         SpringApplication.run(BookingBackendApplication.class, args);
     }

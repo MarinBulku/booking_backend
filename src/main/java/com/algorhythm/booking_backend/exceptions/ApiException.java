@@ -6,6 +6,9 @@ import java.time.ZonedDateTime;
 
 public class ApiException {
 
+    /*
+    * The format of api exception to be thrown in controller layer
+    * */
     private final String message;
     private final HttpStatus status;
     private final ZonedDateTime timestamp;

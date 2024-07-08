@@ -22,6 +22,18 @@ public class BookingController {
 
     public final BookingService bookingService;
 
+    /*
+    * getUsersBookingHistory(Integer userId, Integer pageSize, Integer pageNo, String sorted)
+    * userId - ID of user to search for his bookings
+    * pageSize - Number of bookings that should be displayed for this page
+    * pageNo - Number of page that should be returned
+    * sorted - if the contents should be returned
+    *
+    * Must be a user to access this endpoint
+    * It returns a page of BookingHistoryDto of the user specified
+    *
+    * If it encounters an error, by default a response with bad_request status is returned
+    * */
     @GetMapping("/history")
     @PreAuthorize("hasRole('USER')")
     @Operation(summary = "Get booking history of user")
@@ -34,6 +46,15 @@ public class BookingController {
         return ResponseEntity.ok(bookingService.findAllBookingsFromUser(userId, pageSize, pageNo, sorted));
     }
 
+    /*
+    * cancelBookReservation(Integer bookingId, Integer userId)
+    * bookingId - ID of the booking to be cancelled
+    * userID - The user that made the booking
+    *
+    * Must be a user to access this endpoint
+    * If cancelled successfully, response with 200 status is returned,
+    * else user with bad_request status is returned
+    * */
     @PutMapping("/cancel")
     @PreAuthorize("hasRole('USER')")
     @Operation(summary = "Cancel a booking")

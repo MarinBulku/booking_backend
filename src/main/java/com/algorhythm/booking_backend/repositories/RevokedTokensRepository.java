@@ -9,6 +9,12 @@ import java.time.LocalDateTime;
 
 public interface RevokedTokensRepository extends JpaRepository<RevokedToken, String> {
 
+    /*
+    * deleteOlderThan(LocalDateTime time)
+    * time - time specified
+    *
+    * Deletes all the tokens that are older than the specified time
+    * */
     @Modifying
     @Query("DELETE FROM RevokedToken t WHERE t.timeRevoked <= :time")
     void deleteOlderThan(LocalDateTime time);

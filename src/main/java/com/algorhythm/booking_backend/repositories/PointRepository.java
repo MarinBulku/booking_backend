@@ -7,5 +7,11 @@ import java.util.List;
 
 public interface PointRepository extends JpaRepository<Points, Integer> {
 
+    /*
+    * findByRoom_RoomId(Integer roomId)
+    * roomId - ID of room that we must search points for
+    *
+    * Returns a list of Points entity for a specific room
+    * */
     List<Points> findByRoom_RoomId(Integer roomId);
 }

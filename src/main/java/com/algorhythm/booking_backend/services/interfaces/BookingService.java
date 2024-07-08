@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface BookingService {
 
+    //Booking Service method interfaces
     List<Booking> findAll();
 
     Page<BookingHistoryDto> findAllBookingsFromUser(Integer userId, Integer pageSize, Integer pageNo, String orderBy);
@@ -17,5 +18,4 @@ public interface BookingService {
 
     boolean cancelBooking(Integer bookingId, Integer userId);
 
-    Booking bookRoom(Integer roomId, LocalDate startDate, LocalDate endDate, Integer userId, Double price);
 }

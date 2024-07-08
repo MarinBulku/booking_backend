@@ -10,7 +10,7 @@ import org.springframework.data.domain.Page;
 import java.util.List;
 
 public interface HotelService {
-
+    //Hotel Service method interfaces
     List<Hotel> findAll();
 
     List<HotelDTO> allHotelDtos();

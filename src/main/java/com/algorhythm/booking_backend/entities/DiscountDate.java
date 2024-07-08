@@ -15,6 +15,13 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class DiscountDate {
 
+    /*
+    * Discount Date entity
+    *
+    * Holds the room which has the discount on a specific date,
+    * and the discount made on that date
+    * */
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "discount_id")

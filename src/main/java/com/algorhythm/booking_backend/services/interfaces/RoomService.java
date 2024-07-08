@@ -13,6 +13,7 @@ import java.util.List;
 
 public interface RoomService {
 
+    //Room Service method interfaces
     List<Room> findAll();
 
     Page<AvailableRoomDto> findAvailableRoomsToBook2(RoomSearchRequest request, Integer pageNo);

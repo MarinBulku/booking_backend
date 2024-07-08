@@ -24,6 +24,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
 
+    /*
+    * doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+    * request - The request made
+    * response - The response to be sent
+    *
+    *
+    * Checks the request, verifies the headers and extracts user data from the token if it is valid
+    * */
     @Override
     protected void doFilterInternal(
             @NonNull HttpServletRequest request,
@@ -56,15 +64,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
         filterChain.doFilter(request, response);
     }
+
+    /*
+    * shouldNotFilter(HttpServletRequest request)
+    * request - The request that should not be filtered
+    *
+    * If the request satisfies the conditions for not filtering, returns true.
+    * Else returns false
+    * */
     @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+    protected boolean shouldNotFilter(HttpServletRequest request) {
 
         String servletPath =  request.getServletPath();
 
         return
                 servletPath.equals("/swagger-ui.html")
                 || servletPath.contains("/api-docs")
-                || servletPath.contains("/users/login")
-                || servletPath.contains("/users/logout");
+                || servletPath.contains("/users/login");
     }
 }

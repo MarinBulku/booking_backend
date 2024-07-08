@@ -11,6 +11,22 @@ import java.util.List;
 
 public interface RoomRepository extends JpaRepository<Room, Integer> {
 
+    /*
+    * Room repository, to perform simple CRUD operations on
+    * */
+
+    /*
+    * All three methods below have the same purpose
+    *
+    * Based on the requirements specified, finds the rooms' info that is needed for booking
+    * It returns for each room the id, name, description, image path, all booking dates, all daily costs,
+    * total cost and also any discount if it is applied.
+    *
+    * The difference is that findAvailableRooms2 gets these results in unsorted total cost order,
+    * findAvailableRoomsASC gets the results in ascending total cost order,
+    * findAvailableRoomsDESC gets the results in descending total cost order
+    * */
+
     @Query(value = "WITH DateSeries AS ( " +
             "    SELECT generate_series(CAST(:startDate AS DATE), CAST(:endDate AS DATE), '1 day'::INTERVAL) AS booking_date " +
             "), " +

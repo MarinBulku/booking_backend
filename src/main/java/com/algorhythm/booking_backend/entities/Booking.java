@@ -20,6 +20,7 @@ public class Booking {
     @Column(name = "booking_id")
     private Integer bookingId;
 
+    //User on whose account the booking is made
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "fk_user_id")
     private User user;
@@ -41,6 +42,7 @@ public class Booking {
     @Enumerated(EnumType.STRING)
     private Status status;
 
+    //Info of user that the booking is for
     @Column(name = "full_name")
     private String reservedFor;
 

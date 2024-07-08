@@ -36,6 +36,7 @@ public class Hotel {
     @Column(name = "free_breakfast")
     private boolean freeBreakfast;
 
+    //User which registers the hotel
     @ManyToOne
     @JoinColumn(name = "fk_owner_id")
     private User owner;

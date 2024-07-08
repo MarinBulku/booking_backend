@@ -25,10 +25,17 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class HotelServiceImpl implements HotelService {
-
+    //Hotel Service Method implementations
+    //HotelRepository to fetch hotel data from repository/database
+    //UserRepository to fetch user data from repository/database, mostly for confirmation
     private final HotelRepository hotelRepository;
     private final UserRepository userRepository;
 
+    /*
+    * findAll() - No parameters needed
+    *
+    * Returns a list of ALL Hotel Entities in the repository
+    * */
     @Override
     public List<Hotel> findAll() {
         List<Hotel> allHotels = hotelRepository.findAll();
@@ -38,12 +45,26 @@ public class HotelServiceImpl implements HotelService {
         return allHotels;
     }
 
+    /*
+     * findAllDtos() - No parameters needed
+     *
+     * Finds all Hotel Entities, and then parses into HotelDTO to return as a list
+     * */
     @Override
     public List<HotelDTO> allHotelDtos() {
         List<Hotel> allHotels = findAll();
         return getHotelDTOS(allHotels);
     }
 
+    /*
+    * allHotelDtosByOwner(Integer ownerId)
+    * ownerId - ID of the business owner(ADMIN that created the hotel)
+    *
+    * If no owner exists with this ownerId, EntityNotFoundException is thrown
+    *
+    * Gets a list of all the hotels owned by this ownerId, then maps
+    * objects as a list of HotelDTO to return.
+    * */
     @Override
     public List<HotelDTO> allHotelDtosByOwner(Integer ownerId) {
         Optional<User> owner = userRepository.findById(ownerId);
@@ -54,6 +75,19 @@ public class HotelServiceImpl implements HotelService {
         return getHotelDTOS(allHotelsByOwner);
     }
 
+    /*
+    * findAllAvailableHotels(HotelSearchRequest request, Integer pageNo)
+    * request - The data we need to filter to find available hotels, matching
+    * the criteria specified in the request.
+    * pageNo - The page number that needs to be sent as a response.
+    *
+    * If request's start date is not before end date, IllegalArgumentException is thrown
+    *
+    * After, a page is fetched from repository with the criteria specified.
+    *
+    * From the page returned we create the list of AvailableHotelDto to return
+    * with the correct data needed.
+    * */
     @Override
     public Page<AvailableHotelDto> findAllAvailableHotels(HotelSearchRequest request, Integer pageNo) {
         if (!request.getCheckInDate().isBefore(request.getCheckOutDate())) {
@@ -71,7 +105,6 @@ public class HotelServiceImpl implements HotelService {
                 pageable
         );
 
-        // Map to DTOs
         List<AvailableHotelDto> availableHotelDtoList = availableHotelsWithFreeRooms.getContent().stream().map(row -> {
             Hotel h = (Hotel) row[0];
             Long freeRooms = (Long) row[1];
@@ -98,21 +131,34 @@ public class HotelServiceImpl implements HotelService {
         return new PageImpl<>(availableHotelDtoList, pageable, availableHotelsWithFreeRooms.getTotalElements());
     }
 
-    private List<HotelDTO> getHotelDTOS(List<Hotel> allHotelsByOwner) {
-        ArrayList<HotelDTO> allHotelsByOwnerDtos = new ArrayList<>();
+    /*
+    * getHotelDTOS(List<Hotel> hotels)
+    * hotels - List of hotels
+    *
+    * Transforms each Hotel object to HotelDto object, and return the final list
+    * */
+    private List<HotelDTO> getHotelDTOS(List<Hotel> hotels) {
+        ArrayList<HotelDTO> allHotelDtos = new ArrayList<>();
 
         for (Hotel h:
-                allHotelsByOwner) {
+                hotels) {
             HotelDTO hotelDTO = HotelDTO.builder()
                     .hotelId(h.getHotelId())
                     .hotelName(h.getHotelName())
                     .build();
-            allHotelsByOwnerDtos.add(hotelDTO);
+            allHotelDtos.add(hotelDTO);
         }
 
-        return allHotelsByOwnerDtos;
+        return allHotelDtos;
     }
 
+    /*
+    * findById(Integer id)
+    * id - ID of hotel that needs to be found
+    *
+    * If no hotel exists with that ID, EntityNotFoundException is thrown,
+    * else it is returned the hotel object
+    * */
     @Override
     public Hotel findById(Integer id) {
         Optional<Hotel> optional = hotelRepository.findById(id);
@@ -122,11 +168,29 @@ public class HotelServiceImpl implements HotelService {
         return optional.get();
     }
 
+    /*
+    * existsById(Integer id)
+    * id - ID of hotel that needs to be checked
+    * If a hotel with this id exits, true is returned, false otherwise.
+    * */
     @Override
     public boolean existsById(Integer id) {
         return hotelRepository.existsById(id);
     }
 
+    /*
+    * addHotel(HotelCreationRequest request)
+    * request - The data and info of hotel that needs to be added
+    *
+    * If no user exists with the id specified, EntityNotFoundException is thrown
+    * If file size is larger than expected ImageTooLargeException is thrown
+    * If file type is not image, IncorrectFileTypeException is thrown
+    *
+    * Saves the file in the specified folder, and then the Hotel data and image path
+    * are stored in the repository.
+    *
+    * Returns true if saved successfully, and false otherwise.
+    * */
     @Override
     public boolean addHotel(HotelCreationRequest request) {
 
@@ -162,11 +226,22 @@ public class HotelServiceImpl implements HotelService {
         return true;
     }
 
+    /*
+    * removeHotel(Integer idOfHotelToBeRemoved)
+    * idOfHotelToBeRemoved - ID of the hotels that needs to be removed
+    *
+    * If no hotel is found with that id, EntityNotFoundException is thrown.
+    *
+    * If the file path specified does not exist, EntityNotFoundException is thrown
+    * If the file in that path cannot be deleted, method returns false.
+    *
+    * If deletion is successful, true is returned
+    * */
     @Override
     public boolean removeHotel(Integer idOfHotelToBeRemoved) {
         if (!hotelRepository.existsById(idOfHotelToBeRemoved)) throw new EntityNotFoundException("No hotel with this id: " + idOfHotelToBeRemoved);
 
-        String pathOfImageToDelete = hotelRepository.findById(idOfHotelToBeRemoved).get().getHotelImagePath();
+        String pathOfImageToDelete = hotelRepository.findById(idOfHotelToBeRemoved).orElseThrow().getHotelImagePath();
         File file = new File(pathOfImageToDelete);
 
         if (file.exists() && file.isFile()) {

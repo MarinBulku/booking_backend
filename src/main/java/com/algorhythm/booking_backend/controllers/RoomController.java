@@ -26,6 +26,15 @@ public class RoomController {
 
     public final RoomService roomService;
 
+    /*
+     * createRoom(RoomCreationRequest request)
+     * request - Contains the details for creating a new room
+     *
+     * Must be an admin to access this endpoint
+     * Returns a response indicating the success or failure of the room creation
+     *
+     * If the room cannot be added, a response with bad_request status is returned
+     */
     @PostMapping("/create")
     @Operation(summary = "Add a new room")
     @PreAuthorize("hasRole('ADMIN')")
@@ -36,6 +45,15 @@ public class RoomController {
         else return ResponseEntity.ok("Room saved successfully");
     }
 
+    /*
+     * deleteRoom(Integer id)
+     * id - ID of the room to be deleted
+     *
+     * Must be an admin to access this endpoint
+     * Returns a response indicating the success or failure of the room deletion
+     *
+     * If the deletion is not successful, a response with bad_request status is returned
+     */
     @DeleteMapping("/delete")
     @Operation(summary = "Delete a hotel by its ID")
     @PreAuthorize("hasRole('ADMIN')")
@@ -46,6 +64,16 @@ public class RoomController {
         return ResponseEntity.badRequest().body("Deletion not made successfully!");
     }
 
+    /*
+     * getAvailableRooms(RoomSearchRequest request, Integer pageNo)
+     * request - Contains the criteria for searching available rooms
+     * pageNo - Number of the page that should be returned
+     *
+     * Must be a user to access this endpoint
+     * Returns a page of AvailableRoomDto matching the search criteria
+     *
+     * If it encounters an error, by default a response with bad_request status is returned
+     */
     @PostMapping("/available")
     @Operation(summary = "Get all available rooms for a certain room search request")
     @PreAuthorize("hasRole('USER')")
@@ -54,6 +82,15 @@ public class RoomController {
         return ResponseEntity.ok(rooms);
     }
 
+    /*
+     * bookRoom(BookingRequest request)
+     * request - Contains the details for booking a room
+     *
+     * Must be a user to access this endpoint
+     * Returns a response indicating the success or failure of the room booking
+     *
+     * If the booking information is incorrect, a response with bad_request status is returned
+     */
     @PostMapping("/book")
     @Operation(summary = "Book a new room")
     @PreAuthorize("hasRole('USER')")
@@ -64,4 +101,5 @@ public class RoomController {
             return ResponseEntity.ok("OK");
         else return new ResponseEntity<>("Info not correct, credit card or price sent may be invalid", HttpStatus.BAD_REQUEST);
     }
+
 }

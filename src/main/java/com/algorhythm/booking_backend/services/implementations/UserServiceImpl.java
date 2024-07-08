@@ -23,10 +23,23 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
+    /*
+    * User Service method implementations
+    *
+    * Repositories to perform crud operations
+    * PasswordEncoder to encode user password
+    * Jwt Service to deauthenticate a user(revoke the token)
+    * */
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+
+    /*
+    * findAll()
+    *
+    * Returns a list of ALL users, in UserDto form
+    * */
     @Override
     public List<UserDto> findAll() {
 
@@ -51,12 +64,21 @@ public class UserServiceImpl implements UserService {
         return allUsersDto;
     }
 
+    /*
+    * findById(Integer id)
+    * id - ID of the user to be found
+    *
+    * If no user is found, EntityNotFoundException is thrown
+    * Method returns UserDto with the data of user requested
+    * */
     @Override
     public UserDto findById(Integer id) {
 
         Optional<User> foundUser  = userRepository.findById(id);
 
-        if (foundUser.isPresent()) {
+        if (foundUser.isEmpty()) {
+            throw new EntityNotFoundException("No user with this id: " + id);
+        } else {
             User u = foundUser.get();
             return UserDto.builder()
                     .userId(u.getUserId())
@@ -71,15 +93,27 @@ public class UserServiceImpl implements UserService {
                     .build();
         }
 
-        else throw new EntityNotFoundException("No user with this id: " + id);
-
     }
 
+    /*
+    * existsById(Integer id)
+    * id - id of user that has to be checked
+    *
+    * Returns true if user exists with that id in the repository
+    * ele returns false
+    * */
     @Override
     public boolean existsById(Integer id) {
         return userRepository.existsById(id);
     }
 
+    /*
+    * addUser(NewUserDto newUserDto)
+    * newUserDto - Request to add new user
+    *
+    * Adds a new user to repository
+    * Returns user entity as UserDto
+    * */
     @Override
     public UserDto addUser(NewUserDto newUserDto) {
 
@@ -112,12 +146,26 @@ public class UserServiceImpl implements UserService {
                 .build();
     }
 
+    /*
+    * removeUser(Integer idOfUserToBeRemoved)
+    * idOfUserToBeRemoved - ID of the user to be removed
+    *
+    * If no user is found with that id, throws EntityNotFoundException
+    * Else it deletes the user from repository.
+    * */
     @Override
     public void removeUser(Integer idOfUserToBeRemoved) {
         if (!userRepository.existsById(idOfUserToBeRemoved)) throw new EntityNotFoundException("No user with this id: "+ idOfUserToBeRemoved);
         userRepository.deleteById(idOfUserToBeRemoved);
     }
 
+    /*
+    * authenticate(AuthenticationRequest request)
+    * request - The request to authenticate
+    *
+    * If no user is found with the credentials, EntityNotFoundException is thrown
+    * Else, an encrypted token is returned
+    * */
     @Override
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         Optional<User> optional = userRepository.findByEmail(request.getEmail());
@@ -147,6 +195,15 @@ public class UserServiceImpl implements UserService {
                 .build();
     }
 
+    /*
+    * deauthenticate(DeauthenticationRequest request)
+    * request - The request to deauthenticate
+    *
+    * Token sent in the request is revoked
+    *
+    * If no token is sent, or revocation not made successfully, false is returned
+    * Else returned true
+    * */
     @Override
     public boolean deauthenticate(DeauthenticationRequest request) {
         if (request.getToken().isBlank()) return false;

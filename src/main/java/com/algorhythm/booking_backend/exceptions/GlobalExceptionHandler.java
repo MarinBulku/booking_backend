@@ -12,7 +12,9 @@ import java.time.ZonedDateTime;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-
+    /*
+    * How exceptions are handled
+    * */
     @ExceptionHandler(value = {
             EntityNotFoundException.class,
             ImageTooLargeException.class,

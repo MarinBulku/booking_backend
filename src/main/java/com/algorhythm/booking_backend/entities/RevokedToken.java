@@ -17,7 +17,10 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 @AllArgsConstructor
 public class RevokedToken {
-
+    /*
+    * RevokedToken Entity
+    * Has all the tokens that were used, and then logged out.
+    * */
     @Id
     @Column(name = "token")
     private String revokedToken;

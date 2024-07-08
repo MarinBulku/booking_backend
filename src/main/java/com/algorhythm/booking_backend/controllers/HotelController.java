@@ -28,6 +28,14 @@ public class HotelController {
 
     public final HotelService hotelService;
 
+    /*
+     * getAllHotels()
+     *
+     * Must be an admin to access this endpoint
+     * Returns a list of all hotels in the system
+     *
+     * If it encounters an error, by default a response with bad_request status is returned
+     */
     @GetMapping("/all")
     @Operation(summary = "Get all hotels")
     @PreAuthorize("hasRole('ADMIN')")
@@ -35,6 +43,15 @@ public class HotelController {
         return new ResponseEntity<>(hotelService.allHotelDtos(), HttpStatus.OK);
     }
 
+    /*
+     * getAllHotelsByOwner(Integer ownerId)
+     * ownerId - ID of the owner to fetch their hotels
+     *
+     * Must be an admin to access this endpoint
+     * Returns a list of hotels owned by the specified owner
+     *
+     * If it encounters an error, by default a response with bad_request status is returned
+     */
     @GetMapping("/allByOwner")
     @Operation(summary = "Get all hotels by owner")
     @PreAuthorize("hasRole('ADMIN')")
@@ -42,6 +59,16 @@ public class HotelController {
         return ResponseEntity.ok(hotelService.allHotelDtosByOwner(ownerId));
     }
 
+    /*
+     * getAllAvailableHotels(HotelSearchRequest request, Integer pageNo)
+     * request - Contains the criteria for searching available hotels
+     * pageNo - Number of the page that should be returned
+     *
+     * Must be a user to access this endpoint
+     * Returns a page of AvailableHotelDto matching the search criteria
+     *
+     * If it encounters an error, by default a response with bad_request status is returned
+     */
     @PostMapping("/availableHotels")
     @Operation(summary = "Get all available hotels for a certain booking request")
     @PreAuthorize("hasRole('USER')")
@@ -50,6 +77,15 @@ public class HotelController {
         return ResponseEntity.ok(pageRequested);
     }
 
+    /*
+     * createHotel(HotelCreationRequest request)
+     * request - Contains the details for creating a new hotel
+     *
+     * Must be an admin to access this endpoint
+     * Returns a response indicating the success or failure of the hotel creation
+     *
+     * If the hotel cannot be added, a response with bad_request status is returned
+     */
     @PostMapping("/create")
     @Operation(summary = "Create a new hotel")
     @PreAuthorize("hasRole('ADMIN')")
@@ -60,6 +96,15 @@ public class HotelController {
         else return ResponseEntity.ok("Hotel saved successfully");
     }
 
+    /*
+     * deleteHotel(Integer id)
+     * id - ID of the hotel to be deleted
+     *
+     * Must be an admin to access this endpoint
+     * Returns a response indicating the success or failure of the hotel deletion
+     *
+     * If the deletion is not successful, a response with bad_request status is returned
+     */
     @DeleteMapping("/delete")
     @Operation(summary = "Delete a hotel by its ID")
     @PreAuthorize("hasRole('ADMIN')")
