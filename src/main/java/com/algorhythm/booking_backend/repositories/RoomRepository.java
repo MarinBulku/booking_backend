@@ -106,7 +106,7 @@ public interface RoomRepository extends JpaRepository<Room, Integer> {
             "             room_id, " +
             "             room_name, " +
             "             description, " +
-            "             SUM(daily_cost) AS total_cost " +
+            "             ROUND(SUM(daily_cost)::numeric, 2) AS total_cost" +
             "         FROM " +
             "             RoomPriceAdjustments " +
             "         GROUP BY " +
@@ -222,7 +222,7 @@ public interface RoomRepository extends JpaRepository<Room, Integer> {
             "             room_id, " +
             "             room_name, " +
             "             description, " +
-            "             SUM(daily_cost) AS total_cost " +
+            "             ROUND(SUM(daily_cost)::numeric, 2) AS total_cost " +
             "         FROM " +
             "             RoomPriceAdjustments " +
             "         GROUP BY " +
@@ -338,7 +338,7 @@ public interface RoomRepository extends JpaRepository<Room, Integer> {
             "             room_id, " +
             "             room_name, " +
             "             description, " +
-            "             SUM(daily_cost) AS total_cost " +
+            "             ROUND(SUM(daily_cost)::numeric, 2) AS total_cost " +
             "         FROM " +
             "             RoomPriceAdjustments " +
             "         GROUP BY " +

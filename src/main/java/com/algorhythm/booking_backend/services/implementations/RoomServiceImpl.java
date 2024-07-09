@@ -20,6 +20,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -384,9 +386,12 @@ public class RoomServiceImpl implements RoomService {
 
         Double bookingPrice = getRoomsDatePriceList(room, request.getStartDate(), request.getEndDate()).stream().mapToDouble(DatePrice::getPrice).sum();
         Double discountPoints = getPointDiscountByRoom(room, user);
-        Double priceThatShouldBePaid = bookingPrice * discountPoints;
 
-        if (!priceThatShouldBePaid.equals(request.getPrice()))
+        Double roundedPrice = BigDecimal.valueOf(bookingPrice * discountPoints)
+                .setScale(2, RoundingMode.HALF_UP)
+                .doubleValue();
+
+        if (!roundedPrice.equals(request.getPrice()))
             return false;
 
         Booking newBooking = Booking.builder()
@@ -394,7 +399,7 @@ public class RoomServiceImpl implements RoomService {
                 .room(room)
                 .startDate(request.getStartDate())
                 .endDate(request.getEndDate())
-                .pricePaid(request.getPrice())
+                .pricePaid(roundedPrice)
                 .status(Status.ACTIVE)
                 .reservedFor(request.getReservedFor())
                 .email(request.getEmail())
