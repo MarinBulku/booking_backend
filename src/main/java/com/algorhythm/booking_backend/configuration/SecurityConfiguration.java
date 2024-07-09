@@ -54,6 +54,7 @@ public class SecurityConfiguration {
                     auth.requestMatchers("/swagger-ui.html").permitAll();
                     auth.requestMatchers("/api-docs/**").permitAll();
                     auth.requestMatchers("/users/login").permitAll();
+                    auth.requestMatchers("/users/logout").permitAll();
                     auth.anyRequest().authenticated();
                 })
                 .sessionManagement(session ->

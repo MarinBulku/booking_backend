@@ -56,7 +56,6 @@ public class UserController {
     * */
     @PostMapping("/logout")
     @Operation(summary = "Deauthenticate")
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<Void> deauthenticate(@Valid @RequestBody DeauthenticationRequest request){
         if (userService.deauthenticate(request))
             return new ResponseEntity<>(HttpStatus.OK);
@@ -81,7 +80,6 @@ public class UserController {
      * getUserById(Integer userId)
      * userId - ID of user to be searched
      *
-     * Must be an admin to access this endpoint
      * It returns the user as UserDto object if found,
      * Else BAD_REQUEST with a message is returned
      * */
