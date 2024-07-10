@@ -24,7 +24,9 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -360,6 +362,11 @@ public class RoomServiceImpl implements RoomService {
         User user = userRepository.findById(request.getUserId()).orElseThrow(() -> new EntityNotFoundException("No user with this id:" + request.getUserId()));
         Room room = roomRepository.findById(request.getRoomId()).orElseThrow(() -> new EntityNotFoundException("No room with this id:" + request.getRoomId()));
 
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/yy");
+        YearMonth yearMonth = YearMonth.parse(request.getCCExpiryDate(), formatter);
+        LocalDate CCExpiryDate = yearMonth.atDay(1);
+
+
         if (
                 request.getReservedFor().isBlank()
                 || request.getEmail().isBlank()
@@ -372,7 +379,7 @@ public class RoomServiceImpl implements RoomService {
                 || request.getCCNumber().length() != 16
                 || request.getCVV().isBlank()
                 || request.getCVV().length() != 3
-                || request.getCCExpiryDate().isBefore(LocalDate.now())
+                || CCExpiryDate.isBefore(LocalDate.now())
         ) return false;
 
         Optional<Booking> isThereABooking = bookingRepository.isThereABooking(
