@@ -110,6 +110,9 @@ public class BookingServiceImpl implements BookingService {
         if (bookingToBeCanceled.getUser() != optionalUser.get())
             return false;
 
+        if (!bookingToBeCanceled.getStatus().equals(Status.ACTIVE))
+            return false;
+
         bookingToBeCanceled.setStatus(Status.CANCELLED);
         bookingRepository.save(bookingToBeCanceled);
 
