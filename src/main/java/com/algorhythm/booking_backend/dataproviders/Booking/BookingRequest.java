@@ -38,5 +38,5 @@ public class BookingRequest {
     @NotNull
     private String CVV;
     @NotNull
-    private LocalDate CCExpiryDate;
+    private String CCExpiryDate;
 }
