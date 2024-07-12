@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 public interface BookingRepository extends JpaRepository<Booking, Integer> {
@@ -24,7 +25,7 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
     * */
     @Query("SELECT NEW com.algorhythm.booking_backend.dataproviders.Booking.BookingHistoryDto(b.bookingId, b.room.hotel.hotelName, b.pricePaid, b.startDate, b.status) " +
             "FROM Booking b WHERE b.user.userId = :userId")
-    Page<BookingHistoryDto> findByUser_UserId(Integer userId, Pageable pageable);
+    List<BookingHistoryDto> findByUser_UserId(Integer userId);
 
     /*
     * updateCompletedBookings(LocalDate today)
