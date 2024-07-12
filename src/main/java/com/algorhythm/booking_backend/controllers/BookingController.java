@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/bookings")
 @RequiredArgsConstructor
@@ -37,13 +39,8 @@ public class BookingController {
     @GetMapping("/history")
     @PreAuthorize("hasRole('USER')")
     @Operation(summary = "Get booking history of user")
-    public ResponseEntity<Page<BookingHistoryDto>> getUsersBookingHistory(
-            @RequestParam Integer userId,
-            @RequestParam Integer pageSize,
-            @RequestParam Integer pageNo,
-            @RequestParam String sorted
-    ){
-        return ResponseEntity.ok(bookingService.findAllBookingsFromUser(userId, pageSize, pageNo, sorted));
+    public ResponseEntity<List<BookingHistoryDto>> getUsersBookingHistory(@RequestParam Integer userId){
+        return ResponseEntity.ok(bookingService.findAllBookingsFromUser(userId));
     }
 
     /*
