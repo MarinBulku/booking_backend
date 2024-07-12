@@ -69,6 +69,9 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public Page<AvailableRoomDto> findAvailableRoomsToBook2(RoomSearchRequest request, Integer pageNo) {
 
+        if (request.getStartDate().isBefore(LocalDate.now()))
+            throw new IllegalArgumentException("Start date cannot be before today");
+
         if (!request.getStartDate().isBefore(request.getEndDate()))
             throw new IllegalArgumentException("Start date must be before end date");
 
@@ -362,6 +365,13 @@ public class RoomServiceImpl implements RoomService {
         User user = userRepository.findById(request.getUserId()).orElseThrow(() -> new EntityNotFoundException("No user with this id:" + request.getUserId()));
         Room room = roomRepository.findById(request.getRoomId()).orElseThrow(() -> new EntityNotFoundException("No room with this id:" + request.getRoomId()));
 
+        if (request.getStartDate().isBefore(LocalDate.now()))
+            throw new IllegalArgumentException("Start date cannot be before today");
+
+        if (!request.getStartDate().isBefore(request.getEndDate()))
+            throw new IllegalArgumentException("Start date must be before end date");
+
+
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/yy");
         YearMonth yearMonth = YearMonth.parse(request.getCCExpiryDate(), formatter);
         LocalDate CCExpiryDate = yearMonth.atDay(1);
@@ -375,9 +385,7 @@ public class RoomServiceImpl implements RoomService {
         ) return false;
 
         if (request.getCCName().isBlank()
-                || request.getCCNumber().isBlank()
                 || request.getCCNumber().length() != 16
-                || request.getCVV().isBlank()
                 || request.getCVV().length() != 3
                 || CCExpiryDate.isBefore(LocalDate.now())
         ) return false;

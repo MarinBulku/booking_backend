@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -90,6 +91,9 @@ public class HotelServiceImpl implements HotelService {
     * */
     @Override
     public Page<AvailableHotelDto> findAllAvailableHotels(HotelSearchRequest request, Integer pageNo) {
+        if (request.getCheckInDate().isBefore(LocalDate.now()))
+            throw new IllegalArgumentException("Check-in date cannot be before today");
+
         if (!request.getCheckInDate().isBefore(request.getCheckOutDate())) {
             throw new IllegalArgumentException("Check-in date should be before check-out date");
         }
