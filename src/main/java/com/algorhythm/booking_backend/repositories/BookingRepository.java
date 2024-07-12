@@ -4,8 +4,6 @@ import com.algorhythm.booking_backend.dataproviders.Booking.BookingHistoryDto;
 import com.algorhythm.booking_backend.entities.Booking;
 import com.algorhythm.booking_backend.entities.Room;
 import jakarta.transaction.Transactional;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
