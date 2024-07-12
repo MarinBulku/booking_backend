@@ -9,10 +9,6 @@ import com.algorhythm.booking_backend.repositories.BookingRepository;
 import com.algorhythm.booking_backend.repositories.UserRepository;
 import com.algorhythm.booking_backend.services.interfaces.BookingService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -56,18 +52,11 @@ public class BookingServiceImpl implements BookingService {
     * Finds all bookings made from a user, returns them as a page.
     * */
     @Override
-    public Page<BookingHistoryDto> findAllBookingsFromUser(Integer userId, Integer pageSize, Integer pageNo, String orderBy) {
+    public List<BookingHistoryDto> findAllBookingsFromUser(Integer userId) {
+        if (!userRepository.existsById(userId))
+            throw new EntityNotFoundException("User not found with ID: " + userId);
 
-        if (pageSize <= 0 || pageNo <0)
-            throw new IllegalArgumentException("Invalid page arguments");
-
-        Sort sort = switch (orderBy){
-            case "+" -> Sort.by("startDate").ascending();
-            case "-" -> Sort.by("startDate").descending();
-            default -> Sort.unsorted();
-        };
-        Pageable page = PageRequest.of(pageNo,pageSize, sort);
-        return bookingRepository.findByUser_UserId(userId, page);
+        return bookingRepository.findByUser_UserId(userId);
     }
 
     /*

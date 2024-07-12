@@ -12,7 +12,7 @@ public interface BookingService {
     //Booking Service method interfaces
     List<Booking> findAll();
 
-    Page<BookingHistoryDto> findAllBookingsFromUser(Integer userId, Integer pageSize, Integer pageNo, String orderBy);
+    List<BookingHistoryDto> findAllBookingsFromUser(Integer userId);
 
     Booking findById(Integer bookingId);
 
