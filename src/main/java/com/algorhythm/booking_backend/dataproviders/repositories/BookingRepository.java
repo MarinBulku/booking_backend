@@ -21,7 +21,7 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
     *
     * Returns the page requested of user's booking
     * */
-    @Query("SELECT NEW com.algorhythm.booking_backend.dtos.Booking.BookingHistoryDto(b.bookingId, b.room.hotel.hotelName, b.pricePaid, b.startDate, b.status) " +
+    @Query("SELECT NEW com.algorhythm.booking_backend.dataproviders.dtos.Booking.BookingHistoryDto(b.bookingId, b.room.hotel.hotelName, b.pricePaid, b.startDate, b.status) " +
             "FROM Booking b WHERE b.user.userId = :userId")
     List<BookingHistoryDto> findByUser_UserId(Integer userId);
 
