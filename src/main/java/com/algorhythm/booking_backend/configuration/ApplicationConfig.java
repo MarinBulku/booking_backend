@@ -1,7 +1,7 @@
 package com.algorhythm.booking_backend.configuration;
 
-import com.algorhythm.booking_backend.entities.User;
-import com.algorhythm.booking_backend.repositories.UserRepository;
+import com.algorhythm.booking_backend.dataproviders.entities.User;
+import com.algorhythm.booking_backend.dataproviders.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

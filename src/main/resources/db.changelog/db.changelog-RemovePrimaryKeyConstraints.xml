@@ -10,7 +10,7 @@
         between user and booking tables> </-->
         <addForeignKeyConstraint baseTableName="booking_tbl"
                                  baseColumnNames="fk_user_id"
-                                 constraintName="constraint_user_booking"
+                                 constraintName="constraint_user_booking2"
                                  referencedTableName="user_tbl"
                                  referencedColumnNames="user_id"
                                  onDelete="CASCADE"
@@ -20,7 +20,7 @@
         between room and booking tables> </-->
         <addForeignKeyConstraint baseTableName="booking_tbl"
                                  baseColumnNames="fk_room_id"
-                                 constraintName="constraint_room_booking"
+                                 constraintName="constraint_room_booking2"
                                  referencedTableName="room_tbl"
                                  referencedColumnNames="room_id"
                                  onDelete="CASCADE"
@@ -29,7 +29,7 @@
         <!--Creating the relationship between rooms and points-->
         <addForeignKeyConstraint baseTableName="point_tbl"
                                  baseColumnNames="fk_room_id"
-                                 constraintName="constraint_room_points"
+                                 constraintName="constraint_room_points2"
                                  referencedTableName="room_tbl"
                                  referencedColumnNames="room_id"
                                  onUpdate="CASCADE"
@@ -38,7 +38,7 @@
         <!--Creating the relationship between rooms and discount dates-->
         <addForeignKeyConstraint baseTableName="discount_date_tbl"
                                  baseColumnNames="fk_room_id"
-                                 constraintName="constraint_room_discount_date"
+                                 constraintName="constraint_room_discount_date2"
                                  referencedTableName="room_tbl"
                                  referencedColumnNames="room_id"
                                  onUpdate="CASCADE"

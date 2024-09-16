@@ -1,6 +1,6 @@
 package com.algorhythm.booking_backend.configuration;
 
-import com.algorhythm.booking_backend.services.implementations.JwtService;
+import com.algorhythm.booking_backend.dataproviders.services.implementations.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
