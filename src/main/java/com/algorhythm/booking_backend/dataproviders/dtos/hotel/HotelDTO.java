@@ -1,4 +1,4 @@
-package com.algorhythm.booking_backend.dataproviders.dtos.Hotel;
+package com.algorhythm.booking_backend.dataproviders.dtos.hotel;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

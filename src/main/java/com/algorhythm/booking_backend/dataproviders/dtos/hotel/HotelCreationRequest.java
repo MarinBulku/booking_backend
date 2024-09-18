@@ -1,4 +1,4 @@
-package com.algorhythm.booking_backend.dataproviders.dtos.Hotel;
+package com.algorhythm.booking_backend.dataproviders.dtos.hotel;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
