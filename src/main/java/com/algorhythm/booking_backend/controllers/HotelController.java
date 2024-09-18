@@ -1,9 +1,9 @@
 package com.algorhythm.booking_backend.controllers;
 
-import com.algorhythm.booking_backend.dataproviders.dtos.Booking.HotelSearchRequest;
-import com.algorhythm.booking_backend.dataproviders.dtos.Hotel.AvailableHotelDto;
-import com.algorhythm.booking_backend.dataproviders.dtos.Hotel.HotelCreationRequest;
-import com.algorhythm.booking_backend.dataproviders.dtos.Hotel.HotelDTO;
+import com.algorhythm.booking_backend.dataproviders.dtos.booking.HotelSearchRequest;
+import com.algorhythm.booking_backend.dataproviders.dtos.hotel.AvailableHotelDto;
+import com.algorhythm.booking_backend.dataproviders.dtos.hotel.HotelCreationRequest;
+import com.algorhythm.booking_backend.dataproviders.dtos.hotel.HotelDTO;
 import com.algorhythm.booking_backend.dataproviders.services.interfaces.HotelService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -89,10 +90,10 @@ public class HotelController {
     @PostMapping("/create")
     @Operation(summary = "Create a new hotel")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> createHotel(@Valid @ModelAttribute HotelCreationRequest request){
+    public ResponseEntity<String> createHotel(@Valid @ModelAttribute HotelCreationRequest request){
         boolean hotelAdded = hotelService.addHotel(request);
         if (!hotelAdded)
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Could not save file");
+            return ResponseEntity.badRequest().body("Could not save file");
         else return ResponseEntity.ok("Hotel saved successfully");
     }
 
@@ -108,10 +109,12 @@ public class HotelController {
     @DeleteMapping("/delete")
     @Operation(summary = "Delete a hotel by its ID")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> deleteHotel(@RequestParam Integer id){
-        if (hotelService.removeHotel(id)) {
+    public ResponseEntity<String> deleteHotel(@RequestParam Integer id){
+        try{
+            hotelService.removeHotel(id);
             return ResponseEntity.ok("Deleted successfully");
+        } catch (IOException e) {
+            return ResponseEntity.badRequest().body("Deletion not made successfully!");
         }
-        return ResponseEntity.badRequest().body("Deletion not made successfully!");
     }
 }

@@ -1,6 +1,6 @@
 package com.algorhythm.booking_backend.controllers;
 
-import com.algorhythm.booking_backend.dataproviders.dtos.Booking.BookingHistoryDto;
+import com.algorhythm.booking_backend.dataproviders.dtos.booking.BookingHistoryDto;
 import com.algorhythm.booking_backend.dataproviders.services.interfaces.BookingService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

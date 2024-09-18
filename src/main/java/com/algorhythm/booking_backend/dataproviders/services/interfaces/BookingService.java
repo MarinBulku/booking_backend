@@ -1,6 +1,6 @@
 package com.algorhythm.booking_backend.dataproviders.services.interfaces;
 
-import com.algorhythm.booking_backend.dataproviders.dtos.Booking.BookingHistoryDto;
+import com.algorhythm.booking_backend.dataproviders.dtos.booking.BookingHistoryDto;
 import com.algorhythm.booking_backend.dataproviders.entities.Booking;
 
 import java.util.List;

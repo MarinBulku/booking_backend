@@ -1,10 +1,10 @@
 package com.algorhythm.booking_backend.dataproviders.services.implementations;
 
-import com.algorhythm.booking_backend.dataproviders.dtos.Booking.BookingRequest;
-import com.algorhythm.booking_backend.dataproviders.dtos.Booking.RoomSearchRequest;
-import com.algorhythm.booking_backend.dataproviders.dtos.Room.AvailableRoomDto;
-import com.algorhythm.booking_backend.dataproviders.dtos.Room.DatePrice;
-import com.algorhythm.booking_backend.dataproviders.dtos.Room.RoomCreationRequest;
+import com.algorhythm.booking_backend.dataproviders.dtos.booking.BookingRequest;
+import com.algorhythm.booking_backend.dataproviders.dtos.booking.RoomSearchRequest;
+import com.algorhythm.booking_backend.dataproviders.dtos.room.AvailableRoomDto;
+import com.algorhythm.booking_backend.dataproviders.dtos.room.DatePrice;
+import com.algorhythm.booking_backend.dataproviders.dtos.room.RoomCreationRequest;
 import com.algorhythm.booking_backend.dataproviders.entities.*;
 import com.algorhythm.booking_backend.dataproviders.repositories.*;
 import com.algorhythm.booking_backend.core.exceptions.EntityNotFoundException;
@@ -22,6 +22,8 @@ import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.YearMonth;
@@ -124,7 +126,7 @@ public class RoomServiceImpl implements RoomService {
             );
         };
 
-        if (allAvailableRooms.size() == 0)
+        if (allAvailableRooms.isEmpty())
             return new PageImpl<>(new ArrayList<>(), pageable, 0);
 
         List<AvailableRoomDto> availableRoomsList = new ArrayList<>();
@@ -301,8 +303,8 @@ public class RoomServiceImpl implements RoomService {
             throw new IncorrectFileTypeException("File type provided not image: " +file.getContentType());
         }
 
-        String FOLDER_PATH = "C:\\Users\\User\\git\\booking_backend\\src\\main\\resources\\roomImages\\";
-        String filePath = FOLDER_PATH + file.getOriginalFilename();
+        String folderPath = "C:\\Users\\User\\git\\booking_backend\\src\\main\\resources\\roomImages\\";
+        String filePath = folderPath + file.getOriginalFilename();
         try {
             file.transferTo(new File(filePath));
         } catch (IOException e) {
@@ -331,20 +333,22 @@ public class RoomServiceImpl implements RoomService {
     * Else, room is deleted and method returns true
     * */
     @Override
-    public boolean removeRoom(Integer idOfRoomToBeRemoved) {
+    public boolean removeRoom(Integer idOfRoomToBeRemoved) throws IOException {
         if (!roomRepository.existsById(idOfRoomToBeRemoved)) throw new EntityNotFoundException("No room with this id: " + idOfRoomToBeRemoved);
         String pathOfImageToDelete = roomRepository.findById(idOfRoomToBeRemoved).orElseThrow(() -> new EntityNotFoundException("No room with this id:" + idOfRoomToBeRemoved)).getRoomImagePath();
         File file = new File(pathOfImageToDelete);
 
         if (file.exists() && file.isFile()) {
-            if (!file.delete()) {
-                return false;
-            }
+            cleanupFile(file);
         } else {
-            throw new EntityNotFoundException("File not found: " + pathOfImageToDelete);
+            throw new IOException("File not found: " + pathOfImageToDelete);
         }
         roomRepository.deleteById(idOfRoomToBeRemoved);
         return true;
+    }
+
+    private void cleanupFile(File file) throws IOException {
+        Files.delete(Path.of(file.getAbsolutePath()));
     }
 
     /*
@@ -374,7 +378,7 @@ public class RoomServiceImpl implements RoomService {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/yy");
         YearMonth yearMonth = YearMonth.parse(request.getCCExpiryDate(), formatter);
-        LocalDate CCExpiryDate = yearMonth.atDay(1);
+        LocalDate ccExpiryDate = yearMonth.atDay(1);
 
 
         if (
@@ -387,7 +391,7 @@ public class RoomServiceImpl implements RoomService {
         if (request.getCCName().isBlank()
                 || request.getCCNumber().length() != 16
                 || request.getCVV().length() != 3
-                || CCExpiryDate.isBefore(LocalDate.now())
+                || ccExpiryDate.isBefore(LocalDate.now())
         ) return false;
 
         Optional<Booking> isThereABooking = bookingRepository.isThereABooking(

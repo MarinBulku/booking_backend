@@ -6,9 +6,7 @@ import com.algorhythm.booking_backend.dataproviders.repositories.RoleRepository;
 import com.algorhythm.booking_backend.dataproviders.services.interfaces.RoleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -41,9 +39,8 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public Role findById(Integer roleId){
 
-        Optional<Role> roleFound = roleRepository.findById(roleId);
-
-        return roleFound.orElseThrow(() -> new EntityNotFoundException("No role with this ID: " + roleId));
+        return roleRepository.findById(roleId)
+                .orElseThrow(() -> new EntityNotFoundException("Role not found"));
 
     }
 

@@ -2,8 +2,8 @@ package com.algorhythm.booking_backend.dataproviders.services.implementations;
 
 import com.algorhythm.booking_backend.dataproviders.dtos.authentication.AuthenticationRequest;
 import com.algorhythm.booking_backend.dataproviders.dtos.authentication.AuthenticationResponse;
-import com.algorhythm.booking_backend.dataproviders.dtos.User.NewUserDto;
-import com.algorhythm.booking_backend.dataproviders.dtos.User.UserDto;
+import com.algorhythm.booking_backend.dataproviders.dtos.user.NewUserDto;
+import com.algorhythm.booking_backend.dataproviders.dtos.user.UserDto;
 import com.algorhythm.booking_backend.dataproviders.dtos.authentication.DeauthenticationRequest;
 import com.algorhythm.booking_backend.dataproviders.entities.Role;
 import com.algorhythm.booking_backend.dataproviders.entities.User;

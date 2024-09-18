@@ -31,7 +31,6 @@ public class DiscountDateServiceImpl implements DiscountDateService {
     * */
     @Override
     public List<DiscountDate> datesBetween(Integer roomId, LocalDate startDate, LocalDate endDate) {
-
         return discountDateRepository.findByDiscountDateBetweenAndRoom_RoomId(startDate, endDate, roomId);
     }
 

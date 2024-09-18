@@ -2,8 +2,8 @@ package com.algorhythm.booking_backend.controllers;
 
 import com.algorhythm.booking_backend.dataproviders.dtos.authentication.AuthenticationRequest;
 import com.algorhythm.booking_backend.dataproviders.dtos.authentication.AuthenticationResponse;
-import com.algorhythm.booking_backend.dataproviders.dtos.User.NewUserDto;
-import com.algorhythm.booking_backend.dataproviders.dtos.User.UserDto;
+import com.algorhythm.booking_backend.dataproviders.dtos.user.NewUserDto;
+import com.algorhythm.booking_backend.dataproviders.dtos.user.UserDto;
 import com.algorhythm.booking_backend.dataproviders.dtos.authentication.DeauthenticationRequest;
 import com.algorhythm.booking_backend.dataproviders.services.interfaces.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -119,8 +119,8 @@ public class UserController {
     @DeleteMapping("/delete")
     @Operation(summary = "Remove a user by its id")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Void> removeUser(@RequestParam Integer userId){
+    public ResponseEntity<String> removeUser(@RequestParam Integer userId){
             userService.removeUser(userId);
-            return ResponseEntity.ok(null);
+            return ResponseEntity.ok("Deleted user successfully");
     }
 }

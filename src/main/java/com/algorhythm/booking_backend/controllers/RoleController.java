@@ -102,8 +102,8 @@ public class RoleController {
     @DeleteMapping("/delete")
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Delete a role by its Id")
-    public ResponseEntity<Void> deleteRole(@RequestParam Integer roleId){
+    public ResponseEntity<String> deleteRole(@RequestParam Integer roleId){
             roleService.deleteRoleById(roleId);
-            return ResponseEntity.ok(null);
+            return ResponseEntity.ok("Role deleted successfully");
     }
 }

@@ -1,6 +1,6 @@
 package com.algorhythm.booking_backend.dataproviders.services.implementations;
 
-import com.algorhythm.booking_backend.dataproviders.dtos.Booking.BookingHistoryDto;
+import com.algorhythm.booking_backend.dataproviders.dtos.booking.BookingHistoryDto;
 import com.algorhythm.booking_backend.dataproviders.entities.Booking;
 import com.algorhythm.booking_backend.dataproviders.entities.Status;
 import com.algorhythm.booking_backend.dataproviders.entities.User;
@@ -11,7 +11,6 @@ import com.algorhythm.booking_backend.dataproviders.services.interfaces.BookingS
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,11 +34,7 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public List<Booking> findAll() {
 
-        List<Booking> allBookings = bookingRepository.findAll();
-
-        if (allBookings.isEmpty()) return new ArrayList<>();
-
-        return allBookings;
+        return bookingRepository.findAll();
     }
 
     /*
@@ -86,24 +81,19 @@ public class BookingServiceImpl implements BookingService {
     * */
     @Override
     public boolean cancelBooking(Integer bookingId, Integer userId) {
-        Optional<Booking> optional = bookingRepository.findById(bookingId);
+        Booking optional = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new EntityNotFoundException("Booking with id: " + bookingId + " is not found."));
+        User optionalUser = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User with id: " + userId + " is not found."));
 
-        if (optional.isEmpty()) throw new EntityNotFoundException("Booking not found!");
-
-        Optional<User> optionalUser = userRepository.findById(userId);
-
-        if (optionalUser.isEmpty()) throw new EntityNotFoundException("User not found!");
-
-        Booking bookingToBeCanceled = optional.get();
-
-        if (bookingToBeCanceled.getUser() != optionalUser.get())
+        if (optional.getUser() != optionalUser)
             return false;
 
-        if (!bookingToBeCanceled.getStatus().equals(Status.ACTIVE))
+        if (!optional.getStatus().equals(Status.ACTIVE))
             return false;
 
-        bookingToBeCanceled.setStatus(Status.CANCELLED);
-        bookingRepository.save(bookingToBeCanceled);
+        optional.setStatus(Status.CANCELLED);
+        bookingRepository.save(optional);
 
         return true;
     }

@@ -1,9 +1,9 @@
 package com.algorhythm.booking_backend.controllers;
 
-import com.algorhythm.booking_backend.dataproviders.dtos.Booking.BookingRequest;
-import com.algorhythm.booking_backend.dataproviders.dtos.Booking.RoomSearchRequest;
-import com.algorhythm.booking_backend.dataproviders.dtos.Room.AvailableRoomDto;
-import com.algorhythm.booking_backend.dataproviders.dtos.Room.RoomCreationRequest;
+import com.algorhythm.booking_backend.dataproviders.dtos.booking.BookingRequest;
+import com.algorhythm.booking_backend.dataproviders.dtos.booking.RoomSearchRequest;
+import com.algorhythm.booking_backend.dataproviders.dtos.room.AvailableRoomDto;
+import com.algorhythm.booking_backend.dataproviders.dtos.room.RoomCreationRequest;
 import com.algorhythm.booking_backend.dataproviders.services.interfaces.RoomService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -14,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/rooms")
@@ -38,7 +40,7 @@ public class RoomController {
     @PostMapping("/create")
     @Operation(summary = "Add a new room")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> createRoom(@Valid @ModelAttribute RoomCreationRequest request){
+    public ResponseEntity<String> createRoom(@Valid @ModelAttribute RoomCreationRequest request){
         boolean addedRoom = roomService.addRoom(request);
         if (!addedRoom)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Could not save file");
@@ -57,11 +59,14 @@ public class RoomController {
     @DeleteMapping("/delete")
     @Operation(summary = "Delete a hotel by its ID")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> deleteRoom(@RequestParam Integer id){
-        if (roomService.removeRoom(id)) {
+    public ResponseEntity<String> deleteRoom(@RequestParam Integer id) {
+        try {
+            roomService.removeRoom(id);
             return ResponseEntity.ok("Deleted successfully");
+        } catch (IOException e) {
+            return ResponseEntity.badRequest().body("Deletion not made successfully! " + e.getMessage());
         }
-        return ResponseEntity.badRequest().body("Deletion not made successfully!");
+
     }
 
     /*
