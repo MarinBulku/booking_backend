@@ -1,12 +1,13 @@
 package com.algorhythm.booking_backend.dataproviders.services.interfaces;
 
-import com.algorhythm.booking_backend.dataproviders.dtos.Booking.HotelSearchRequest;
-import com.algorhythm.booking_backend.dataproviders.dtos.Hotel.AvailableHotelDto;
-import com.algorhythm.booking_backend.dataproviders.dtos.Hotel.HotelCreationRequest;
-import com.algorhythm.booking_backend.dataproviders.dtos.Hotel.HotelDTO;
+import com.algorhythm.booking_backend.dataproviders.dtos.booking.HotelSearchRequest;
+import com.algorhythm.booking_backend.dataproviders.dtos.hotel.AvailableHotelDto;
+import com.algorhythm.booking_backend.dataproviders.dtos.hotel.HotelCreationRequest;
+import com.algorhythm.booking_backend.dataproviders.dtos.hotel.HotelDTO;
 import com.algorhythm.booking_backend.dataproviders.entities.Hotel;
 import org.springframework.data.domain.Page;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface HotelService {
@@ -25,5 +26,5 @@ public interface HotelService {
 
     boolean addHotel(HotelCreationRequest request);
 
-    boolean removeHotel(Integer idOfHotelToBeRemoved);
+    void removeHotel(Integer idOfHotelToBeRemoved) throws IOException;
 }
