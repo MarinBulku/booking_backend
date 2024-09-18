@@ -4,7 +4,7 @@ import org.springframework.http.HttpStatus;
 
 import java.time.ZonedDateTime;
 
-public class ApiException {
+public class ApiExc {
 
     /*
     * The format of api exception to be thrown in controller layer
@@ -13,7 +13,7 @@ public class ApiException {
     private final HttpStatus status;
     private final ZonedDateTime timestamp;
 
-    public ApiException(String message, HttpStatus status, ZonedDateTime timestamp) {
+    public ApiExc(String message, HttpStatus status, ZonedDateTime timestamp) {
         this.message = message;
         this.status = status;
         this.timestamp = timestamp;
