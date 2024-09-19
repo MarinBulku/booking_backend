@@ -1,0 +1,244 @@
+2024-09-19T12:48:43.690+02:00  INFO 5872 --- [booking_backend] [restartedMain] c.a.b.BookingBackendApplication          : Starting BookingBackendApplication using Java 21.0.4 with PID 5872 (C:\Users\ALGORHYTHM\Documents\Booking\booking_backend\target\classes started by ALGORHYTHM in C:\Users\ALGORHYTHM\Documents\Booking\booking_backend)
+2024-09-19T12:48:43.693+02:00 DEBUG 5872 --- [booking_backend] [restartedMain] c.a.b.BookingBackendApplication          : Running with Spring Boot v3.3.0, Spring v6.1.8
+2024-09-19T12:48:43.695+02:00  INFO 5872 --- [booking_backend] [restartedMain] c.a.b.BookingBackendApplication          : No active profile set, falling back to 1 default profile: "default"
+2024-09-19T12:48:43.790+02:00  INFO 5872 --- [booking_backend] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-09-19T12:48:43.793+02:00  INFO 5872 --- [booking_backend] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-09-19T12:48:45.497+02:00  INFO 5872 --- [booking_backend] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-09-19T12:48:45.691+02:00  INFO 5872 --- [booking_backend] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 172 ms. Found 8 JPA repository interfaces.
+2024-09-19T12:48:47.005+02:00  INFO 5872 --- [booking_backend] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8081 (http)
+2024-09-19T12:48:47.042+02:00  INFO 5872 --- [booking_backend] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-09-19T12:48:47.044+02:00  INFO 5872 --- [booking_backend] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.24]
+2024-09-19T12:48:47.259+02:00  INFO 5872 --- [booking_backend] [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-09-19T12:48:47.261+02:00  INFO 5872 --- [booking_backend] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3467 ms
+2024-09-19T12:48:47.724+02:00  INFO 5872 --- [booking_backend] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-09-19T12:48:48.095+02:00  INFO 5872 --- [booking_backend] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@4e10bc98
+2024-09-19T12:48:48.100+02:00  INFO 5872 --- [booking_backend] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-09-19T12:48:48.523+02:00  INFO 5872 --- [booking_backend] [restartedMain] liquibase.database                       : Set default schema name to public
+2024-09-19T12:48:49.942+02:00  INFO 5872 --- [booking_backend] [restartedMain] liquibase.changelog                      : Reading from public.databasechangelog
+2024-09-19T12:48:50.062+02:00  INFO 5872 --- [booking_backend] [restartedMain] liquibase.ui                             : Database is up to date, no changesets to execute
+2024-09-19T12:48:50.065+02:00  INFO 5872 --- [booking_backend] [restartedMain] liquibase.changelog                      : Reading from public.databasechangelog
+2024-09-19T12:48:50.081+02:00  INFO 5872 --- [booking_backend] [restartedMain] liquibase.util                           : UPDATE SUMMARY
+2024-09-19T12:48:50.082+02:00  INFO 5872 --- [booking_backend] [restartedMain] liquibase.util                           : Run:                          0
+2024-09-19T12:48:50.082+02:00  INFO 5872 --- [booking_backend] [restartedMain] liquibase.util                           : Previously run:              15
+2024-09-19T12:48:50.082+02:00  INFO 5872 --- [booking_backend] [restartedMain] liquibase.util                           : Filtered out:                 0
+2024-09-19T12:48:50.082+02:00  INFO 5872 --- [booking_backend] [restartedMain] liquibase.util                           : -------------------------------
+2024-09-19T12:48:50.082+02:00  INFO 5872 --- [booking_backend] [restartedMain] liquibase.util                           : Total change sets:           15
+2024-09-19T12:48:50.084+02:00  INFO 5872 --- [booking_backend] [restartedMain] liquibase.util                           : Update summary generated
+2024-09-19T12:48:50.127+02:00  INFO 5872 --- [booking_backend] [restartedMain] liquibase.lockservice                    : Successfully released change log lock
+2024-09-19T12:48:50.130+02:00  INFO 5872 --- [booking_backend] [restartedMain] liquibase.command                        : Command execution complete
+2024-09-19T12:48:50.377+02:00  INFO 5872 --- [booking_backend] [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-09-19T12:48:50.552+02:00  INFO 5872 --- [booking_backend] [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.2.Final
+2024-09-19T12:48:50.676+02:00  INFO 5872 --- [booking_backend] [restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-09-19T12:48:51.799+02:00  INFO 5872 --- [booking_backend] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-09-19T12:48:55.500+02:00  INFO 5872 --- [booking_backend] [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-09-19T12:48:56.066+02:00  INFO 5872 --- [booking_backend] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-09-19T12:48:57.399+02:00  INFO 5872 --- [booking_backend] [restartedMain] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-09-19T12:48:59.122+02:00 DEBUG 5872 --- [booking_backend] [restartedMain] c.a.b.c.JwtAuthenticationFilter          : Filter 'jwtAuthenticationFilter' configured for use
+2024-09-19T12:49:02.585+02:00  INFO 5872 --- [booking_backend] [restartedMain] eAuthenticationProviderManagerConfigurer : Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2024-09-19T12:49:02.588+02:00  WARN 5872 --- [booking_backend] [restartedMain] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used for username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider.
+2024-09-19T12:49:03.311+02:00  WARN 5872 --- [booking_backend] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-09-19T12:49:04.206+02:00  INFO 5872 --- [booking_backend] [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@5ad706f0, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@3339d979, org.springframework.security.web.context.SecurityContextHolderFilter@4254fd84, org.springframework.security.web.header.HeaderWriterFilter@c37ba29, org.springframework.web.filter.CorsFilter@524ae7f1, org.springframework.security.web.authentication.logout.LogoutFilter@416a3036, com.algorhythm.booking_backend.configuration.JwtAuthenticationFilter@461b7b66, org.springframework.security.web.authentication.www.BasicAuthenticationFilter@131f4310, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@b1f4ea9, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@f525000, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@4877868b, org.springframework.security.web.session.SessionManagementFilter@429b5fe9, org.springframework.security.web.access.ExceptionTranslationFilter@d7682d1, org.springframework.security.web.access.intercept.AuthorizationFilter@67dd7134]
+2024-09-19T12:49:04.724+02:00  INFO 5872 --- [booking_backend] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-09-19T12:49:04.770+02:00  INFO 5872 --- [booking_backend] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8081 (http) with context path '/'
+2024-09-19T12:49:04.790+02:00  INFO 5872 --- [booking_backend] [restartedMain] c.a.b.BookingBackendApplication          : Started BookingBackendApplication in 21.902 seconds (process running for 23.261)
+2024-09-19T12:49:41.840+02:00  INFO 5872 --- [booking_backend] [http-nio-8081-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-09-19T12:49:41.840+02:00  INFO 5872 --- [booking_backend] [http-nio-8081-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-09-19T12:49:41.843+02:00  INFO 5872 --- [booking_backend] [http-nio-8081-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 3 ms
+2024-09-19T12:49:42.318+02:00 DEBUG 5872 --- [booking_backend] [http-nio-8081-exec-2] c.a.b.d.s.i.UserServiceImpl              : User :Marin Bulkuis authenticated, ready to generate token
+2024-09-19T12:51:11.086+02:00  INFO 5872 --- [booking_backend] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-09-19T12:51:11.090+02:00  INFO 5872 --- [booking_backend] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2024-09-19T12:51:11.100+02:00  INFO 5872 --- [booking_backend] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2024-09-19T12:51:15.551+02:00  INFO 4360 --- [booking_backend] [restartedMain] c.a.b.BookingBackendApplication          : Starting BookingBackendApplication using Java 21.0.4 with PID 4360 (C:\Users\ALGORHYTHM\Documents\Booking\booking_backend\target\classes started by ALGORHYTHM in C:\Users\ALGORHYTHM\Documents\Booking\booking_backend)
+2024-09-19T12:51:15.554+02:00 DEBUG 4360 --- [booking_backend] [restartedMain] c.a.b.BookingBackendApplication          : Running with Spring Boot v3.3.0, Spring v6.1.8
+2024-09-19T12:51:15.555+02:00  INFO 4360 --- [booking_backend] [restartedMain] c.a.b.BookingBackendApplication          : No active profile set, falling back to 1 default profile: "default"
+2024-09-19T12:51:15.641+02:00  INFO 4360 --- [booking_backend] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-09-19T12:51:15.642+02:00  INFO 4360 --- [booking_backend] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-09-19T12:51:17.033+02:00  INFO 4360 --- [booking_backend] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-09-19T12:51:17.144+02:00  INFO 4360 --- [booking_backend] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 98 ms. Found 8 JPA repository interfaces.
+2024-09-19T12:51:17.935+02:00  INFO 4360 --- [booking_backend] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8081 (http)
+2024-09-19T12:51:17.947+02:00  INFO 4360 --- [booking_backend] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-09-19T12:51:17.948+02:00  INFO 4360 --- [booking_backend] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.24]
+2024-09-19T12:51:18.010+02:00  INFO 4360 --- [booking_backend] [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-09-19T12:51:18.011+02:00  INFO 4360 --- [booking_backend] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2367 ms
+2024-09-19T12:51:18.156+02:00  INFO 4360 --- [booking_backend] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-09-19T12:51:18.350+02:00  INFO 4360 --- [booking_backend] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@1ce9dad2
+2024-09-19T12:51:18.352+02:00  INFO 4360 --- [booking_backend] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-09-19T12:51:18.595+02:00  INFO 4360 --- [booking_backend] [restartedMain] liquibase.database                       : Set default schema name to public
+2024-09-19T12:51:19.620+02:00  INFO 4360 --- [booking_backend] [restartedMain] liquibase.changelog                      : Reading from public.databasechangelog
+2024-09-19T12:51:19.704+02:00  INFO 4360 --- [booking_backend] [restartedMain] liquibase.ui                             : Database is up to date, no changesets to execute
+2024-09-19T12:51:19.706+02:00  INFO 4360 --- [booking_backend] [restartedMain] liquibase.changelog                      : Reading from public.databasechangelog
+2024-09-19T12:51:19.718+02:00  INFO 4360 --- [booking_backend] [restartedMain] liquibase.util                           : UPDATE SUMMARY
+2024-09-19T12:51:19.719+02:00  INFO 4360 --- [booking_backend] [restartedMain] liquibase.util                           : Run:                          0
+2024-09-19T12:51:19.719+02:00  INFO 4360 --- [booking_backend] [restartedMain] liquibase.util                           : Previously run:              15
+2024-09-19T12:51:19.719+02:00  INFO 4360 --- [booking_backend] [restartedMain] liquibase.util                           : Filtered out:                 0
+2024-09-19T12:51:19.719+02:00  INFO 4360 --- [booking_backend] [restartedMain] liquibase.util                           : -------------------------------
+2024-09-19T12:51:19.719+02:00  INFO 4360 --- [booking_backend] [restartedMain] liquibase.util                           : Total change sets:           15
+2024-09-19T12:51:19.720+02:00  INFO 4360 --- [booking_backend] [restartedMain] liquibase.util                           : Update summary generated
+2024-09-19T12:51:19.750+02:00  INFO 4360 --- [booking_backend] [restartedMain] liquibase.lockservice                    : Successfully released change log lock
+2024-09-19T12:51:19.752+02:00  INFO 4360 --- [booking_backend] [restartedMain] liquibase.command                        : Command execution complete
+2024-09-19T12:51:19.876+02:00  INFO 4360 --- [booking_backend] [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-09-19T12:51:19.975+02:00  INFO 4360 --- [booking_backend] [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.2.Final
+2024-09-19T12:51:20.020+02:00  INFO 4360 --- [booking_backend] [restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-09-19T12:51:20.416+02:00  INFO 4360 --- [booking_backend] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-09-19T12:51:21.805+02:00  INFO 4360 --- [booking_backend] [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-09-19T12:51:21.989+02:00  INFO 4360 --- [booking_backend] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-09-19T12:51:22.255+02:00  INFO 4360 --- [booking_backend] [restartedMain] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-09-19T12:51:22.876+02:00 DEBUG 4360 --- [booking_backend] [restartedMain] c.a.b.c.JwtAuthenticationFilter          : Filter 'jwtAuthenticationFilter' configured for use
+2024-09-19T12:51:24.012+02:00  INFO 4360 --- [booking_backend] [restartedMain] eAuthenticationProviderManagerConfigurer : Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2024-09-19T12:51:24.013+02:00  WARN 4360 --- [booking_backend] [restartedMain] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used for username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider.
+2024-09-19T12:51:24.143+02:00  WARN 4360 --- [booking_backend] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-09-19T12:51:24.578+02:00  INFO 4360 --- [booking_backend] [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@29f63f86, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@1c3d4a9c, org.springframework.security.web.context.SecurityContextHolderFilter@20f0378, org.springframework.security.web.header.HeaderWriterFilter@4ac05df1, org.springframework.web.filter.CorsFilter@17d9307a, org.springframework.security.web.authentication.logout.LogoutFilter@c99c134, com.algorhythm.booking_backend.configuration.JwtAuthenticationFilter@630fda03, org.springframework.security.web.authentication.www.BasicAuthenticationFilter@6b0bdeaa, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@5773efb1, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@21c558c3, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@b8d57e8, org.springframework.security.web.session.SessionManagementFilter@579e7345, org.springframework.security.web.access.ExceptionTranslationFilter@7ba3e180, org.springframework.security.web.access.intercept.AuthorizationFilter@cd2b1ec]
+2024-09-19T12:51:25.105+02:00  INFO 4360 --- [booking_backend] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-09-19T12:51:25.151+02:00  INFO 4360 --- [booking_backend] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8081 (http) with context path '/'
+2024-09-19T12:51:25.170+02:00  INFO 4360 --- [booking_backend] [restartedMain] c.a.b.BookingBackendApplication          : Started BookingBackendApplication in 10.256 seconds (process running for 11.445)
+2024-09-19T12:51:31.646+02:00  INFO 4360 --- [booking_backend] [http-nio-8081-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-09-19T12:51:31.647+02:00  INFO 4360 --- [booking_backend] [http-nio-8081-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-09-19T12:51:31.650+02:00  INFO 4360 --- [booking_backend] [http-nio-8081-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 3 ms
+2024-09-19T12:51:32.224+02:00 DEBUG 4360 --- [booking_backend] [http-nio-8081-exec-2] c.a.b.d.s.i.UserServiceImpl              : User :Marin Bulkuis authenticated, ready to generate token
+2024-09-19T12:52:25.464+02:00  INFO 4360 --- [booking_backend] [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 1 deletion, 0 modifications)
+2024-09-19T12:52:25.490+02:00  INFO 4360 --- [booking_backend] [Thread-5] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-09-19T12:52:25.496+02:00  INFO 4360 --- [booking_backend] [Thread-5] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2024-09-19T12:52:25.513+02:00  INFO 4360 --- [booking_backend] [Thread-5] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2024-09-19T12:52:25.724+02:00  INFO 4360 --- [booking_backend] [restartedMain] c.a.b.BookingBackendApplication          : Starting BookingBackendApplication using Java 21.0.4 with PID 4360 (C:\Users\ALGORHYTHM\Documents\Booking\booking_backend\target\classes started by ALGORHYTHM in C:\Users\ALGORHYTHM\Documents\Booking\booking_backend)
+2024-09-19T12:52:25.725+02:00 DEBUG 4360 --- [booking_backend] [restartedMain] c.a.b.BookingBackendApplication          : Running with Spring Boot v3.3.0, Spring v6.1.8
+2024-09-19T12:52:25.725+02:00  INFO 4360 --- [booking_backend] [restartedMain] c.a.b.BookingBackendApplication          : No active profile set, falling back to 1 default profile: "default"
+2024-09-19T12:52:26.377+02:00  INFO 4360 --- [booking_backend] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-09-19T12:52:26.438+02:00  INFO 4360 --- [booking_backend] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 59 ms. Found 8 JPA repository interfaces.
+2024-09-19T12:52:26.741+02:00  INFO 4360 --- [booking_backend] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8081 (http)
+2024-09-19T12:52:26.742+02:00  INFO 4360 --- [booking_backend] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-09-19T12:52:26.743+02:00  INFO 4360 --- [booking_backend] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.24]
+2024-09-19T12:52:26.788+02:00  INFO 4360 --- [booking_backend] [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-09-19T12:52:26.789+02:00  INFO 4360 --- [booking_backend] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1060 ms
+2024-09-19T12:52:26.906+02:00  INFO 4360 --- [booking_backend] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Starting...
+2024-09-19T12:52:27.012+02:00  INFO 4360 --- [booking_backend] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-2 - Added connection org.postgresql.jdbc.PgConnection@6280d0e3
+2024-09-19T12:52:27.013+02:00  INFO 4360 --- [booking_backend] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Start completed.
+2024-09-19T12:52:27.045+02:00  INFO 4360 --- [booking_backend] [restartedMain] liquibase.database                       : Set default schema name to public
+2024-09-19T12:52:27.768+02:00  INFO 4360 --- [booking_backend] [restartedMain] liquibase.changelog                      : Reading from public.databasechangelog
+2024-09-19T12:52:27.812+02:00  INFO 4360 --- [booking_backend] [restartedMain] liquibase.ui                             : Database is up to date, no changesets to execute
+2024-09-19T12:52:27.813+02:00  INFO 4360 --- [booking_backend] [restartedMain] liquibase.changelog                      : Reading from public.databasechangelog
+2024-09-19T12:52:27.820+02:00  INFO 4360 --- [booking_backend] [restartedMain] liquibase.util                           : UPDATE SUMMARY
+2024-09-19T12:52:27.820+02:00  INFO 4360 --- [booking_backend] [restartedMain] liquibase.util                           : Run:                          0
+2024-09-19T12:52:27.820+02:00  INFO 4360 --- [booking_backend] [restartedMain] liquibase.util                           : Previously run:              15
+2024-09-19T12:52:27.820+02:00  INFO 4360 --- [booking_backend] [restartedMain] liquibase.util                           : Filtered out:                 0
+2024-09-19T12:52:27.820+02:00  INFO 4360 --- [booking_backend] [restartedMain] liquibase.util                           : -------------------------------
+2024-09-19T12:52:27.820+02:00  INFO 4360 --- [booking_backend] [restartedMain] liquibase.util                           : Total change sets:           15
+2024-09-19T12:52:27.821+02:00  INFO 4360 --- [booking_backend] [restartedMain] liquibase.util                           : Update summary generated
+2024-09-19T12:52:27.825+02:00  INFO 4360 --- [booking_backend] [restartedMain] liquibase.lockservice                    : Successfully released change log lock
+2024-09-19T12:52:27.825+02:00  INFO 4360 --- [booking_backend] [restartedMain] liquibase.command                        : Command execution complete
+2024-09-19T12:52:27.880+02:00  INFO 4360 --- [booking_backend] [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-09-19T12:52:27.885+02:00  INFO 4360 --- [booking_backend] [restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-09-19T12:52:27.901+02:00  INFO 4360 --- [booking_backend] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-09-19T12:52:28.240+02:00  INFO 4360 --- [booking_backend] [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-09-19T12:52:28.458+02:00  INFO 4360 --- [booking_backend] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-09-19T12:52:28.687+02:00 DEBUG 4360 --- [booking_backend] [restartedMain] c.a.b.c.JwtAuthenticationFilter          : Filter 'jwtAuthenticationFilter' configured for use
+2024-09-19T12:52:29.358+02:00  WARN 4360 --- [booking_backend] [restartedMain] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'userController' defined in file [C:\Users\ALGORHYTHM\Documents\Booking\booking_backend\target\classes\com\algorhythm\booking_backend\controllers\UserController.class]: Unsatisfied dependency expressed through constructor parameter 0: No qualifying bean of type 'com.algorhythm.booking_backend.dataproviders.services.interfaces.UserService' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {}
+2024-09-19T12:52:29.359+02:00  INFO 4360 --- [booking_backend] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-09-19T12:52:29.360+02:00  INFO 4360 --- [booking_backend] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Shutdown initiated...
+2024-09-19T12:52:29.373+02:00  INFO 4360 --- [booking_backend] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Shutdown completed.
+2024-09-19T12:52:29.374+02:00  INFO 4360 --- [booking_backend] [restartedMain] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2024-09-19T12:52:29.390+02:00  INFO 4360 --- [booking_backend] [restartedMain] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2024-09-19T12:52:29.439+02:00 ERROR 4360 --- [booking_backend] [restartedMain] o.s.b.d.LoggingFailureAnalysisReporter   : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Parameter 0 of constructor in com.algorhythm.booking_backend.controllers.UserController required a bean of type 'com.algorhythm.booking_backend.dataproviders.services.interfaces.UserService' that could not be found.
+
+
+Action:
+
+Consider defining a bean of type 'com.algorhythm.booking_backend.dataproviders.services.interfaces.UserService' in your configuration.
+
+2024-09-19T12:52:31.016+02:00  INFO 4360 --- [booking_backend] [restartedMain] c.a.b.BookingBackendApplication          : Starting BookingBackendApplication using Java 21.0.4 with PID 4360 (C:\Users\ALGORHYTHM\Documents\Booking\booking_backend\target\classes started by ALGORHYTHM in C:\Users\ALGORHYTHM\Documents\Booking\booking_backend)
+2024-09-19T12:52:31.017+02:00 DEBUG 4360 --- [booking_backend] [restartedMain] c.a.b.BookingBackendApplication          : Running with Spring Boot v3.3.0, Spring v6.1.8
+2024-09-19T12:52:31.017+02:00  INFO 4360 --- [booking_backend] [restartedMain] c.a.b.BookingBackendApplication          : No active profile set, falling back to 1 default profile: "default"
+2024-09-19T12:52:31.550+02:00  INFO 4360 --- [booking_backend] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-09-19T12:52:31.606+02:00  INFO 4360 --- [booking_backend] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 55 ms. Found 8 JPA repository interfaces.
+2024-09-19T12:52:31.918+02:00  INFO 4360 --- [booking_backend] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8081 (http)
+2024-09-19T12:52:31.919+02:00  INFO 4360 --- [booking_backend] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-09-19T12:52:31.919+02:00  INFO 4360 --- [booking_backend] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.24]
+2024-09-19T12:52:32.025+02:00  INFO 4360 --- [booking_backend] [restartedMain] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Initializing Spring embedded WebApplicationContext
+2024-09-19T12:52:32.025+02:00  INFO 4360 --- [booking_backend] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1003 ms
+2024-09-19T12:52:32.149+02:00  INFO 4360 --- [booking_backend] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Starting...
+2024-09-19T12:52:32.230+02:00  INFO 4360 --- [booking_backend] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-3 - Added connection org.postgresql.jdbc.PgConnection@f8a38c6
+2024-09-19T12:52:32.231+02:00  INFO 4360 --- [booking_backend] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Start completed.
+2024-09-19T12:52:32.254+02:00  INFO 4360 --- [booking_backend] [restartedMain] liquibase.database                       : Set default schema name to public
+2024-09-19T12:52:32.876+02:00  INFO 4360 --- [booking_backend] [restartedMain] liquibase.changelog                      : Reading from public.databasechangelog
+2024-09-19T12:52:32.915+02:00  INFO 4360 --- [booking_backend] [restartedMain] liquibase.ui                             : Database is up to date, no changesets to execute
+2024-09-19T12:52:32.917+02:00  INFO 4360 --- [booking_backend] [restartedMain] liquibase.changelog                      : Reading from public.databasechangelog
+2024-09-19T12:52:32.923+02:00  INFO 4360 --- [booking_backend] [restartedMain] liquibase.util                           : UPDATE SUMMARY
+2024-09-19T12:52:32.924+02:00  INFO 4360 --- [booking_backend] [restartedMain] liquibase.util                           : Run:                          0
+2024-09-19T12:52:32.924+02:00  INFO 4360 --- [booking_backend] [restartedMain] liquibase.util                           : Previously run:              15
+2024-09-19T12:52:32.924+02:00  INFO 4360 --- [booking_backend] [restartedMain] liquibase.util                           : Filtered out:                 0
+2024-09-19T12:52:32.924+02:00  INFO 4360 --- [booking_backend] [restartedMain] liquibase.util                           : -------------------------------
+2024-09-19T12:52:32.924+02:00  INFO 4360 --- [booking_backend] [restartedMain] liquibase.util                           : Total change sets:           15
+2024-09-19T12:52:32.924+02:00  INFO 4360 --- [booking_backend] [restartedMain] liquibase.util                           : Update summary generated
+2024-09-19T12:52:32.928+02:00  INFO 4360 --- [booking_backend] [restartedMain] liquibase.lockservice                    : Successfully released change log lock
+2024-09-19T12:52:32.929+02:00  INFO 4360 --- [booking_backend] [restartedMain] liquibase.command                        : Command execution complete
+2024-09-19T12:52:33.012+02:00  INFO 4360 --- [booking_backend] [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-09-19T12:52:33.023+02:00  INFO 4360 --- [booking_backend] [restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-09-19T12:52:33.063+02:00  INFO 4360 --- [booking_backend] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-09-19T12:52:33.443+02:00  INFO 4360 --- [booking_backend] [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-09-19T12:52:33.754+02:00  INFO 4360 --- [booking_backend] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-09-19T12:52:34.031+02:00 DEBUG 4360 --- [booking_backend] [restartedMain] c.a.b.c.JwtAuthenticationFilter          : Filter 'jwtAuthenticationFilter' configured for use
+2024-09-19T12:52:34.695+02:00  INFO 4360 --- [booking_backend] [restartedMain] eAuthenticationProviderManagerConfigurer : Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2024-09-19T12:52:34.696+02:00  WARN 4360 --- [booking_backend] [restartedMain] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used for username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider.
+2024-09-19T12:52:34.810+02:00  WARN 4360 --- [booking_backend] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-09-19T12:52:35.154+02:00  INFO 4360 --- [booking_backend] [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@2cd15eb0, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@4bf9ab45, org.springframework.security.web.context.SecurityContextHolderFilter@35de7a88, org.springframework.security.web.header.HeaderWriterFilter@328188e, org.springframework.web.filter.CorsFilter@2de8d2f9, org.springframework.security.web.authentication.logout.LogoutFilter@342eaab1, com.algorhythm.booking_backend.configuration.JwtAuthenticationFilter@62a173b6, org.springframework.security.web.authentication.www.BasicAuthenticationFilter@6d6b0a8e, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@5475c286, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@17da4cee, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@18e282b0, org.springframework.security.web.session.SessionManagementFilter@7aa3ffcd, org.springframework.security.web.access.ExceptionTranslationFilter@22286c51, org.springframework.security.web.access.intercept.AuthorizationFilter@bcda744]
+2024-09-19T12:52:35.564+02:00  INFO 4360 --- [booking_backend] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-09-19T12:52:35.591+02:00  INFO 4360 --- [booking_backend] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8081 (http) with context path '/'
+2024-09-19T12:52:35.601+02:00  INFO 4360 --- [booking_backend] [restartedMain] c.a.b.BookingBackendApplication          : Started BookingBackendApplication in 4.635 seconds (process running for 81.876)
+2024-09-19T12:52:35.604+02:00  INFO 4360 --- [booking_backend] [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2024-09-19T12:54:06.832+02:00  INFO 4360 --- [booking_backend] [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2024-09-19T12:54:06.841+02:00  INFO 4360 --- [booking_backend] [Thread-7] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-09-19T12:54:06.842+02:00  INFO 4360 --- [booking_backend] [Thread-7] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Shutdown initiated...
+2024-09-19T12:54:06.854+02:00  INFO 4360 --- [booking_backend] [Thread-7] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Shutdown completed.
+2024-09-19T12:54:07.055+02:00  INFO 4360 --- [booking_backend] [restartedMain] c.a.b.BookingBackendApplication          : Starting BookingBackendApplication using Java 21.0.4 with PID 4360 (C:\Users\ALGORHYTHM\Documents\Booking\booking_backend\target\classes started by ALGORHYTHM in C:\Users\ALGORHYTHM\Documents\Booking\booking_backend)
+2024-09-19T12:54:07.055+02:00 DEBUG 4360 --- [booking_backend] [restartedMain] c.a.b.BookingBackendApplication          : Running with Spring Boot v3.3.0, Spring v6.1.8
+2024-09-19T12:54:07.055+02:00  INFO 4360 --- [booking_backend] [restartedMain] c.a.b.BookingBackendApplication          : No active profile set, falling back to 1 default profile: "default"
+2024-09-19T12:54:07.653+02:00  INFO 4360 --- [booking_backend] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-09-19T12:54:07.731+02:00  INFO 4360 --- [booking_backend] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 78 ms. Found 8 JPA repository interfaces.
+2024-09-19T12:54:08.080+02:00  INFO 4360 --- [booking_backend] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8081 (http)
+2024-09-19T12:54:08.082+02:00  INFO 4360 --- [booking_backend] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-09-19T12:54:08.082+02:00  INFO 4360 --- [booking_backend] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.24]
+2024-09-19T12:54:08.125+02:00  INFO 4360 --- [booking_backend] [restartedMain] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Initializing Spring embedded WebApplicationContext
+2024-09-19T12:54:08.125+02:00  INFO 4360 --- [booking_backend] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1066 ms
+2024-09-19T12:54:08.232+02:00  INFO 4360 --- [booking_backend] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-4 - Starting...
+2024-09-19T12:54:08.325+02:00  INFO 4360 --- [booking_backend] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-4 - Added connection org.postgresql.jdbc.PgConnection@22331b73
+2024-09-19T12:54:08.326+02:00  INFO 4360 --- [booking_backend] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-4 - Start completed.
+2024-09-19T12:54:08.354+02:00  INFO 4360 --- [booking_backend] [restartedMain] liquibase.database                       : Set default schema name to public
+2024-09-19T12:54:08.908+02:00  INFO 4360 --- [booking_backend] [restartedMain] liquibase.changelog                      : Reading from public.databasechangelog
+2024-09-19T12:54:08.942+02:00  INFO 4360 --- [booking_backend] [restartedMain] liquibase.ui                             : Database is up to date, no changesets to execute
+2024-09-19T12:54:08.943+02:00  INFO 4360 --- [booking_backend] [restartedMain] liquibase.changelog                      : Reading from public.databasechangelog
+2024-09-19T12:54:08.949+02:00  INFO 4360 --- [booking_backend] [restartedMain] liquibase.util                           : UPDATE SUMMARY
+2024-09-19T12:54:08.949+02:00  INFO 4360 --- [booking_backend] [restartedMain] liquibase.util                           : Run:                          0
+2024-09-19T12:54:08.949+02:00  INFO 4360 --- [booking_backend] [restartedMain] liquibase.util                           : Previously run:              15
+2024-09-19T12:54:08.950+02:00  INFO 4360 --- [booking_backend] [restartedMain] liquibase.util                           : Filtered out:                 0
+2024-09-19T12:54:08.950+02:00  INFO 4360 --- [booking_backend] [restartedMain] liquibase.util                           : -------------------------------
+2024-09-19T12:54:08.950+02:00  INFO 4360 --- [booking_backend] [restartedMain] liquibase.util                           : Total change sets:           15
+2024-09-19T12:54:08.950+02:00  INFO 4360 --- [booking_backend] [restartedMain] liquibase.util                           : Update summary generated
+2024-09-19T12:54:08.954+02:00  INFO 4360 --- [booking_backend] [restartedMain] liquibase.lockservice                    : Successfully released change log lock
+2024-09-19T12:54:08.955+02:00  INFO 4360 --- [booking_backend] [restartedMain] liquibase.command                        : Command execution complete
+2024-09-19T12:54:09.005+02:00  INFO 4360 --- [booking_backend] [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-09-19T12:54:09.015+02:00  INFO 4360 --- [booking_backend] [restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-09-19T12:54:09.033+02:00  INFO 4360 --- [booking_backend] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-09-19T12:54:09.343+02:00  INFO 4360 --- [booking_backend] [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-09-19T12:54:09.509+02:00  INFO 4360 --- [booking_backend] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-09-19T12:54:09.653+02:00 DEBUG 4360 --- [booking_backend] [restartedMain] c.a.b.c.JwtAuthenticationFilter          : Filter 'jwtAuthenticationFilter' configured for use
+2024-09-19T12:54:10.092+02:00  INFO 4360 --- [booking_backend] [restartedMain] eAuthenticationProviderManagerConfigurer : Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2024-09-19T12:54:10.093+02:00  WARN 4360 --- [booking_backend] [restartedMain] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used for username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider.
+2024-09-19T12:54:10.147+02:00  WARN 4360 --- [booking_backend] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-09-19T12:54:10.378+02:00  INFO 4360 --- [booking_backend] [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@420c5dfa, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@27223bf9, org.springframework.security.web.context.SecurityContextHolderFilter@45373080, org.springframework.security.web.header.HeaderWriterFilter@395f5613, org.springframework.web.filter.CorsFilter@7623edd3, org.springframework.security.web.authentication.logout.LogoutFilter@602d779f, com.algorhythm.booking_backend.configuration.JwtAuthenticationFilter@64af83bd, org.springframework.security.web.authentication.www.BasicAuthenticationFilter@49964ad8, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@6f19d633, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2cb5fa0d, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@d18b945, org.springframework.security.web.session.SessionManagementFilter@5add5747, org.springframework.security.web.access.ExceptionTranslationFilter@1297026f, org.springframework.security.web.access.intercept.AuthorizationFilter@42c2725c]
+2024-09-19T12:54:10.654+02:00  INFO 4360 --- [booking_backend] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-09-19T12:54:10.673+02:00  INFO 4360 --- [booking_backend] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8081 (http) with context path '/'
+2024-09-19T12:54:10.680+02:00  INFO 4360 --- [booking_backend] [restartedMain] c.a.b.BookingBackendApplication          : Started BookingBackendApplication in 3.687 seconds (process running for 176.954)
+2024-09-19T12:54:10.681+02:00  INFO 4360 --- [booking_backend] [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2024-09-19T12:55:11.862+02:00  INFO 4360 --- [booking_backend] [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2024-09-19T12:55:11.870+02:00  INFO 4360 --- [booking_backend] [Thread-14] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-09-19T12:55:11.871+02:00  INFO 4360 --- [booking_backend] [Thread-14] com.zaxxer.hikari.HikariDataSource       : HikariPool-4 - Shutdown initiated...
+2024-09-19T12:55:11.880+02:00  INFO 4360 --- [booking_backend] [Thread-14] com.zaxxer.hikari.HikariDataSource       : HikariPool-4 - Shutdown completed.
