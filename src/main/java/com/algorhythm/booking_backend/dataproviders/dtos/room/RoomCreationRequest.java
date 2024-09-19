@@ -28,6 +28,8 @@ public class RoomCreationRequest {
     private String description;
     @NotBlank(message = "Hotel ID should not be null")
     private Integer hotelId;
+    @NotBlank(message = "Hotel owner shouldn't be null")
+    private Integer ownerId;
     @NotBlank(message = "Image file should not be null")
     private MultipartFile roomImage;
 }
