@@ -14,12 +14,15 @@ import com.algorhythm.booking_backend.dataproviders.repositories.UserRepository;
 import com.algorhythm.booking_backend.dataproviders.services.interfaces.HotelService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.*;
@@ -32,7 +35,8 @@ public class HotelServiceImpl implements HotelService {
     //UserRepository to fetch user data from repository/database, mostly for confirmation
     private final HotelRepository hotelRepository;
     private final UserRepository userRepository;
-    private static final String FOLDER_PATH = "C:\\Users\\User\\git\\booking_backend\\src\\main\\resources\\businessImages\\";
+    private final Logger logger = LoggerFactory.getLogger(HotelServiceImpl.class);
+    private static final String FOLDER_PATH = "C:\\Users\\ALGORHYTHM\\Documents\\Booking\\booking_backend\\src\\main\\resources\\businessImages\\";
 
     /*
     * findAll() - No parameters needed
@@ -41,6 +45,7 @@ public class HotelServiceImpl implements HotelService {
     * */
     @Override
     public List<Hotel> findAll() {
+        logger.trace("List of all hotels requested, being generated");
         return hotelRepository.findAll();
     }
 
@@ -70,6 +75,7 @@ public class HotelServiceImpl implements HotelService {
                 .orElseThrow( () -> new EntityNotFoundException("No user with this ID: " + ownerId));
 
         List<Hotel> allHotelsByOwner = hotelRepository.findHotelsByOwner(owner);
+        logger.trace("List of all hotels requested by user {}, being generated", ownerId);
         return getHotelDTOS(allHotelsByOwner);
     }
 
@@ -125,10 +131,11 @@ public class HotelServiceImpl implements HotelService {
                         .roomCount(freeRooms.intValue())
                         .build();
             } catch (IOException e) {
+                logger.error("Could not read content from file!!!");
                 throw new RuntimeException("Cannot read from file! " + e.getMessage());
             }
         }).toList();
-
+        logger.trace("Page of available hotels requested, being generated");
         return new PageImpl<>(availableHotelDtoList, pageable, availableHotelsWithFreeRooms.getTotalElements());
     }
 
@@ -165,7 +172,7 @@ public class HotelServiceImpl implements HotelService {
         Optional<Hotel> optional = hotelRepository.findById(id);
 
         if (optional.isEmpty()) throw new EntityNotFoundException("No hotel with this id: " + id);
-
+        logger.trace("Hotel with id {} found", id);
         return optional.get();
     }
 
@@ -209,6 +216,7 @@ public class HotelServiceImpl implements HotelService {
         try {
             file.transferTo(new File(filePath));
         } catch (IOException e) {
+            logger.error("Could not upload file: {}", e.getMessage());
             return false;
         }
 
@@ -221,7 +229,7 @@ public class HotelServiceImpl implements HotelService {
                 .freePool(request.getFreePool().equalsIgnoreCase("true"))
                 .freeBreakfast(request.getFreeBreakfast().equalsIgnoreCase("true"))
                 .build();
-
+        logger.info("Hotel added: {} from owner {}", newHotel.getHotelName(), request.getOwnerId());
         hotelRepository.save(newHotel);
         return true;
     }
@@ -245,8 +253,14 @@ public class HotelServiceImpl implements HotelService {
         File file = new File(pathOfImageToDelete);
 
         if (file.exists() && file.isFile()) {
-            Files.delete(Path.of(file.getAbsolutePath()));
+            try{
+                Files.delete(Path.of(file.getAbsolutePath()));
+            }
+            catch (IOException e){
+                logger.error("Could not delete file: {}", e.getMessage());
+            }
         } else {
+            logger.warn("Could not delete file in path {}, not there", pathOfImageToDelete);
             throw new EntityNotFoundException("File not found: " + pathOfImageToDelete);
         }
         hotelRepository.deleteById(idOfHotelToBeRemoved);
