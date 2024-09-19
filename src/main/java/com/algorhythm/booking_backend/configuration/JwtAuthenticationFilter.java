@@ -80,7 +80,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         return
                 servletPath.equals("/swagger-ui.html")
                 || servletPath.contains("/api-docs")
-                || servletPath.contains("/users/login")
-                || servletPath.contains("/users/logout");
+                || servletPath.contains("/users/login");
     }
 }
