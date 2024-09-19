@@ -7,6 +7,8 @@ import com.algorhythm.booking_backend.dataproviders.repositories.RoomRepository;
 import com.algorhythm.booking_backend.dataproviders.services.interfaces.PointService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,6 +23,7 @@ public class PointsServiceImpl implements PointService {
     * */
     private final PointRepository pointRepository;
     private final RoomRepository roomRepository;
+    private final Logger logger = LoggerFactory.getLogger(PointsServiceImpl.class);
 
     /*
     * findRoomDiscountsByRoomId(Integer roomId)
@@ -30,7 +33,7 @@ public class PointsServiceImpl implements PointService {
     * */
     @Override
     public List<Points> findRoomDiscountsByRoomId(Integer roomId) {
-
+        logger.trace("List of Discount points requested for room {}", roomId);
         return pointRepository.findByRoom_RoomId(roomId);
     }
 
@@ -50,7 +53,7 @@ public class PointsServiceImpl implements PointService {
                 .requiredPoints(numberOfPoints)
                 .discount(discount)
                 .build();
-
+        logger.info("Added new room discount point for room {}, with {} points and with discount {}", roomId, numberOfPoints, discount);
         return pointRepository.save(newPoint);
     }
 
@@ -64,6 +67,7 @@ public class PointsServiceImpl implements PointService {
     @Override
     public void removeRoomPoint(Integer pointId) {
         if (!pointRepository.existsById(pointId)) throw new EntityNotFoundException("No points with this id:" + pointId);
+        logger.info("Removed room discount point for pointId {}", pointId);
         pointRepository.deleteById(pointId);
     }
 }

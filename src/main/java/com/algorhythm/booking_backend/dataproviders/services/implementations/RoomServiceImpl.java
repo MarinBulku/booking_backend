@@ -14,6 +14,8 @@ import com.algorhythm.booking_backend.dataproviders.services.interfaces.RoomServ
 import jakarta.persistence.EntityExistsException;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -47,6 +49,7 @@ public class RoomServiceImpl implements RoomService {
     private final PointRepository pointRepository;
     private final UserRepository userRepository;
     private final BookingRepository bookingRepository;
+    private final Logger logger = LoggerFactory.getLogger(RoomServiceImpl.class);
 
     /*
     * findAll() - No parameters
@@ -54,6 +57,7 @@ public class RoomServiceImpl implements RoomService {
      * */
     @Override
     public List<Room> findAll() {
+        logger.trace("List of all rooms requested");
         return roomRepository.findAll();
     }
 
@@ -126,8 +130,10 @@ public class RoomServiceImpl implements RoomService {
             );
         };
 
-        if (allAvailableRooms.isEmpty())
+        if (allAvailableRooms.isEmpty()) {
+            logger.trace("No available rooms");
             return new PageImpl<>(new ArrayList<>(), pageable, 0);
+        }
 
         List<AvailableRoomDto> availableRoomsList = new ArrayList<>();
         /*
@@ -144,6 +150,7 @@ public class RoomServiceImpl implements RoomService {
                 );
             } catch (IOException e) {
                 roomImageEncoded = "";
+                logger.error("Failed to read roles, {}", e.getMessage());
             }
 
             Instant bookingDateTime = (Instant) row[4];
@@ -263,6 +270,7 @@ public class RoomServiceImpl implements RoomService {
         Optional<Room> optional = roomRepository.findById(id);
         if (optional.isEmpty()) throw new EntityNotFoundException("No room with this id: " + id);
 
+        logger.trace("Room with id {} found", id);
         return optional.get();
     }
 
@@ -296,6 +304,14 @@ public class RoomServiceImpl implements RoomService {
         Optional<Hotel> optional = hotelRepository.findById(request.getHotelId());
         if (optional.isEmpty()) throw new EntityNotFoundException("No hotel found with this id: " + request.getHotelId());
 
+        if (!userRepository.existsById(request.getOwnerId())) {
+            throw new EntityNotFoundException("No hotel owner with id: " + request.getOwnerId());
+        }
+
+        if (!Objects.equals(optional.get().getOwner().getUserId(), request.getOwnerId())) {
+            throw new EntityNotFoundException("This user is not the owner of the hotel, id: " + request.getOwnerId());
+        }
+
         MultipartFile file = request.getRoomImage();
         if (file.getSize() > 102400)
             throw new ImageTooLargeException("Image size larger than 100KB: " + file.getSize());
@@ -303,11 +319,12 @@ public class RoomServiceImpl implements RoomService {
             throw new IncorrectFileTypeException("File type provided not image: " +file.getContentType());
         }
 
-        String folderPath = "C:\\Users\\User\\git\\booking_backend\\src\\main\\resources\\roomImages\\";
+        String folderPath = "C:\\Users\\ALGORHYTHM\\Documents\\Booking\\booking_backend\\src\\main\\resources\\roomImages\\";
         String filePath = folderPath + file.getOriginalFilename();
         try {
             file.transferTo(new File(filePath));
         } catch (IOException e) {
+            logger.error("Failed to save room, {}", e.getMessage());
             return false;
         }
 
@@ -322,6 +339,7 @@ public class RoomServiceImpl implements RoomService {
                 .build();
 
         roomRepository.save(newRoom);
+        logger.info("New room created");
         return true;
     }
 
@@ -347,8 +365,12 @@ public class RoomServiceImpl implements RoomService {
         return true;
     }
 
-    private void cleanupFile(File file) throws IOException {
-        Files.delete(Path.of(file.getAbsolutePath()));
+    private void cleanupFile(File file) {
+        try {
+            Files.delete(Path.of(file.getAbsolutePath()));
+        }catch (IOException e) {
+            logger.error("Failed to delete photo, {}", e.getMessage());
+        }
     }
 
     /*
@@ -386,13 +408,19 @@ public class RoomServiceImpl implements RoomService {
                 || request.getEmail().isBlank()
                         || request.getAddress().isBlank()
                         || request.getPhoneNumber().isBlank()
-        ) return false;
+        ) {
+            logger.warn("Person reserved for information is invalid");
+            return false;
+        }
 
         if (request.getCCName().isBlank()
                 || request.getCCNumber().length() != 16
                 || request.getCVV().length() != 3
                 || ccExpiryDate.isBefore(LocalDate.now())
-        ) return false;
+        ) {
+            logger.warn("Credit card info is invalid");
+            return false;
+        }
 
         Optional<Booking> isThereABooking = bookingRepository.isThereABooking(
                 room,
@@ -410,8 +438,10 @@ public class RoomServiceImpl implements RoomService {
                 .setScale(2, RoundingMode.HALF_UP)
                 .doubleValue();
 
-        if (!roundedPrice.equals(request.getPrice()))
+        if (!roundedPrice.equals(request.getPrice())) {
+            logger.error("Room price from request is not what it should be : {} != {}", request.getPrice(), roundedPrice);
             return false;
+        }
 
         Booking newBooking = Booking.builder()
                 .user(user)
@@ -427,7 +457,7 @@ public class RoomServiceImpl implements RoomService {
                 .build();
 
         bookingRepository.save(newBooking);
-
+        logger.trace("New booking created");
         user.setBookingsNumber(user.getBookingsNumber()+1);
         user.setBookingPoints(user.getBookingPoints()+2);
 

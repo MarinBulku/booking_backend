@@ -5,6 +5,8 @@ import com.algorhythm.booking_backend.dataproviders.entities.Role;
 import com.algorhythm.booking_backend.dataproviders.repositories.RoleRepository;
 import com.algorhythm.booking_backend.dataproviders.services.interfaces.RoleService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -17,6 +19,7 @@ public class RoleServiceImpl implements RoleService {
     * Role Repository to perform CRUD operations
     * */
     private final RoleRepository roleRepository;
+    private final Logger logger = LoggerFactory.getLogger(RoleServiceImpl.class);
 
     /*
     * findAll() - No parameters
@@ -25,7 +28,7 @@ public class RoleServiceImpl implements RoleService {
     * */
     @Override
     public List<Role> findAll() {
-
+        logger.trace("List of all roles requested");
         return roleRepository.findAll();
     }
 
@@ -38,7 +41,7 @@ public class RoleServiceImpl implements RoleService {
     * */
     @Override
     public Role findById(Integer roleId){
-
+        logger.trace("Requesting role with id {}", roleId);
         return roleRepository.findById(roleId)
                 .orElseThrow(() -> new EntityNotFoundException("Role not found"));
 
@@ -55,7 +58,7 @@ public class RoleServiceImpl implements RoleService {
         Role newRole = Role.builder()
                 .role(roleName)
                 .build();
-
+        logger.info("New role {} being saved", newRole.getRole());
         return roleRepository.save(newRole);
     }
 
@@ -87,6 +90,7 @@ public class RoleServiceImpl implements RoleService {
         Role role = roleRepository.findById(idOfTheRoleToBeUpdated).orElseThrow(() -> new EntityNotFoundException("No role with this id:" + idOfTheRoleToBeUpdated));
 
         role.setRole(newRoleName);
+        logger.info("Updating role with id {}", idOfTheRoleToBeUpdated);
         return roleRepository.save(role);
     }
 
@@ -101,6 +105,7 @@ public class RoleServiceImpl implements RoleService {
     public void deleteRoleById(Integer idOfRoleToBeDeleted) {
         if (!roleRepository.existsById(idOfRoleToBeDeleted))
             throw new EntityNotFoundException("No role with this ID: " + idOfRoleToBeDeleted);
+        logger.info("Deleting role with id {}", idOfRoleToBeDeleted);
         roleRepository.deleteById(idOfRoleToBeDeleted);
     }
 }

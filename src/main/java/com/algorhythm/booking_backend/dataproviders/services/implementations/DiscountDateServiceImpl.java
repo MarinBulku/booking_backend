@@ -5,6 +5,8 @@ import com.algorhythm.booking_backend.core.exceptions.EntityNotFoundException;
 import com.algorhythm.booking_backend.dataproviders.repositories.DiscountDateRepository;
 import com.algorhythm.booking_backend.dataproviders.services.interfaces.DiscountDateService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -18,6 +20,7 @@ public class DiscountDateServiceImpl implements DiscountDateService {
 
     //DiscountDateRepository to get data of DiscountDate from repository
     private final DiscountDateRepository discountDateRepository;
+    private final Logger logger = LoggerFactory.getLogger(DiscountDateServiceImpl.class);
 
     /*
     * datesBetween(Integer roomId, LocalDate startDate, LocalDate endDate)
@@ -31,6 +34,7 @@ public class DiscountDateServiceImpl implements DiscountDateService {
     * */
     @Override
     public List<DiscountDate> datesBetween(Integer roomId, LocalDate startDate, LocalDate endDate) {
+        logger.trace("List of dates required from {} to {} for room with id {}", startDate, endDate, roomId);
         return discountDateRepository.findByDiscountDateBetweenAndRoom_RoomId(startDate, endDate, roomId);
     }
 
@@ -50,6 +54,7 @@ public class DiscountDateServiceImpl implements DiscountDateService {
                 .discount(discount)
                 .build();
 
+        logger.trace("Adding discount date {} for room with id {}", date, roomId);
         return discountDateRepository.save(newDate);
     }
 
@@ -62,6 +67,7 @@ public class DiscountDateServiceImpl implements DiscountDateService {
     @Override
     public void removeDiscountDate(Integer discountDateId) {
         if (!discountDateRepository.existsById(discountDateId)) throw new EntityNotFoundException("No discount date with this id: " + discountDateId);
+        logger.trace("Removing discount date with id {}", discountDateId);
         discountDateRepository.deleteById(discountDateId);
     }
 }

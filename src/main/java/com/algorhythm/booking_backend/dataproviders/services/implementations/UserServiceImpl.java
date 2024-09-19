@@ -12,6 +12,8 @@ import com.algorhythm.booking_backend.dataproviders.repositories.RoleRepository;
 import com.algorhythm.booking_backend.dataproviders.repositories.UserRepository;
 import com.algorhythm.booking_backend.dataproviders.services.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +36,7 @@ public class UserServiceImpl implements UserService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     /*
     * findAll()
@@ -61,6 +64,7 @@ public class UserServiceImpl implements UserService {
                             .roleId(u.getRole().getRoleId())
                     .build());
         }
+        logger.info("List of all users generated");
         return allUsersDto;
     }
 
@@ -80,6 +84,7 @@ public class UserServiceImpl implements UserService {
             throw new EntityNotFoundException("No user with this id: " + id);
         } else {
             User u = foundUser.get();
+            logger.info("Found user with id: {}", u.getUserId());
             return UserDto.builder()
                     .userId(u.getUserId())
                     .name(u.getFullName())
@@ -132,7 +137,7 @@ public class UserServiceImpl implements UserService {
                 .build();
 
         User u = userRepository.save(newUser);
-
+        logger.info("Added user with id: {} as {}", u.getUserId(), u.getRole().getRole());
         return UserDto.builder()
                 .userId(u.getUserId())
                 .name(u.getFullName())
@@ -156,6 +161,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void removeUser(Integer idOfUserToBeRemoved) {
         if (!userRepository.existsById(idOfUserToBeRemoved)) throw new EntityNotFoundException("No user with this id: "+ idOfUserToBeRemoved);
+        logger.info("Removing user with id: {}", idOfUserToBeRemoved);
         userRepository.deleteById(idOfUserToBeRemoved);
     }
 
@@ -182,6 +188,7 @@ public class UserServiceImpl implements UserService {
         }
 
         String jwtToken = jwtService.generateToken(user);
+        logger.info("User {} is authenticated, token to be sent is : {}", user.getFullName(), jwtToken);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .userId(user.getUserId())
@@ -207,6 +214,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean deauthenticate(DeauthenticationRequest request) {
         if (request.getToken().isBlank()) return false;
+        logger.info("Revoking token: {}", request.getToken());
         return jwtService.revokeToken(request.getToken());
     }
 }
