@@ -37,7 +37,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = {
             IOException.class,
-            RuntimeException.class,
+            RuntimeException.class
     })
     public ResponseEntity<ApiExc> handleServerExceptions(Exception e) {
         ApiExc exception = new ApiExc(
