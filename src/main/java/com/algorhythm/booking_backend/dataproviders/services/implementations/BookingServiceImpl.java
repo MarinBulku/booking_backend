@@ -1,9 +1,9 @@
 package com.algorhythm.booking_backend.dataproviders.services.implementations;
 
 import com.algorhythm.booking_backend.dataproviders.dtos.booking.BookingHistoryDto;
-import com.algorhythm.booking_backend.dataproviders.entities.Booking;
-import com.algorhythm.booking_backend.dataproviders.entities.Status;
-import com.algorhythm.booking_backend.dataproviders.entities.User;
+import com.algorhythm.booking_backend.core.entities.Booking;
+import com.algorhythm.booking_backend.core.entities.Status;
+import com.algorhythm.booking_backend.core.entities.User;
 import com.algorhythm.booking_backend.core.exceptions.EntityNotFoundException;
 import com.algorhythm.booking_backend.dataproviders.repositories.BookingRepository;
 import com.algorhythm.booking_backend.dataproviders.repositories.UserRepository;

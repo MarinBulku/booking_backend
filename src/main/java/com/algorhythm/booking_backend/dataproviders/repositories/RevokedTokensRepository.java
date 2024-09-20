@@ -1,6 +1,6 @@
 package com.algorhythm.booking_backend.dataproviders.repositories;
 
-import com.algorhythm.booking_backend.dataproviders.entities.RevokedToken;
+import com.algorhythm.booking_backend.core.entities.RevokedToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

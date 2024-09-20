@@ -4,8 +4,8 @@ import com.algorhythm.booking_backend.dataproviders.dtos.booking.HotelSearchRequ
 import com.algorhythm.booking_backend.dataproviders.dtos.hotel.AvailableHotelDto;
 import com.algorhythm.booking_backend.dataproviders.dtos.hotel.HotelCreationRequest;
 import com.algorhythm.booking_backend.dataproviders.dtos.hotel.HotelDTO;
-import com.algorhythm.booking_backend.dataproviders.entities.Hotel;
-import com.algorhythm.booking_backend.dataproviders.entities.User;
+import com.algorhythm.booking_backend.core.entities.Hotel;
+import com.algorhythm.booking_backend.core.entities.User;
 import com.algorhythm.booking_backend.core.exceptions.EntityNotFoundException;
 import com.algorhythm.booking_backend.core.exceptions.ImageTooLargeException;
 import com.algorhythm.booking_backend.core.exceptions.IncorrectFileTypeException;
@@ -22,7 +22,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.*;

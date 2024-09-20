@@ -1,7 +1,7 @@
 package com.algorhythm.booking_backend.dataproviders.services.implementations;
 
 import com.algorhythm.booking_backend.core.exceptions.EntityNotFoundException;
-import com.algorhythm.booking_backend.dataproviders.entities.Role;
+import com.algorhythm.booking_backend.core.entities.Role;
 import com.algorhythm.booking_backend.dataproviders.repositories.RoleRepository;
 import com.algorhythm.booking_backend.dataproviders.services.interfaces.RoleService;
 import lombok.RequiredArgsConstructor;

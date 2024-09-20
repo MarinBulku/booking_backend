@@ -1,8 +1,8 @@
 package com.algorhythm.booking_backend.dataproviders.repositories;
 
 import com.algorhythm.booking_backend.dataproviders.dtos.booking.BookingHistoryDto;
-import com.algorhythm.booking_backend.dataproviders.entities.Booking;
-import com.algorhythm.booking_backend.dataproviders.entities.Room;
+import com.algorhythm.booking_backend.core.entities.Booking;
+import com.algorhythm.booking_backend.core.entities.Room;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

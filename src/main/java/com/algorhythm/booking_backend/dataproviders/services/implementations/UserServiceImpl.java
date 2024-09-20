@@ -5,8 +5,8 @@ import com.algorhythm.booking_backend.dataproviders.dtos.authentication.Authenti
 import com.algorhythm.booking_backend.dataproviders.dtos.user.NewUserDto;
 import com.algorhythm.booking_backend.dataproviders.dtos.user.UserDto;
 import com.algorhythm.booking_backend.dataproviders.dtos.authentication.DeauthenticationRequest;
-import com.algorhythm.booking_backend.dataproviders.entities.Role;
-import com.algorhythm.booking_backend.dataproviders.entities.User;
+import com.algorhythm.booking_backend.core.entities.Role;
+import com.algorhythm.booking_backend.core.entities.User;
 import com.algorhythm.booking_backend.core.exceptions.EntityNotFoundException;
 import com.algorhythm.booking_backend.dataproviders.repositories.RoleRepository;
 import com.algorhythm.booking_backend.dataproviders.repositories.UserRepository;

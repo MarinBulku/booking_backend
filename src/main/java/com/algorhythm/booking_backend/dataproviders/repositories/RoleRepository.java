@@ -1,6 +1,6 @@
 package com.algorhythm.booking_backend.dataproviders.repositories;
 
-import com.algorhythm.booking_backend.dataproviders.entities.Role;
+import com.algorhythm.booking_backend.core.entities.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RoleRepository extends JpaRepository<Role, Integer> {

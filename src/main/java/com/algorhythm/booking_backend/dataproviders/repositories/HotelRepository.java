@@ -1,7 +1,7 @@
 package com.algorhythm.booking_backend.dataproviders.repositories;
 
-import com.algorhythm.booking_backend.dataproviders.entities.Hotel;
-import com.algorhythm.booking_backend.dataproviders.entities.User;
+import com.algorhythm.booking_backend.core.entities.Hotel;
+import com.algorhythm.booking_backend.core.entities.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,6 +1,6 @@
 package com.algorhythm.booking_backend.dataproviders.services.interfaces;
 
-import com.algorhythm.booking_backend.dataproviders.entities.Role;
+import com.algorhythm.booking_backend.core.entities.Role;
 
 import java.util.List;
 

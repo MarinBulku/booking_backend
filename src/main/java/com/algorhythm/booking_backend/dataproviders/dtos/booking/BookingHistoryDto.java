@@ -1,6 +1,6 @@
 package com.algorhythm.booking_backend.dataproviders.dtos.booking;
 
-import com.algorhythm.booking_backend.dataproviders.entities.Status;
+import com.algorhythm.booking_backend.core.entities.Status;
 import lombok.Data;
 
 import java.time.LocalDate;

@@ -4,7 +4,7 @@ import com.algorhythm.booking_backend.dataproviders.dtos.booking.HotelSearchRequ
 import com.algorhythm.booking_backend.dataproviders.dtos.hotel.AvailableHotelDto;
 import com.algorhythm.booking_backend.dataproviders.dtos.hotel.HotelCreationRequest;
 import com.algorhythm.booking_backend.dataproviders.dtos.hotel.HotelDTO;
-import com.algorhythm.booking_backend.dataproviders.entities.Hotel;
+import com.algorhythm.booking_backend.core.entities.Hotel;
 import org.springframework.data.domain.Page;
 
 import java.io.IOException;

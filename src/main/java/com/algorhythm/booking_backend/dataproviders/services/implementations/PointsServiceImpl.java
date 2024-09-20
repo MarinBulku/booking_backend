@@ -1,7 +1,7 @@
 package com.algorhythm.booking_backend.dataproviders.services.implementations;
 
-import com.algorhythm.booking_backend.dataproviders.entities.Points;
-import com.algorhythm.booking_backend.dataproviders.entities.Room;
+import com.algorhythm.booking_backend.core.entities.Points;
+import com.algorhythm.booking_backend.core.entities.Room;
 import com.algorhythm.booking_backend.dataproviders.repositories.PointRepository;
 import com.algorhythm.booking_backend.dataproviders.repositories.RoomRepository;
 import com.algorhythm.booking_backend.dataproviders.services.interfaces.PointService;

@@ -1,6 +1,6 @@
 package com.algorhythm.booking_backend.dataproviders.repositories;
 
-import com.algorhythm.booking_backend.dataproviders.entities.DiscountDate;
+import com.algorhythm.booking_backend.core.entities.DiscountDate;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDate;

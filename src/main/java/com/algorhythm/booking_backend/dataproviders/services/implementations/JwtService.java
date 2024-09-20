@@ -1,6 +1,6 @@
 package com.algorhythm.booking_backend.dataproviders.services.implementations;
 
-import com.algorhythm.booking_backend.dataproviders.entities.RevokedToken;
+import com.algorhythm.booking_backend.core.entities.RevokedToken;
 import com.algorhythm.booking_backend.dataproviders.repositories.RevokedTokensRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

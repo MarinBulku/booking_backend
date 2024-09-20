@@ -1,11 +1,11 @@
 package com.algorhythm.booking_backend.dataproviders.services.implementations;
 
+import com.algorhythm.booking_backend.core.entities.*;
 import com.algorhythm.booking_backend.dataproviders.dtos.booking.BookingRequest;
 import com.algorhythm.booking_backend.dataproviders.dtos.booking.RoomSearchRequest;
 import com.algorhythm.booking_backend.dataproviders.dtos.room.AvailableRoomDto;
 import com.algorhythm.booking_backend.dataproviders.dtos.room.DatePrice;
 import com.algorhythm.booking_backend.dataproviders.dtos.room.RoomCreationRequest;
-import com.algorhythm.booking_backend.dataproviders.entities.*;
 import com.algorhythm.booking_backend.dataproviders.repositories.*;
 import com.algorhythm.booking_backend.core.exceptions.EntityNotFoundException;
 import com.algorhythm.booking_backend.core.exceptions.ImageTooLargeException;

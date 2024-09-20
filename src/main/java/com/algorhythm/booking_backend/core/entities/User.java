@@ -1,4 +1,4 @@
-package com.algorhythm.booking_backend.dataproviders.entities;
+package com.algorhythm.booking_backend.core.entities;
 
 import jakarta.persistence.*;
 import lombok.*;

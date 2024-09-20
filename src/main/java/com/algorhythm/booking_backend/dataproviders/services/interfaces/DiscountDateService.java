@@ -1,6 +1,6 @@
 package com.algorhythm.booking_backend.dataproviders.services.interfaces;
 
-import com.algorhythm.booking_backend.dataproviders.entities.DiscountDate;
+import com.algorhythm.booking_backend.core.entities.DiscountDate;
 
 import java.time.LocalDate;
 import java.util.List;
