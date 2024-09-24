@@ -6,6 +6,7 @@ target/
 
 **/src/main/resources/roomImages/**
 **/src/main/resources/businessImages/**
+**/src/main/resources/logs/**
 
 ### STS ###
 .apt_generated
