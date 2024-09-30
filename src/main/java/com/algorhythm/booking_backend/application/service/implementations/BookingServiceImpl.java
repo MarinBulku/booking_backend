@@ -1,6 +1,8 @@
 package com.algorhythm.booking_backend.application.service.implementations;
 
+import com.algorhythm.booking_backend.adapter.in.models.booking.BookingDto;
 import com.algorhythm.booking_backend.adapter.in.models.booking.BookingHistoryDto;
+import com.algorhythm.booking_backend.application.mapper.BookingMapper;
 import com.algorhythm.booking_backend.core.entities.Booking;
 import com.algorhythm.booking_backend.core.entities.Status;
 import com.algorhythm.booking_backend.core.entities.User;
@@ -27,6 +29,7 @@ public class BookingServiceImpl implements BookingService {
     private final BookingRepository bookingRepository;
     private final UserRepository userRepository;
     private final Logger logger = LoggerFactory.getLogger(BookingServiceImpl.class);
+    private static final BookingMapper mapper = BookingMapper.bookingMapper;
 
     /*
     * findAll() - No parameters needed
@@ -35,9 +38,11 @@ public class BookingServiceImpl implements BookingService {
     * If there aren't any, it returns an empty list.
     * */
     @Override
-    public List<Booking> findAll() {
+    public List<BookingDto> findAll() {
         logger.trace("List of all bookings generated");
-        return bookingRepository.findAll();
+        List<Booking> bookings = bookingRepository.findAll();
+
+        return mapper.toBookingDtoList(bookings);
     }
 
     /*
@@ -65,13 +70,13 @@ public class BookingServiceImpl implements BookingService {
     * Returns a Booking object or null if not present.
     * */
     @Override
-    public Booking findById(Integer bookingId) {
+    public BookingDto findById(Integer bookingId) {
 
         Optional<Booking> optional = bookingRepository.findById(bookingId);
 
         if (optional.isEmpty()) throw new EntityNotFoundException("Booking not found!");
         logger.trace("Booking with id {} found", bookingId);
-        return optional.get();
+        return mapper.toBookingDto(optional.get());
     }
 
     /*

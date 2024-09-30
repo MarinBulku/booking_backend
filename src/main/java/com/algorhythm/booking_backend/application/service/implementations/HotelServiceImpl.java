@@ -4,6 +4,8 @@ import com.algorhythm.booking_backend.adapter.in.models.booking.HotelSearchReque
 import com.algorhythm.booking_backend.adapter.in.models.hotel.AvailableHotelDto;
 import com.algorhythm.booking_backend.adapter.in.models.hotel.HotelCreationRequest;
 import com.algorhythm.booking_backend.adapter.in.models.hotel.HotelDTO;
+import com.algorhythm.booking_backend.adapter.in.models.hotel.HotelInfoDto;
+import com.algorhythm.booking_backend.application.mapper.HotelMapper;
 import com.algorhythm.booking_backend.core.entities.Hotel;
 import com.algorhythm.booking_backend.core.entities.User;
 import com.algorhythm.booking_backend.core.exceptions.EntityNotFoundException;
@@ -36,6 +38,7 @@ public class HotelServiceImpl implements HotelService {
     private final UserRepository userRepository;
     private final Logger logger = LoggerFactory.getLogger(HotelServiceImpl.class);
     private static final String FOLDER_PATH = "C:\\Users\\ALGORHYTHM\\Documents\\Booking\\booking_backend\\src\\main\\resources\\businessImages\\";
+    private static final HotelMapper mapper = HotelMapper.mapper;
 
     /*
     * findAll() - No parameters needed
@@ -43,9 +46,11 @@ public class HotelServiceImpl implements HotelService {
     * Returns a list of ALL Hotel Entities in the repository
     * */
     @Override
-    public List<Hotel> findAll() {
+    public List<HotelInfoDto> findAll() {
         logger.trace("List of all hotels requested, being generated");
-        return hotelRepository.findAll();
+        List<Hotel> hotels = hotelRepository.findAll();
+
+        return mapper.toHotelInfoDtoList(hotels);
     }
 
     /*
@@ -55,8 +60,8 @@ public class HotelServiceImpl implements HotelService {
      * */
     @Override
     public List<HotelDTO> allHotelDtos() {
-        List<Hotel> allHotels = findAll();
-        return getHotelDTOS(allHotels);
+        List<Hotel> allHotels = hotelRepository.findAll();
+        return mapper.toHotelDTOList(allHotels);
     }
 
     /*
@@ -75,7 +80,7 @@ public class HotelServiceImpl implements HotelService {
 
         List<Hotel> allHotelsByOwner = hotelRepository.findHotelsByOwner(owner);
         logger.trace("List of all hotels requested by user {}, being generated", ownerId);
-        return getHotelDTOS(allHotelsByOwner);
+        return mapper.toHotelDTOList(allHotelsByOwner);
     }
 
     /*
@@ -139,27 +144,6 @@ public class HotelServiceImpl implements HotelService {
     }
 
     /*
-    * getHotelDTOS(List<Hotel> hotels)
-    * hotels - List of hotels
-    *
-    * Transforms each Hotel object to HotelDto object, and return the final list
-    * */
-    private List<HotelDTO> getHotelDTOS(List<Hotel> hotels) {
-        ArrayList<HotelDTO> allHotelDtos = new ArrayList<>();
-
-        for (Hotel h:
-                hotels) {
-            HotelDTO hotelDTO = HotelDTO.builder()
-                    .hotelId(h.getHotelId())
-                    .hotelName(h.getHotelName())
-                    .build();
-            allHotelDtos.add(hotelDTO);
-        }
-
-        return allHotelDtos;
-    }
-
-    /*
     * findById(Integer id)
     * id - ID of hotel that needs to be found
     *
@@ -167,12 +151,12 @@ public class HotelServiceImpl implements HotelService {
     * else it is returned the hotel object
     * */
     @Override
-    public Hotel findById(Integer id) {
+    public HotelInfoDto findById(Integer id) {
         Optional<Hotel> optional = hotelRepository.findById(id);
 
         if (optional.isEmpty()) throw new EntityNotFoundException("No hotel with this id: " + id);
         logger.trace("Hotel with id {} found", id);
-        return optional.get();
+        return mapper.toHotelInfoDto(optional.get());
     }
 
     /*

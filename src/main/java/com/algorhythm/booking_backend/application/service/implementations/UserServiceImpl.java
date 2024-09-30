@@ -5,6 +5,7 @@ import com.algorhythm.booking_backend.adapter.in.models.authentication.Authentic
 import com.algorhythm.booking_backend.adapter.in.models.user.NewUserDto;
 import com.algorhythm.booking_backend.adapter.in.models.user.UserDto;
 import com.algorhythm.booking_backend.adapter.in.models.authentication.DeauthenticationRequest;
+import com.algorhythm.booking_backend.application.mapper.UserMapper;
 import com.algorhythm.booking_backend.core.entities.Role;
 import com.algorhythm.booking_backend.core.entities.User;
 import com.algorhythm.booking_backend.core.exceptions.EntityNotFoundException;
@@ -17,7 +18,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,6 +37,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+    private static final UserMapper mapper = UserMapper.INSTANCE;
 
     /*
     * findAll()
@@ -48,24 +49,7 @@ public class UserServiceImpl implements UserService {
 
         List<User> allUsers = userRepository.findAll();
 
-        if (allUsers.isEmpty()) return new ArrayList<>();
-
-        ArrayList<UserDto> allUsersDto = new ArrayList<>(allUsers.size());
-        for (User u: allUsers) {
-            allUsersDto.add(UserDto.builder()
-                            .userId(u.getUserId())
-                            .name(u.getFullName())
-                            .email(u.getEmail())
-                            .phoneNumber(u.getPhoneNumber())
-                            .address(u.getAddress())
-                            .bookingPoints(u.getBookingPoints())
-                            .bookingsNumber(u.getBookingsNumber())
-                            .role(u.getRole().getRole())
-                            .roleId(u.getRole().getRoleId())
-                    .build());
-        }
-        logger.info("List of all users generated");
-        return allUsersDto;
+        return mapper.toUserDtoList(allUsers);
     }
 
     /*
@@ -85,17 +69,7 @@ public class UserServiceImpl implements UserService {
         } else {
             User u = foundUser.get();
             logger.info("Found user with id: {}", u.getUserId());
-            return UserDto.builder()
-                    .userId(u.getUserId())
-                    .name(u.getFullName())
-                    .email(u.getEmail())
-                    .phoneNumber(u.getPhoneNumber())
-                    .address(u.getAddress())
-                    .bookingPoints(u.getBookingPoints())
-                    .bookingsNumber(u.getBookingsNumber())
-                    .role(u.getRole().getRole())
-                    .roleId(u.getRole().getRoleId())
-                    .build();
+            return mapper.toUserDto(u);
         }
 
     }
@@ -138,17 +112,7 @@ public class UserServiceImpl implements UserService {
 
         User u = userRepository.save(newUser);
         logger.info("Added user with id: {} as {}", u.getUserId(), u.getRole().getRole());
-        return UserDto.builder()
-                .userId(u.getUserId())
-                .name(u.getFullName())
-                .email(u.getEmail())
-                .phoneNumber(u.getPhoneNumber())
-                .address(u.getAddress())
-                .bookingPoints(u.getBookingPoints())
-                .bookingsNumber(u.getBookingsNumber())
-                .role(u.getRole().getRole())
-                .roleId(u.getRole().getRoleId())
-                .build();
+        return mapper.toUserDto(u);
     }
 
     /*
