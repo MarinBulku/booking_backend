@@ -4,7 +4,7 @@ import com.algorhythm.booking_backend.adapter.in.models.booking.HotelSearchReque
 import com.algorhythm.booking_backend.adapter.in.models.hotel.AvailableHotelDto;
 import com.algorhythm.booking_backend.adapter.in.models.hotel.HotelCreationRequest;
 import com.algorhythm.booking_backend.adapter.in.models.hotel.HotelDTO;
-import com.algorhythm.booking_backend.core.entities.Hotel;
+import com.algorhythm.booking_backend.adapter.in.models.hotel.HotelInfoDto;
 import org.springframework.data.domain.Page;
 
 import java.io.IOException;
@@ -12,15 +12,15 @@ import java.util.List;
 
 public interface HotelService {
     //Hotel Service method interfaces
-    List<Hotel> findAll();
+    List<HotelInfoDto> findAll();
 
     List<HotelDTO> allHotelDtos();
 
     List<HotelDTO> allHotelDtosByOwner(Integer ownerId);
 
-    Page<AvailableHotelDto> findAllAvailableHotels(HotelSearchRequest request, Integer pageNo) throws Exception;
+    Page<AvailableHotelDto> findAllAvailableHotels(HotelSearchRequest request, Integer pageNo) throws IOException;
 
-    Hotel findById(Integer id);
+    HotelInfoDto findById(Integer id);
 
     boolean existsById(Integer id);
 
