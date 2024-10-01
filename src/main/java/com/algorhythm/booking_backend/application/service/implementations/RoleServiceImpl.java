@@ -1,5 +1,7 @@
 package com.algorhythm.booking_backend.application.service.implementations;
 
+import com.algorhythm.booking_backend.adapter.in.models.role.RoleDto;
+import com.algorhythm.booking_backend.application.mapper.RoleMapper;
 import com.algorhythm.booking_backend.core.exceptions.EntityNotFoundException;
 import com.algorhythm.booking_backend.core.entities.Role;
 import com.algorhythm.booking_backend.adapter.out.persistence.RoleRepository;
@@ -8,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
@@ -20,6 +23,7 @@ public class RoleServiceImpl implements RoleService {
     * */
     private final RoleRepository roleRepository;
     private final Logger logger = LoggerFactory.getLogger(RoleServiceImpl.class);
+    private static final RoleMapper mapper = RoleMapper.ROLE_MAPPER;
 
     /*
     * findAll() - No parameters
@@ -27,9 +31,11 @@ public class RoleServiceImpl implements RoleService {
     * Return a list of ALL roles
     * */
     @Override
-    public List<Role> findAll() {
+    public List<RoleDto> findAll() {
         logger.trace("List of all roles requested");
-        return roleRepository.findAll();
+        List<Role> allRoles = roleRepository.findAll();
+
+        return mapper.toDtoList(allRoles);
     }
 
     /*
@@ -40,11 +46,12 @@ public class RoleServiceImpl implements RoleService {
     * else returns the role
     * */
     @Override
-    public Role findById(Integer roleId){
+    public RoleDto findById(Integer roleId){
         logger.trace("Requesting role with id {}", roleId);
-        return roleRepository.findById(roleId)
+        Role roleFound = roleRepository.findById(roleId)
                 .orElseThrow(() -> new EntityNotFoundException("Role not found"));
 
+        return mapper.toDto(roleFound);
     }
 
     /*
@@ -54,12 +61,13 @@ public class RoleServiceImpl implements RoleService {
     * Returns the new Role
     * */
     @Override
-    public Role createRole(String roleName) {
+    public RoleDto createRole(String roleName) {
         Role newRole = Role.builder()
                 .role(roleName)
                 .build();
         logger.info("New role {} being saved", newRole.getRole());
-        return roleRepository.save(newRole);
+        Role r = roleRepository.save(newRole);
+        return mapper.toDto(r);
     }
 
     /*
@@ -83,7 +91,7 @@ public class RoleServiceImpl implements RoleService {
     * else save and return the updated role
     * */
     @Override
-    public Role updateRole(Integer idOfTheRoleToBeUpdated, String newRoleName) {
+    public RoleDto updateRole(Integer idOfTheRoleToBeUpdated, String newRoleName) {
         if (!roleRepository.existsById(idOfTheRoleToBeUpdated))
             throw new EntityNotFoundException("No role with this ID: " + idOfTheRoleToBeUpdated);
 
@@ -91,7 +99,8 @@ public class RoleServiceImpl implements RoleService {
 
         role.setRole(newRoleName);
         logger.info("Updating role with id {}", idOfTheRoleToBeUpdated);
-        return roleRepository.save(role);
+        Role updated = roleRepository.save(role);
+        return mapper.toDto(updated);
     }
 
     /*
