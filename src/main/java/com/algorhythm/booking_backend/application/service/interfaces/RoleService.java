@@ -1,6 +1,6 @@
 package com.algorhythm.booking_backend.application.service.interfaces;
 
-import com.algorhythm.booking_backend.core.entities.Role;
+import com.algorhythm.booking_backend.adapter.in.models.role.RoleDto;
 
 import java.util.List;
 
@@ -8,15 +8,15 @@ public interface RoleService {
 
     //Role Service method interfaces
 
-    List<Role> findAll();
+    List<RoleDto> findAll();
 
-    Role findById(Integer roleId);
+    RoleDto findById(Integer roleId);
 
-    Role createRole(String roleName);
+    RoleDto createRole(String roleName);
 
     boolean existsById(Integer roleId);
 
-    Role updateRole(Integer idOfTheRoleToBeUpdated, String newRoleName);
+    RoleDto updateRole(Integer idOfTheRoleToBeUpdated, String newRoleName);
 
     void deleteRoleById(Integer idOfRoleToBeDeleted);
 }

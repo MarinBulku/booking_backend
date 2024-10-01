@@ -1,6 +1,6 @@
 package com.algorhythm.booking_backend.adapter.in.web;
 
-import com.algorhythm.booking_backend.core.entities.Role;
+import com.algorhythm.booking_backend.adapter.in.models.role.RoleDto;
 import com.algorhythm.booking_backend.application.service.interfaces.RoleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -33,8 +33,8 @@ public class RoleController {
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Get all roles")
-    public ResponseEntity<List<Role>> getAllRoles(){
-        List<Role> allRoles = roleService.findAll();
+    public ResponseEntity<List<RoleDto>> getAllRoles(){
+        List<RoleDto> allRoles = roleService.findAll();
         return ResponseEntity.ok(allRoles);
     }
 
@@ -50,8 +50,8 @@ public class RoleController {
     @GetMapping("/role")
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Get a role by its id")
-    public ResponseEntity<Role> getRoleById(@RequestParam Integer roleId){
-        Role roleFound = roleService.findById(roleId);
+    public ResponseEntity<RoleDto> getRoleById(@RequestParam Integer roleId){
+        RoleDto roleFound = roleService.findById(roleId);
         return ResponseEntity.ok(roleFound);
     }
 
@@ -68,8 +68,8 @@ public class RoleController {
     @PutMapping("/update")
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Update a role name with its Id")
-    public ResponseEntity<Role> updateRole(@RequestParam Integer roleId, @RequestParam String roleName){
-        Role role = roleService.updateRole(roleId, roleName);
+    public ResponseEntity<RoleDto> updateRole(@RequestParam Integer roleId, @RequestParam String roleName){
+        RoleDto role = roleService.updateRole(roleId, roleName);
         return ResponseEntity.ok(role);
     }
 
@@ -85,8 +85,8 @@ public class RoleController {
     @PostMapping("/create")
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Create a role with a name")
-    public ResponseEntity<Role> createRole(@RequestParam String roleName){
-        Role role = roleService.createRole(roleName);
+    public ResponseEntity<RoleDto> createRole(@RequestParam String roleName){
+        RoleDto role = roleService.createRole(roleName);
         return ResponseEntity.ok(role);
     }
 
