@@ -7,6 +7,7 @@ target/
 **/src/main/resources/roomImages/**
 **/src/main/resources/businessImages/**
 **/src/main/resources/logs/**
+**/src/main/resources/logs/booking.log
 
 ### STS ###
 .apt_generated
