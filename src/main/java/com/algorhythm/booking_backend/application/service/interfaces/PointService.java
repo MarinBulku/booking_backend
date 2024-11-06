@@ -1,6 +1,6 @@
 package com.algorhythm.booking_backend.application.service.interfaces;
 
-import com.algorhythm.booking_backend.core.entities.Points;
+import com.algorhythm.booking_backend.adapter.in.models.points.PointDto;
 
 import java.util.List;
 
@@ -8,9 +8,11 @@ public interface PointService {
 
     //Points Service method interfaces
 
-    List<Points> findRoomDiscountsByRoomId(Integer roomId);
+    List<PointDto> findRoomDiscountsByRoomId(Integer roomId);
 
-    Points addRoomPoint(Integer roomId, Integer numberOfPoints, Double discount);
+    List<PointDto> getAll();
+
+    PointDto addRoomPoint(Integer roomId, Integer numberOfPoints, Double discount);
 
     void removeRoomPoint(Integer pointId);
 }
