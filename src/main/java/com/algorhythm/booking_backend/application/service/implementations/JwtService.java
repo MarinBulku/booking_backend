@@ -8,6 +8,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import java.security.Key;
@@ -27,7 +28,8 @@ public class JwtService {
     * Builds and verifies tokens
     * RevokedTokensRepository to check which tokens are revoked before
     * */
-    private static final String SECRET_KEY = "56692738757545333c46492d227b747e5d495c2b4941764e59675b2f63";
+    @Value("${security.authentication.tokenSecret}")
+    private String secretKey;
     private final RevokedTokensRepository revokedTokensRepository;
 
     /*
@@ -148,7 +150,7 @@ public class JwtService {
     * returns a Key object that contain the secret key
     * */
     private Key getSigningKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
+        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
