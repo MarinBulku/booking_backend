@@ -1,5 +1,7 @@
 package com.algorhythm.booking_backend.application.service.implementations;
 
+import com.algorhythm.booking_backend.adapter.in.models.points.PointDto;
+import com.algorhythm.booking_backend.application.mapper.PointMapper;
 import com.algorhythm.booking_backend.core.entities.Points;
 import com.algorhythm.booking_backend.core.entities.Room;
 import com.algorhythm.booking_backend.adapter.out.persistence.PointRepository;
@@ -24,6 +26,7 @@ public class PointsServiceImpl implements PointService {
     private final PointRepository pointRepository;
     private final RoomRepository roomRepository;
     private final Logger logger = LoggerFactory.getLogger(PointsServiceImpl.class);
+    private static final PointMapper mapper = PointMapper.POINT_MAPPER;
 
     /*
     * findRoomDiscountsByRoomId(Integer roomId)
@@ -32,9 +35,20 @@ public class PointsServiceImpl implements PointService {
     * Returns a list of Points to that room
     * */
     @Override
-    public List<Points> findRoomDiscountsByRoomId(Integer roomId) {
+    public List<PointDto> findRoomDiscountsByRoomId(Integer roomId) {
         logger.trace("List of Discount points requested for room {}", roomId);
-        return pointRepository.findByRoom_RoomId(roomId);
+        List<Points> points = pointRepository.findByRoom_RoomId(roomId);
+        return mapper.toPointDtoList(points);
+    }
+
+    /*
+    * getAll()
+    * Returns a list of all points of rooms
+    * */
+    @Override
+    public List<PointDto> getAll() {
+        List<Points> points = pointRepository.findAll();
+        return mapper.toPointDtoList(points);
     }
 
     /*
@@ -44,7 +58,7 @@ public class PointsServiceImpl implements PointService {
     * else returns the Point created
     * */
     @Override
-    public Points addRoomPoint(Integer roomId, Integer numberOfPoints, Double discount) {
+    public PointDto addRoomPoint(Integer roomId, Integer numberOfPoints, Double discount) {
 
         Room room = roomRepository.findById(roomId).orElseThrow(EntityNotFoundException::new);
 
@@ -54,7 +68,8 @@ public class PointsServiceImpl implements PointService {
                 .discount(discount)
                 .build();
         logger.info("Added new room discount point for room {}, with {} points and with discount {}", roomId, numberOfPoints, discount);
-        return pointRepository.save(newPoint);
+        Points p = pointRepository.save(newPoint);
+        return mapper.toPointDto(p);
     }
 
     /*
