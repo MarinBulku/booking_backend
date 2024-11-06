@@ -17,4 +17,6 @@ public interface DiscountDateRepository extends JpaRepository<DiscountDate, Inte
     * It returns as a discount date entity list if found, else an empty list
     * */
     List<DiscountDate> findByDiscountDateBetweenAndRoom_RoomId(LocalDate startDate, LocalDate endDate, Integer roomId);
+
+    List<DiscountDate> findByRoom_RoomId(Integer roomId);
 }

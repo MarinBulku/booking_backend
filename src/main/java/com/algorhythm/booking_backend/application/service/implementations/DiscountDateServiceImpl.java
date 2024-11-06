@@ -1,5 +1,7 @@
 package com.algorhythm.booking_backend.application.service.implementations;
 
+import com.algorhythm.booking_backend.adapter.in.models.discountdate.DiscountDateDto;
+import com.algorhythm.booking_backend.application.mapper.DiscountDateMapper;
 import com.algorhythm.booking_backend.core.entities.DiscountDate;
 import com.algorhythm.booking_backend.core.exceptions.EntityNotFoundException;
 import com.algorhythm.booking_backend.adapter.out.persistence.DiscountDateRepository;
@@ -21,6 +23,7 @@ public class DiscountDateServiceImpl implements DiscountDateService {
     //DiscountDateRepository to get data of DiscountDate from repository
     private final DiscountDateRepository discountDateRepository;
     private final Logger logger = LoggerFactory.getLogger(DiscountDateServiceImpl.class);
+    private final DiscountDateMapper mapper = DiscountDateMapper.mapper;
 
     /*
     * datesBetween(Integer roomId, LocalDate startDate, LocalDate endDate)
@@ -38,6 +41,12 @@ public class DiscountDateServiceImpl implements DiscountDateService {
         return discountDateRepository.findByDiscountDateBetweenAndRoom_RoomId(startDate, endDate, roomId);
     }
 
+    @Override
+    public List<DiscountDateDto> getRoomDiscountDates(Integer roomId) {
+        List<DiscountDate> dates = discountDateRepository.findByRoom_RoomId(roomId);
+        return mapper.toDtoList(dates);
+    }
+
     /*
     * addDiscountDate(Integer roomId, LocalDate date, Double discount)
     * roomId - ID of room we want to add a discount date to
@@ -48,14 +57,15 @@ public class DiscountDateServiceImpl implements DiscountDateService {
     * else null is returned
     * */
     @Override
-    public DiscountDate addDiscountDate(Integer roomId, LocalDate date, Double discount) {
+    public DiscountDateDto addDiscountDate(Integer roomId, LocalDate date, Double discount) {
         DiscountDate newDate = DiscountDate.builder()
                 .discountDate(date)
                 .discount(discount)
                 .build();
 
         logger.trace("Adding discount date {} for room with id {}", date, roomId);
-        return discountDateRepository.save(newDate);
+        newDate = discountDateRepository.save(newDate);
+        return mapper.toDto(newDate);
     }
 
     /*
