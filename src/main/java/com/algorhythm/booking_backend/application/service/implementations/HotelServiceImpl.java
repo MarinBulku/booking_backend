@@ -5,28 +5,36 @@ import com.algorhythm.booking_backend.adapter.in.models.hotel.AvailableHotelDto;
 import com.algorhythm.booking_backend.adapter.in.models.hotel.HotelCreationRequest;
 import com.algorhythm.booking_backend.adapter.in.models.hotel.HotelDTO;
 import com.algorhythm.booking_backend.adapter.in.models.hotel.HotelInfoDto;
+import com.algorhythm.booking_backend.adapter.out.persistence.HotelRepository;
+import com.algorhythm.booking_backend.adapter.out.persistence.UserRepository;
 import com.algorhythm.booking_backend.application.mapper.HotelMapper;
+import com.algorhythm.booking_backend.application.service.interfaces.HotelService;
 import com.algorhythm.booking_backend.core.entities.Hotel;
 import com.algorhythm.booking_backend.core.entities.User;
 import com.algorhythm.booking_backend.core.exceptions.EntityNotFoundException;
 import com.algorhythm.booking_backend.core.exceptions.ImageTooLargeException;
 import com.algorhythm.booking_backend.core.exceptions.IncorrectFileTypeException;
-import com.algorhythm.booking_backend.adapter.out.persistence.HotelRepository;
-import com.algorhythm.booking_backend.adapter.out.persistence.UserRepository;
-import com.algorhythm.booking_backend.application.service.interfaces.HotelService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.*;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.Base64;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -37,14 +45,16 @@ public class HotelServiceImpl implements HotelService {
     private final HotelRepository hotelRepository;
     private final UserRepository userRepository;
     private final Logger logger = LoggerFactory.getLogger(HotelServiceImpl.class);
-    private static final String FOLDER_PATH = "C:\\Users\\ALGORHYTHM\\Documents\\Booking\\booking_backend\\src\\main\\resources\\businessImages\\";
-    private static final HotelMapper mapper = HotelMapper.mapper;
+    private final HotelMapper mapper = HotelMapper.mapper;
+    @Value("${hotel.folder.path}")
+    private String FOLDER_PATH;
+
 
     /*
-    * findAll() - No parameters needed
-    *
-    * Returns a list of ALL Hotel Entities in the repository
-    * */
+     * findAll() - No parameters needed
+     *
+     * Returns a list of ALL Hotel Entities in the repository
+     * */
     @Override
     public List<HotelInfoDto> findAll() {
         logger.trace("List of all hotels requested, being generated");
@@ -65,18 +75,18 @@ public class HotelServiceImpl implements HotelService {
     }
 
     /*
-    * allHotelDtosByOwner(Integer ownerId)
-    * ownerId - ID of the business owner(ADMIN that created the hotel)
-    *
-    * If no owner exists with this ownerId, EntityNotFoundException is thrown
-    *
-    * Gets a list of all the hotels owned by this ownerId, then maps
-    * objects as a list of HotelDTO to return.
-    * */
+     * allHotelDtosByOwner(Integer ownerId)
+     * ownerId - ID of the business owner(ADMIN that created the hotel)
+     *
+     * If no owner exists with this ownerId, EntityNotFoundException is thrown
+     *
+     * Gets a list of all the hotels owned by this ownerId, then maps
+     * objects as a list of HotelDTO to return.
+     * */
     @Override
     public List<HotelDTO> allHotelDtosByOwner(Integer ownerId) {
         User owner = userRepository.findById(ownerId)
-                .orElseThrow( () -> new EntityNotFoundException("No user with this ID: " + ownerId));
+                .orElseThrow(() -> new EntityNotFoundException("No user with this ID: " + ownerId));
 
         List<Hotel> allHotelsByOwner = hotelRepository.findHotelsByOwner(owner);
         logger.trace("List of all hotels requested by user {}, being generated", ownerId);
@@ -84,18 +94,18 @@ public class HotelServiceImpl implements HotelService {
     }
 
     /*
-    * findAllAvailableHotels(HotelSearchRequest request, Integer pageNo)
-    * request - The data we need to filter to find available hotels, matching
-    * the criteria specified in the request.
-    * pageNo - The page number that needs to be sent as a response.
-    *
-    * If request's start date is not before end date, IllegalArgumentException is thrown
-    *
-    * After, a page is fetched from repository with the criteria specified.
-    *
-    * From the page returned we create the list of AvailableHotelDto to return
-    * with the correct data needed.
-    * */
+     * findAllAvailableHotels(HotelSearchRequest request, Integer pageNo)
+     * request - The data we need to filter to find available hotels, matching
+     * the criteria specified in the request.
+     * pageNo - The page number that needs to be sent as a response.
+     *
+     * If request's start date is not before end date, IllegalArgumentException is thrown
+     *
+     * After, a page is fetched from repository with the criteria specified.
+     *
+     * From the page returned we create the list of AvailableHotelDto to return
+     * with the correct data needed.
+     * */
     @Override
     public Page<AvailableHotelDto> findAllAvailableHotels(HotelSearchRequest request, Integer pageNo) {
         if (request.getCheckInDate().isBefore(LocalDate.now()))
@@ -144,12 +154,12 @@ public class HotelServiceImpl implements HotelService {
     }
 
     /*
-    * findById(Integer id)
-    * id - ID of hotel that needs to be found
-    *
-    * If no hotel exists with that ID, EntityNotFoundException is thrown,
-    * else it is returned the hotel object
-    * */
+     * findById(Integer id)
+     * id - ID of hotel that needs to be found
+     *
+     * If no hotel exists with that ID, EntityNotFoundException is thrown,
+     * else it is returned the hotel object
+     * */
     @Override
     public HotelInfoDto findById(Integer id) {
         Optional<Hotel> optional = hotelRepository.findById(id);
@@ -160,28 +170,28 @@ public class HotelServiceImpl implements HotelService {
     }
 
     /*
-    * existsById(Integer id)
-    * id - ID of hotel that needs to be checked
-    * If a hotel with this id exits, true is returned, false otherwise.
-    * */
+     * existsById(Integer id)
+     * id - ID of hotel that needs to be checked
+     * If a hotel with this id exits, true is returned, false otherwise.
+     * */
     @Override
     public boolean existsById(Integer id) {
         return hotelRepository.existsById(id);
     }
 
     /*
-    * addHotel(HotelCreationRequest request)
-    * request - The data and info of hotel that needs to be added
-    *
-    * If no user exists with the id specified, EntityNotFoundException is thrown
-    * If file size is larger than expected ImageTooLargeException is thrown
-    * If file type is not image, IncorrectFileTypeException is thrown
-    *
-    * Saves the file in the specified folder, and then the Hotel data and image path
-    * are stored in the repository.
-    *
-    * Returns true if saved successfully, and false otherwise.
-    * */
+     * addHotel(HotelCreationRequest request)
+     * request - The data and info of hotel that needs to be added
+     *
+     * If no user exists with the id specified, EntityNotFoundException is thrown
+     * If file size is larger than expected ImageTooLargeException is thrown
+     * If file type is not image, IncorrectFileTypeException is thrown
+     *
+     * Saves the file in the specified folder, and then the Hotel data and image path
+     * are stored in the repository.
+     *
+     * Returns true if saved successfully, and false otherwise.
+     * */
     @Override
     public boolean addHotel(HotelCreationRequest request) {
 
@@ -192,7 +202,7 @@ public class HotelServiceImpl implements HotelService {
         if (file.getSize() > 102400)
             throw new ImageTooLargeException("Image size larger than 100KB: " + file.getSize());
         else if (!Objects.requireNonNull(file.getContentType()).startsWith("image/")) {
-            throw new IncorrectFileTypeException("File type provided not image: " +file.getContentType());
+            throw new IncorrectFileTypeException("File type provided not image: " + file.getContentType());
         }
 
         String filePath = FOLDER_PATH + file.getOriginalFilename();
@@ -218,28 +228,28 @@ public class HotelServiceImpl implements HotelService {
     }
 
     /*
-    * removeHotel(Integer idOfHotelToBeRemoved)
-    * idOfHotelToBeRemoved - ID of the hotels that needs to be removed
-    *
-    * If no hotel is found with that id, EntityNotFoundException is thrown.
-    *
-    * If the file path specified does not exist, EntityNotFoundException is thrown
-    * If the file in that path cannot be deleted, method returns false.
-    *
-    * If deletion is successful, true is returned
-    * */
+     * removeHotel(Integer idOfHotelToBeRemoved)
+     * idOfHotelToBeRemoved - ID of the hotels that needs to be removed
+     *
+     * If no hotel is found with that id, EntityNotFoundException is thrown.
+     *
+     * If the file path specified does not exist, EntityNotFoundException is thrown
+     * If the file in that path cannot be deleted, method returns false.
+     *
+     * If deletion is successful, true is returned
+     * */
     @Override
     public void removeHotel(Integer idOfHotelToBeRemoved) throws IOException {
-        if (!hotelRepository.existsById(idOfHotelToBeRemoved)) throw new EntityNotFoundException("No hotel with this id: " + idOfHotelToBeRemoved);
+        if (!hotelRepository.existsById(idOfHotelToBeRemoved))
+            throw new EntityNotFoundException("No hotel with this id: " + idOfHotelToBeRemoved);
 
         String pathOfImageToDelete = hotelRepository.findById(idOfHotelToBeRemoved).orElseThrow().getHotelImagePath();
         File file = new File(pathOfImageToDelete);
 
         if (file.exists() && file.isFile()) {
-            try{
+            try {
                 Files.delete(Path.of(file.getAbsolutePath()));
-            }
-            catch (IOException e){
+            } catch (IOException e) {
                 logger.error("Could not delete file: {}", e.getMessage());
             }
         } else {

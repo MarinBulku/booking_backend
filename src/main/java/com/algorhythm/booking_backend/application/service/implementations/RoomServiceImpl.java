@@ -1,22 +1,26 @@
 package com.algorhythm.booking_backend.application.service.implementations;
 
-import com.algorhythm.booking_backend.adapter.out.persistence.*;
-import com.algorhythm.booking_backend.core.entities.*;
 import com.algorhythm.booking_backend.adapter.in.models.booking.BookingRequest;
 import com.algorhythm.booking_backend.adapter.in.models.booking.RoomSearchRequest;
 import com.algorhythm.booking_backend.adapter.in.models.room.AvailableRoomDto;
 import com.algorhythm.booking_backend.adapter.in.models.room.DatePrice;
 import com.algorhythm.booking_backend.adapter.in.models.room.RoomCreationRequest;
+import com.algorhythm.booking_backend.adapter.out.persistence.*;
+import com.algorhythm.booking_backend.application.service.interfaces.RoomService;
+import com.algorhythm.booking_backend.core.entities.*;
 import com.algorhythm.booking_backend.core.exceptions.EntityNotFoundException;
 import com.algorhythm.booking_backend.core.exceptions.ImageTooLargeException;
 import com.algorhythm.booking_backend.core.exceptions.IncorrectFileTypeException;
-import com.algorhythm.booking_backend.application.service.interfaces.RoomService;
 import jakarta.persistence.EntityExistsException;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.*;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -39,21 +43,23 @@ import java.util.stream.Collectors;
 public class RoomServiceImpl implements RoomService {
 
     /*
-    * Room Service method implementations
-    * RoomRepository - To perform CRUD operations
-    * Other repositories - Mostly to check existence and confirmation
-    * */
+     * Room Service method implementations
+     * RoomRepository - To perform CRUD operations
+     * Other repositories - Mostly to check existence and confirmation
+     * */
     private final RoomRepository roomRepository;
     private final HotelRepository hotelRepository;
     private final DiscountDateRepository discountDateRepository;
     private final PointRepository pointRepository;
     private final UserRepository userRepository;
     private final BookingRepository bookingRepository;
+    @Value("${room.folder.path}")
+    private String FOLDER_PATH;
     private final Logger logger = LoggerFactory.getLogger(RoomServiceImpl.class);
 
     /*
-    * findAll() - No parameters
-    * Returns a list of ALL rooms
+     * findAll() - No parameters
+     * Returns a list of ALL rooms
      * */
     @Override
     public List<Room> findAll() {
@@ -62,16 +68,16 @@ public class RoomServiceImpl implements RoomService {
     }
 
     /*
-    * findAvailableRoomsToBook2(RoomSearchRequest request, Integer pageNo)
-    * request - Specifications of the rooms that need to be found
-    * pageNo - Page number that will be returned
-    *
-    * If request's start date is not before end date, it throws IllegalArgumentException
-    * If there isn't any user or hotel by given IDs on the request, EntityNotFoundException is thrown
-    *
-    * Finds the available rooms by the criteria specified in the request
-    * Returns the page of AvailableRoomDto requested
-    * */
+     * findAvailableRoomsToBook2(RoomSearchRequest request, Integer pageNo)
+     * request - Specifications of the rooms that need to be found
+     * pageNo - Page number that will be returned
+     *
+     * If request's start date is not before end date, it throws IllegalArgumentException
+     * If there isn't any user or hotel by given IDs on the request, EntityNotFoundException is thrown
+     *
+     * Finds the available rooms by the criteria specified in the request
+     * Returns the page of AvailableRoomDto requested
+     * */
     @Override
     public Page<AvailableRoomDto> findAvailableRoomsToBook2(RoomSearchRequest request, Integer pageNo) {
 
@@ -85,9 +91,10 @@ public class RoomServiceImpl implements RoomService {
         if (userOptional.isEmpty())
             throw new EntityNotFoundException("No user with this id: " + request.getUserId());
 
-        final int pageSize = 18 ;
+        final int pageSize = 18;
         Optional<Hotel> optionalHotel = hotelRepository.findById(request.getHotelId());
-        if (optionalHotel.isEmpty()) throw new EntityNotFoundException("No hotel with this id: " + request.getHotelId());
+        if (optionalHotel.isEmpty())
+            throw new EntityNotFoundException("No hotel with this id: " + request.getHotelId());
 
         /*
          * we need 18 rooms per page, the results will have number of rooms * dates count records,
@@ -97,27 +104,27 @@ public class RoomServiceImpl implements RoomService {
         Pageable pageable = PageRequest.of(pageNo, pageSize * offset);
 
         /*
-        * Based on the request, we get a sorted or not list of object[]
-        * */
-        List<Object[]> allAvailableRooms = switch (request.getSort()){
-          case "+" -> roomRepository.findAvailableRoomsASC(
-                  request.getHotelId(),
-                  request.getStartDate(),
-                  request.getEndDate(),
-                  request.getAdultsCapacity(),
-                  request.getKidsCapacity(),
-                  userOptional.get().getBookingPoints(),
-                  pageable
-          );
-          case "-" -> roomRepository.findAvailableRoomsDESC(
-                  request.getHotelId(),
-                  request.getStartDate(),
-                  request.getEndDate(),
-                  request.getAdultsCapacity(),
-                  request.getKidsCapacity(),
-                  userOptional.get().getBookingPoints(),
-                  pageable
-          );
+         * Based on the request, we get a sorted or not list of object[]
+         * */
+        List<Object[]> allAvailableRooms = switch (request.getSort()) {
+            case "+" -> roomRepository.findAvailableRoomsASC(
+                    request.getHotelId(),
+                    request.getStartDate(),
+                    request.getEndDate(),
+                    request.getAdultsCapacity(),
+                    request.getKidsCapacity(),
+                    userOptional.get().getBookingPoints(),
+                    pageable
+            );
+            case "-" -> roomRepository.findAvailableRoomsDESC(
+                    request.getHotelId(),
+                    request.getStartDate(),
+                    request.getEndDate(),
+                    request.getAdultsCapacity(),
+                    request.getKidsCapacity(),
+                    userOptional.get().getBookingPoints(),
+                    pageable
+            );
 
             default -> roomRepository.findAvailableRooms2(
                     request.getHotelId(),
@@ -137,8 +144,8 @@ public class RoomServiceImpl implements RoomService {
 
         List<AvailableRoomDto> availableRoomsList = new ArrayList<>();
         /*
-        * We convert the Object[] to AvailableRoomDto
-        * */
+         * We convert the Object[] to AvailableRoomDto
+         * */
         for (Object[] row : allAvailableRooms) {
             Integer roomId = (Integer) row[0];
             String roomName = (String) row[1];
@@ -186,25 +193,25 @@ public class RoomServiceImpl implements RoomService {
                     .build());
         }
         /*
-        * In the end, we have max 18 rooms per page to return
-        * */
+         * In the end, we have max 18 rooms per page to return
+         * */
         return new PageImpl<>(availableRoomsList, PageRequest.of(pageNo, pageSize), availableRoomsList.size());
     }
 
     /*
-    * getPointDiscountByRoom(Room room, User user)
-    * room - room that we get the points discount.
-    * user - user that has the points
-    *
-    * Returns the max discount the user can get with his points
-    * */
+     * getPointDiscountByRoom(Room room, User user)
+     * room - room that we get the points discount.
+     * user - user that has the points
+     *
+     * Returns the max discount the user can get with his points
+     * */
     private Double getPointDiscountByRoom(Room room, User user) {
 
         Integer userPoints = user.getBookingPoints();
         List<Points> discountPoints = pointRepository.findByRoom_RoomId(room.getRoomId());
         Double discount = 1.0;
-        for (Points p:
-             discountPoints) {
+        for (Points p :
+                discountPoints) {
             if (userPoints > p.getRequiredPoints())
                 discount = p.getDiscount();
         }
@@ -213,13 +220,13 @@ public class RoomServiceImpl implements RoomService {
     }
 
     /*
-    * getRoomsDatePriceList(Room room, LocalDate startDate, LocalDate endDate)
-    * room - room to get the DatePrice list from
-    * startDate - The first date of the list
-    * endDate - The last date in the list
-    *
-    * Returns a sorted array list of each date and the price for the room
-    * */
+     * getRoomsDatePriceList(Room room, LocalDate startDate, LocalDate endDate)
+     * room - room to get the DatePrice list from
+     * startDate - The first date of the list
+     * endDate - The last date in the list
+     *
+     * Returns a sorted array list of each date and the price for the room
+     * */
     private ArrayList<DatePrice> getRoomsDatePriceList(Room room, LocalDate startDate, LocalDate endDate) {
 
         if (!roomRepository.existsById(room.getRoomId()))
@@ -259,11 +266,11 @@ public class RoomServiceImpl implements RoomService {
     }
 
     /*
-    * findById(Integer id)
-    * id - ID of the room to be found
-    * If no room is found, EntityNotFoundException is thrown
-    * Else the room is returned
-    * */
+     * findById(Integer id)
+     * id - ID of the room to be found
+     * If no room is found, EntityNotFoundException is thrown
+     * Else the room is returned
+     * */
     @Override
     public Room findById(Integer id) {
 
@@ -275,34 +282,35 @@ public class RoomServiceImpl implements RoomService {
     }
 
     /*
-    * existsById(Integer id)
-    * id - ID of the room to be checked
-    *
-    * Returns true if a room exists by given id, otherwise false is returned
-    * */
+     * existsById(Integer id)
+     * id - ID of the room to be checked
+     *
+     * Returns true if a room exists by given id, otherwise false is returned
+     * */
     @Override
     public boolean existsById(Integer id) {
         return roomRepository.existsById(id);
     }
 
     /*
-    * addRoom(RoomCreationRequest request)
-    * request - specifications of the room to be created
-    *
-    * If no hotel is found by the id in the request, EntityNotFoundException is thrown
-    * If file size is large, ImageTooLargeException is thrown
-    * If file sent is not image, IncorrectFileTypeException is thrown
-    *
-    * Saves the room image in the roomImages folder, and stores the path in the room entity.
-    * If the image cannot be saved, false is returned.
-    *
-    * Room entity is created and saved, method returns true
-    * */
+     * addRoom(RoomCreationRequest request)
+     * request - specifications of the room to be created
+     *
+     * If no hotel is found by the id in the request, EntityNotFoundException is thrown
+     * If file size is large, ImageTooLargeException is thrown
+     * If file sent is not image, IncorrectFileTypeException is thrown
+     *
+     * Saves the room image in the roomImages folder, and stores the path in the room entity.
+     * If the image cannot be saved, false is returned.
+     *
+     * Room entity is created and saved, method returns true
+     * */
     @Override
     public boolean addRoom(RoomCreationRequest request) {
 
         Optional<Hotel> optional = hotelRepository.findById(request.getHotelId());
-        if (optional.isEmpty()) throw new EntityNotFoundException("No hotel found with this id: " + request.getHotelId());
+        if (optional.isEmpty())
+            throw new EntityNotFoundException("No hotel found with this id: " + request.getHotelId());
 
         if (!userRepository.existsById(request.getOwnerId())) {
             throw new EntityNotFoundException("No hotel owner with id: " + request.getOwnerId());
@@ -316,11 +324,10 @@ public class RoomServiceImpl implements RoomService {
         if (file.getSize() > 102400)
             throw new ImageTooLargeException("Image size larger than 100KB: " + file.getSize());
         else if (!Objects.requireNonNull(file.getContentType()).startsWith("image/")) {
-            throw new IncorrectFileTypeException("File type provided not image: " +file.getContentType());
+            throw new IncorrectFileTypeException("File type provided not image: " + file.getContentType());
         }
 
-        String folderPath = "C:\\Users\\ALGORHYTHM\\Documents\\Booking\\booking_backend\\src\\main\\resources\\roomImages\\";
-        String filePath = folderPath + file.getOriginalFilename();
+        String filePath = FOLDER_PATH + file.getOriginalFilename();
         try {
             file.transferTo(new File(filePath));
         } catch (IOException e) {
@@ -344,15 +351,16 @@ public class RoomServiceImpl implements RoomService {
     }
 
     /*
-    * removeRoom(Integer idOfRoomToBeRemoved)
-    * idOfRoomToBeRemoved - ID of the room to be removed
-    *
-    * If room does not exist, or file of room cannot be found, EntityNotFoundException is thrown
-    * Else, room is deleted and method returns true
-    * */
+     * removeRoom(Integer idOfRoomToBeRemoved)
+     * idOfRoomToBeRemoved - ID of the room to be removed
+     *
+     * If room does not exist, or file of room cannot be found, EntityNotFoundException is thrown
+     * Else, room is deleted and method returns true
+     * */
     @Override
     public boolean removeRoom(Integer idOfRoomToBeRemoved) throws IOException {
-        if (!roomRepository.existsById(idOfRoomToBeRemoved)) throw new EntityNotFoundException("No room with this id: " + idOfRoomToBeRemoved);
+        if (!roomRepository.existsById(idOfRoomToBeRemoved))
+            throw new EntityNotFoundException("No room with this id: " + idOfRoomToBeRemoved);
         String pathOfImageToDelete = roomRepository.findById(idOfRoomToBeRemoved).orElseThrow(() -> new EntityNotFoundException("No room with this id:" + idOfRoomToBeRemoved)).getRoomImagePath();
         File file = new File(pathOfImageToDelete);
 
@@ -368,24 +376,24 @@ public class RoomServiceImpl implements RoomService {
     private void cleanupFile(File file) {
         try {
             Files.delete(Path.of(file.getAbsolutePath()));
-        }catch (IOException e) {
+        } catch (IOException e) {
             logger.error("Failed to delete photo, {}", e.getMessage());
         }
     }
 
     /*
-    * bookRoom(BookingRequest request)
-    * request - Booking specifications
-    *
-    * If the user that books or room to be booked does not exist, EntityNotFoundException is thrown
-    *
-    * Credit card and user details are checked, if not correct method returns false
-    * If the room is booked between the specified dates in the request, false is returned
-    *
-    * We check if the price details are correct, if not false is returned
-    *
-    * Otherwise, a booking is saved in the repository and true is returned
-    * */
+     * bookRoom(BookingRequest request)
+     * request - Booking specifications
+     *
+     * If the user that books or room to be booked does not exist, EntityNotFoundException is thrown
+     *
+     * Credit card and user details are checked, if not correct method returns false
+     * If the room is booked between the specified dates in the request, false is returned
+     *
+     * We check if the price details are correct, if not false is returned
+     *
+     * Otherwise, a booking is saved in the repository and true is returned
+     * */
     @Override
     public boolean bookRoom(BookingRequest request) {
         User user = userRepository.findById(request.getUserId()).orElseThrow(() -> new EntityNotFoundException("No user with this id:" + request.getUserId()));
@@ -405,7 +413,7 @@ public class RoomServiceImpl implements RoomService {
 
         if (
                 request.getReservedFor().isBlank()
-                || request.getEmail().isBlank()
+                        || request.getEmail().isBlank()
                         || request.getAddress().isBlank()
                         || request.getPhoneNumber().isBlank()
         ) {
@@ -458,8 +466,8 @@ public class RoomServiceImpl implements RoomService {
 
         bookingRepository.save(newBooking);
         logger.trace("New booking created");
-        user.setBookingsNumber(user.getBookingsNumber()+1);
-        user.setBookingPoints(user.getBookingPoints()+2);
+        user.setBookingsNumber(user.getBookingsNumber() + 1);
+        user.setBookingPoints(user.getBookingPoints() + 2);
 
         userRepository.save(user);
 
