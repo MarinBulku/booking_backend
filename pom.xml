@@ -15,6 +15,9 @@
     <description>booking_backend</description>
     <properties>
         <java.version>21</java.version>
+        <db.url>jdbc:postgresql://localhost:5432/booking_db</db.url>
+        <db.username>postgres</db.username>
+        <db.password>123456</db.password>
     </properties>
     <dependencies>
         <dependency>
@@ -101,9 +104,16 @@
             <version>1.18.30</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itext-core</artifactId>
+            <version>8.0.3</version>
+            <type>pom</type>
+        </dependency>
     </dependencies>
 
     <build>
+        <finalName>Booking Backend</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -124,9 +134,9 @@
                 <configuration>
                     <changeLogFile>src/main/db.changelog/changelog-master.xml</changeLogFile>
                     <driver>org.postgresql.Driver</driver>
-                    <url>jdbc:postgresql://localhost:5432/booking_db</url>
-                    <username>postgres</username>
-                    <password>123456</password>
+                    <url>${db.url}</url>
+                    <username>${db.username}</username>
+                    <password>${db.password}</password>
                 </configuration>
             </plugin>
         </plugins>
