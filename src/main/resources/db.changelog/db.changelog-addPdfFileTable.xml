@@ -1,0 +1,37 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet  author="marinbulku"  id="create-pdf-table">
+        <createTable tableName="pdf_tbl">
+            <column name="pdf_id" type="uuid">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="file_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="file_size" type="decimal"/>
+            <column name="file_path" type="varchar(511)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="fk_booking_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet  author="marinbulku"  id="addForeignKeyConstraint-pdf_table">
+        <addForeignKeyConstraint  baseColumnNames="fk_booking_id"
+                                  baseTableName="pdf_tbl"
+                                  baseTableSchemaName="public"
+                                  constraintName="fk_pdf_booking"
+                                  onDelete="CASCADE"
+                                  referencedColumnNames="booking_id"
+                                  referencedTableName="booking_tbl"
+                                  referencedTableSchemaName="public"
+        />
+    </changeSet>
+
+</databaseChangeLog>
